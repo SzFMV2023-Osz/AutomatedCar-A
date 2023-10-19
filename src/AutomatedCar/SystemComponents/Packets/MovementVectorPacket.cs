@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-
-namespace AutomatedCar.SystemComponents.Packets
+﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using ReactiveUI;
     public interface IMovementVectorPacket
