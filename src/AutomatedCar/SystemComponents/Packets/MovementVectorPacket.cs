@@ -1,11 +1,13 @@
-﻿namespace AutomatedCar.SystemComponents.Packets
+﻿using ReactiveUI;
+
+namespace AutomatedCar.SystemComponents.Packets
 {
     public interface IMovementVectorPacket
     {
         public (int, int) MovementVector { get; }
     }
 
-    public class MovementVectorPacket : IMovementVectorPacket
+    public class MovementVectorPacket : ReactiveObject, IMovementVectorPacket
     {
         private (int, int) movementVector;
 
