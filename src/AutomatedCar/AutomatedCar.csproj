@@ -13,7 +13,6 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\**" />
-    <Folder Include="SystemComponents\Gearbox\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\**;Resources\**" />
