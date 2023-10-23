@@ -8,12 +8,23 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    interface Sensor
+    abstract class Sensor
     {
         public double viewAngle { get; set; }
         public double viewDistance { get; set; }
         public List<WorldObject> currentObjectinView { get; set; }
         public PolylineGeometry sensorTriangle { get; set; }
+
+        public Sensor(double ViewAngle, double ViewDistance)
+        {
+            viewAngle = ViewAngle;
+            viewDistance = ViewDistance;
+        }
+        public void SensorTriangleUpdate()
+        {
+
+        }
+
 
     }
 }
