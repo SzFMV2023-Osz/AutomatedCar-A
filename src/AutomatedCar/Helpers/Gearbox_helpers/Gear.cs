@@ -1,6 +1,6 @@
 ﻿namespace AutomatedCar.Helpers.Gearbox_helpers
 {
-    enum ATGears
+    public enum ATGears
     {
         Park,
         Reverse,
