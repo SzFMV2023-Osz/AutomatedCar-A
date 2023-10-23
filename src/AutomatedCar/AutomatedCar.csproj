@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Helpers\Gearbox_helpers\" />
     <Folder Include="Models\" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
@@ -12,6 +13,7 @@
       <SubType>Designer</SubType>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\**" />
+    <Folder Include="SystemComponents\Gearbox\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\**;Resources\**" />
