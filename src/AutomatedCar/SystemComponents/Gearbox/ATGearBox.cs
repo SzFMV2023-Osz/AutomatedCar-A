@@ -18,7 +18,11 @@
         }
         public void ShiftingGear(GearShift shift)
         {
-            throw new NotImplementedException();
+            if (Enum.IsDefined(typeof(ATGears), gear + ((int)shift)))
+            {
+                gear += (int)shift;
+                GearStage = gear.ToString()[0].ToString();
+            }
         }
     }
 }
