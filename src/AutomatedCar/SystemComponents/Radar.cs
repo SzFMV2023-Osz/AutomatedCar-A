@@ -14,7 +14,8 @@
         //Would it be better to be implemented in the Sensor class?
         public WorldObject highlightedObject { get; private set; }
 
-        public Points RadarPosition { get; set; }
+        public int RadarPositionX { get; set; }
+        public int RadarPositionY { get; set; }
 
         // It's not necessary, should be a protected setter be better? 
         public Radar (double ViewAngle, double ViewDistance) : base(ViewAngle, ViewDistance) 
