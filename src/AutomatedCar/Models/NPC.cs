@@ -1,16 +1,12 @@
-using System;
-
-namespace AutomatedCar.Models
+﻿namespace AutomatedCar.Models
 {
-    public class Car : WorldObject
+    public class NPC : WorldObject
     {
-        public Car(int x, int y, string filename)
+        public NPC(int x, int y, string filename)
             : base(x, y, filename)
         {
         }
 
-        /// <summary>Gets or sets Speed in px/s.</summary>
-        public int Speed { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double Rotation { get; set; }
@@ -37,5 +33,4 @@ namespace AutomatedCar.Models
             }
         }
     }
-}
 }
