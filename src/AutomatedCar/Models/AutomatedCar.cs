@@ -12,6 +12,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.ZIndex = 10;
+            
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
@@ -21,6 +22,8 @@ namespace AutomatedCar.Models
         public int Velocity { get; set; }
 
         public PolylineGeometry Geometry { get; set; }
+
+        private Camera Cam { get; set; }
 
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
         public void Start()
@@ -33,5 +36,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
+
+        
     }
 }
