@@ -14,6 +14,7 @@
             this.ObjectDistance = objectDistance;
         }
 
+        // kell korábbi távolság is? 
         public WorldObject Object { get; set; }
         public double ObjectDistance { get; set; }
 

@@ -23,8 +23,6 @@ namespace AutomatedCar.Models
 
         public PolylineGeometry Geometry { get; set; }
 
-        private Camera Cam { get; set; }
-
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
         public void Start()
         {
