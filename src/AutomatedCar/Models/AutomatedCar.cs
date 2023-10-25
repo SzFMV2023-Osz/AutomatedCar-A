@@ -12,6 +12,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.ZIndex = 10;
+            
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
@@ -33,5 +34,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
+
+        
     }
 }
