@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.SystemComponents.Packets.InputHandling
+﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
     using System;
     using System.Collections.Generic;

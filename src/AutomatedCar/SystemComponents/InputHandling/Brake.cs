@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.SystemComponents.Packets.InputHandling
+﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@
 
         public int GetBrake()
         {
-            return this.brake;
+            return brake;
         }
 
 
@@ -21,7 +21,7 @@
             if (brakeValue >= 0
                 && brakeValue <= 100)
             {
-                this.brake = brakeValue;
+                brake = brakeValue;
             }
         }
     }
