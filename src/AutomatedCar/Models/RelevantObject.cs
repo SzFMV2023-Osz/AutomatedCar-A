@@ -8,19 +8,24 @@
 
     public struct RelevantObject
     {
-        public RelevantObject(WorldObject objectt, double objectDistance)
+        public RelevantObject(WorldObject relevantobject, double currentdistance, double previousdistance)
         {
-            this.Object = objectt;
-            this.ObjectDistance = objectDistance;
+            this.RelevantWorldObject = relevantobject;
+            this.CurrentDistance = currentdistance;
+            this.PreviousDistance = previousdistance;
         }
 
-        // kell korábbi távolság is? 
-        public WorldObject Object { get; set; }
-        public double ObjectDistance { get; set; }
+        // kell korábbi távolság is?
+        public double PreviousDistance { get; set; }
 
-        public void modifyDistance(double distance)
+        public WorldObject RelevantWorldObject { get; set; }
+
+        public double CurrentDistance { get; set; }
+
+        //privátra rakás
+        public void modifyCurrentDistance(double distance)
         {
-            this.ObjectDistance = distance;
+            this.CurrentDistance = distance;
         }
     }
 }

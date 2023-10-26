@@ -33,54 +33,48 @@
             //frissíteni kell a previousObjectinView listát
         }
 
+        // Returns relevant objects
         public List<RelevantObject> RelevantObjects()
         {
-            // struct lista amit majd vissza adunk
-            List<RelevantObject> ret = new List<RelevantObject>();
-            // most vizsgálandó WO-k listája
+            List<RelevantObject> ReturnRelevants = new List<RelevantObject>();
             List<WorldObject> currentlyRelevant = new List<WorldObject>();
 
-            // kiszedjük a most vizsgálandó listába azokat a WO-kat, amik előbb is és most is látótérben vannak, azaz potenciálisan relevánsak lehetnek
-            foreach (WorldObject rev in this.currentObjectinView)
+            foreach (WorldObject relevantobj in this.currentObjectinView)
             {
-                if (previousObjectinView.Contains(rev))
+                if (previousObjectinView.Contains(relevantobj))
                 {
-                    currentlyRelevant.Add(rev);
+                    currentlyRelevant.Add(relevantobj);
                 }
             }
 
-            // végig megyünk a korábban releváns(!) elemek listáján, mindegyikre megnézzük, hogy most is releváns lehet e
-            foreach (RelevantObject rev2 in previousRelevant)
+            foreach (RelevantObject relevantobj2 in previousRelevant)
             {
                 foreach (WorldObject WO in currentlyRelevant)
                 {
-                    // ha most is releváns és közelített az autóhoz, akkor módosítjuk a távolságát, hogy az aktuális értéket mutassa és berakjuk a vissza adandók listájába
-                    if (rev2.Object.Equals(WO) && rev2.ObjectDistance > this.examDistance(WO))
+                    if (relevantobj2.RelevantWorldObject.Equals(WO) && relevantobj2.CurrentDistance > this.examDistance(WO))
                     {
-                        rev2.modifyDistance(this.examDistance(WO)); // (itt azért így kell, mert foreach elemet nem enged módosítani)
-                        ret.Add(rev2);
+                        relevantobj2.modifyCurrentDistance(this.examDistance(WO));
+                        ReturnRelevants.Add(relevantobj2);
                     }
-                    // ha most nem releváns, mert nincs a látótérben, vagy mert nem közelített az autóhoz, akkor eltávolítjuk a korábban relevánsok listájából
                     else
                     {
-                        currentlyRelevant.Remove(WO); // (ez csak optimalizáció miatt van itt, hogy akkor ha már egy object-ről tudjuk,
-                                                      // hogy nem kell már vizsgálni, a belső foreach ne fusson rajta végig mégegyszer)
-                        this.previousRelevant.Remove(rev2);
+                        currentlyRelevant.Remove(WO);
+                        this.previousRelevant.Remove(relevantobj2);
                     }
                 }
             }
 
-            return ret;
+            return ReturnRelevants;
         }
 
+        // Returns a RelevantObjects distance
         public double examDistance(WorldObject WO)
         {
-            // itt vlaszeg van valamilyen szebb megoldás
             foreach (RelevantObject rev in this.previousRelevant)
             {
-                if (rev.Object.Equals(WO))
+                if (rev.RelevantWorldObject.Equals(WO))
                 {
-                    return rev.ObjectDistance;
+                    return rev.CurrentDistance;
                 }
             }
 

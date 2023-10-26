@@ -35,7 +35,8 @@
             this.highlightedObject = currentObjectinView[0];
             for (int i = 0; i < currentObjectinView.Count-1; i++)
             {
-                if (CalculateDistance(currentObjectinView[i].X,currentObjectinView[i].Y, car.X, car.Y) <= CalculateDistance(currentObjectinView[i+1].X, currentObjectinView[i + 1].Y, car.X, car.Y))
+                if (CalculateDistance(currentObjectinView[i].X,currentObjectinView[i].Y, car.X, car.Y) <= 
+                    CalculateDistance(currentObjectinView[i+1].X, currentObjectinView[i + 1].Y, car.X, car.Y))
                 {
                     this.highlightedObject = currentObjectinView[i];
                 }
