@@ -11,11 +11,37 @@
     {
         private ATGears gear;
         public int Velocity { get; set; }
-        public string GearStage { get; private set; }
-        public void CalculateGearSpeed(ref int revolution)
+        public ATGears GearStage { get; private set; }
+        public int CalculateGearSpeed(int revolution, int enginespeed)
+        {
+            switch (GearStage)
+            {
+                case ATGears.R:
+                    return ReverseCalculate(revolution, enginespeed);
+                case ATGears.N:
+                    return NeutralCalculate(revolution, enginespeed);
+                case ATGears.D:
+                    return DriveCalculate(revolution, enginespeed);
+                default:
+                    return 1000;
+            }
+        }
+
+        private int ReverseCalculate(int revolution, object enginespeed)
         {
             throw new NotImplementedException();
         }
+
+        private int NeutralCalculate(int revolution, object enginespeed)
+        {
+            throw new NotImplementedException();
+        }
+
+        private int DriveCalculate(int revolution, object enginespeed)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ShiftingGear(GearShift shift)
         {
             if (Enum.IsDefined(typeof(ATGears), gear + ((int)shift)))
