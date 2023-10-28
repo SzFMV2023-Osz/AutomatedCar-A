@@ -30,7 +30,9 @@
 
         private int ReverseCalculate(int revolution, int enginespeed)
         {
-            throw new NotImplementedException();
+            revolution = ModifyRevolution(revolution, enginespeed);
+            Velocity = -((revolution) / 200);
+            return revolution;
         }
 
         private int NeutralCalculate(int revolution, int enginespeed)
@@ -46,6 +48,23 @@
         private int DriveCalculate(int revolution, int enginespeed)
         {
             throw new NotImplementedException();
+        }
+
+        private int ModifyRevolution(int revolution, int enginespeed)
+        {
+            if (enginespeed > 0 && (revolution < enginespeed + 1000))
+            {
+                return CalculateRevolution(revolution, enginespeed);
+            }
+            else
+            {
+                if (Math.Abs(Velocity) != (int)((revolution) * gearRatios[currentInsideGearStage]))
+                {
+                    revolution = (int)(Math.Abs(Velocity) / gearRatios[currentInsideGearStage]);
+                }
+
+                return SlowsDownRevolution(revolution);
+            }
         }
 
         private int CalculateRevolution(int revolution, int enginespeed)
