@@ -9,7 +9,6 @@
 
     public class ATGearBox : IGearBox
     {
-        private ATGears gear;
         public int Velocity { get; set; }
         public ATGears GearStage { get; private set; }
         public int CalculateGearSpeed(int revolution, int enginespeed)
@@ -27,27 +26,26 @@
             }
         }
 
-        private int ReverseCalculate(int revolution, object enginespeed)
+        private int ReverseCalculate(int revolution, int enginespeed)
         {
             throw new NotImplementedException();
         }
 
-        private int NeutralCalculate(int revolution, object enginespeed)
+        private int NeutralCalculate(int revolution, int enginespeed)
         {
             throw new NotImplementedException();
         }
 
-        private int DriveCalculate(int revolution, object enginespeed)
+        private int DriveCalculate(int revolution, int enginespeed)
         {
             throw new NotImplementedException();
         }
 
         public void ShiftingGear(GearShift shift)
         {
-            if (Enum.IsDefined(typeof(ATGears), gear + ((int)shift)))
+            if (Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
             {
-                gear += (int)shift;
-                GearStage = gear.ToString()[0].ToString();
+                GearStage += (int)shift;
             }
         }
     }
