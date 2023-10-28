@@ -10,8 +10,8 @@
     public interface IGearBox
     {
         int Velocity { get; set; }
-        string GearStage { get; }
+        ATGears GearStage { get; }
         void ShiftingGear(GearShift shift);
-        void CalculateGearSpeed(ref int revolution);
+        int CalculateGearSpeed(int revolution, int throttlen);
     }
 }

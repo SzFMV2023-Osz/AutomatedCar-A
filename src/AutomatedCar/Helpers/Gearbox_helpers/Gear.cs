@@ -2,9 +2,9 @@
 {
     public enum ATGears
     {
-        Park,
-        Reverse,
-        Netrual,
-        Drive
+        P,
+        R,
+        N,
+        D
     }
 }
