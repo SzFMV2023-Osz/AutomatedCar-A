@@ -2,10 +2,6 @@
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// This is the Automatic Transmission class.
