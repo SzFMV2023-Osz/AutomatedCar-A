@@ -114,9 +114,42 @@
 
         public void ShiftingGear(GearShift shift)
         {
+            ATGears nextGearStage = GearStage + ((int)shift);
             if (Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
             {
-                GearStage += (int)shift;
+                if (GearStage == ATGears.R)
+                {
+                    if (nextGearStage == ATGears.N)
+                    {
+                        GearStage = nextGearStage;
+                        currentInsideGearStage = 0;
+                    }
+                    else if (Velocity == 0)
+                    {
+                        GearStage = nextGearStage;
+                    }
+                    return;
+                }
+                else if (GearStage == ATGears.N)
+                {
+                    if ((nextGearStage == ATGears.R && Velocity <= 0) || (nextGearStage == ATGears.D && Velocity >= 0))
+                    {
+                        GearStage = nextGearStage;
+                        currentInsideGearStage = 1;
+                    }
+                }
+                else
+                {
+                    GearStage = nextGearStage;
+                    if (GearStage == ATGears.N)
+                    {
+                        currentInsideGearStage = 0;
+                    }
+                    else
+                    {
+                        currentInsideGearStage = 1;
+                    }
+                }
             }
         }
     }
