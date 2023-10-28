@@ -32,8 +32,8 @@
         /// This method use for calculate engine speed and Velocity.
         /// </summary>
         /// <param name="revolution">The currently engine revolution.</param>
-        /// <param name="throttlen"> The engine torque by gas pedal.</param>
+        /// <param name="enginespeed"> The engine torque by gas pedal.</param>
         /// <returns> The engine's new revolution. Calculated by the transmission stage.</returns>
-        int CalculateGearSpeed(int revolution, int throttlen);
+        int CalculateGearSpeed(int revolution, int enginespeed);
     }
 }
