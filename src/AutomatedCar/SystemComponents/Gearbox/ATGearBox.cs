@@ -32,7 +32,7 @@
         private int ReverseCalculate(int revolution, int enginespeed)
         {
             revolution = ModifyRevolution(revolution, enginespeed);
-            Velocity = -((revolution) / 200);
+            Velocity = -((revolution - 1000) / 200);
             return revolution;
         }
 
@@ -55,7 +55,7 @@
             else if (revolution <= nextLowRevolutionChangeValue)
             {
                 --currentInsideGearStage;
-                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]);
+                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]) + 1000;
                 if (currentInsideGearStage - 1 > 0)
                 {
                     nextLowRevolutionChangeValue = (int)(4000 * gearRatios[currentInsideGearStage - 1] / gearRatios[currentInsideGearStage]) - 500;
@@ -68,10 +68,11 @@
             else
             {
                 ++currentInsideGearStage;
-                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]);
+                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]) + 1000;
                 nextLowRevolutionChangeValue = revolution - 500;
             }
-            Velocity = (int)((revolution) * gearRatios[currentInsideGearStage]);
+
+            Velocity = (int)((revolution - 1000) * gearRatios[currentInsideGearStage]);
             return revolution;
         }
 
@@ -83,9 +84,9 @@
             }
             else
             {
-                if (Math.Abs(Velocity) != (int)((revolution) * gearRatios[currentInsideGearStage]))
+                if (Math.Abs(Velocity) != (int)((revolution - 1000) * gearRatios[currentInsideGearStage]))
                 {
-                    revolution = (int)(Math.Abs(Velocity) / gearRatios[currentInsideGearStage]);
+                    revolution = (int)(Math.Abs(Velocity) / gearRatios[currentInsideGearStage]) + 1000;
                 }
 
                 return SlowsDownRevolution(revolution);
@@ -94,7 +95,7 @@
 
         private int CalculateRevolution(int revolution, int enginespeed)
         {
-            double throttenmultiply = (1 - ((double)revolution) / (enginespeed));
+            double throttenmultiply = (1 - ((double)revolution) / (enginespeed + 1000));
             return (int)(revolution + (enginespeed * throttenmultiply) * gearRatios[gearRatios.Length - 1 - currentInsideGearStage] / 1.5);
         }
 
