@@ -1,27 +1,23 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
-    using AutomatedCar.Models;
-    using Avalonia;
-    using Avalonia.Media;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using AutomatedCar.Models;
 
     internal class Radar : Sensor
-    {  
-        public Radar (int radarPositionX, int radarPositionY)
+    {
+        public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
+            : base(virtualFunctionBus, automatedCar, 10, 60, 200)
         {
-            this.viewAngle = 60;
-            this.viewDistance = 200;
-            this.sensorPositionX = radarPositionX;
-            this.sensorPositionY = radarPositionY;
         }
 
         public void ObjectInRange (WorldObject worldObject)
         {
-            this.currentObjectinView.Add(worldObject);
+            this.CurrentObjectsinView.Add(worldObject);
+        }
+
+        public override void Process()
+        {
+            throw new NotImplementedException();
         }
 
         //figure out how the PolylineGeometry works
