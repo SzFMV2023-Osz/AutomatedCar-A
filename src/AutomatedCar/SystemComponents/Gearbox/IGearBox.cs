@@ -1,11 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Gearbox
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Interface for the transmission types.
