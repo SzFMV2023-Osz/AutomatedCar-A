@@ -1,10 +1,28 @@
 ﻿namespace AutomatedCar.Helpers.Gearbox_helpers
 {
+    /// <summary>
+    /// Automatic Transmission Gear System Enum.
+    /// </summary>
     public enum ATGears
     {
-        Park,
-        Reverse,
-        Netrual,
-        Drive
+        /// <summary>
+        /// Park mode
+        /// </summary>
+        P,
+
+        /// <summary>
+        /// Reverse mode
+        /// </summary>
+        R,
+
+        /// <summary>
+        /// Neutral mode
+        /// </summary>
+        N,
+
+        /// <summary>
+        /// Drive mode
+        /// </summary>
+        D
     }
 }
