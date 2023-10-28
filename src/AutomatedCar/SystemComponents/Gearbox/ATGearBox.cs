@@ -9,6 +9,8 @@
 
     public class ATGearBox : IGearBox
     {
+        private double[] gearRatios = { 0.002, 0.005, 0.01, 0.015, 0.0225, 0.027 };
+        private int currentInsideGearStage = 0;
         public int Velocity { get; set; }
         public ATGears GearStage { get; private set; }
         public int CalculateGearSpeed(int revolution, int enginespeed)
@@ -33,12 +35,36 @@
 
         private int NeutralCalculate(int revolution, int enginespeed)
         {
-            throw new NotImplementedException();
+            if (enginespeed > 0 && (revolution < enginespeed + 1000))
+            {
+                return CalculateRevolution(revolution, enginespeed);
+            }
+
+            return SlowsDownRevolution(revolution);
         }
 
         private int DriveCalculate(int revolution, int enginespeed)
         {
             throw new NotImplementedException();
+        }
+
+        private int CalculateRevolution(int revolution, int enginespeed)
+        {
+            double throttenmultiply = (1 - ((double)revolution) / (enginespeed));
+            return (int)(revolution + (enginespeed * throttenmultiply) * gearRatios[gearRatios.Length - 1 - currentInsideGearStage] / 1.5);
+        }
+
+        private int SlowsDownRevolution(int revolution)
+        {
+            int newRevolution = revolution - revolution / (GearStage == ATGears.N ? 30 : 600);
+            if (newRevolution < 1000)
+            {
+                return 1000;
+            }
+            else
+            {
+                return newRevolution;
+            }
         }
 
         public void ShiftingGear(GearShift shift)
