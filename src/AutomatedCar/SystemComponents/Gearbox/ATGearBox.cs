@@ -11,6 +11,7 @@
     {
         private double[] gearRatios = { 0.002, 0.005, 0.01, 0.015, 0.0225, 0.027 };
         private int currentInsideGearStage = 0;
+        private int nextLowRevolutionChangeValue = 1000;
         public int Velocity { get; set; }
         public ATGears GearStage { get; private set; }
         public int CalculateGearSpeed(int revolution, int enginespeed)
@@ -47,7 +48,31 @@
 
         private int DriveCalculate(int revolution, int enginespeed)
         {
-            throw new NotImplementedException();
+            if ((revolution > nextLowRevolutionChangeValue || currentInsideGearStage == 1) && (revolution <= 4000 || currentInsideGearStage == gearRatios.Length - 1))
+            {
+                revolution = ModifyRevolution(revolution, enginespeed);
+            }
+            else if (revolution <= nextLowRevolutionChangeValue)
+            {
+                --currentInsideGearStage;
+                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]);
+                if (currentInsideGearStage - 1 > 0)
+                {
+                    nextLowRevolutionChangeValue = (int)(4000 * gearRatios[currentInsideGearStage - 1] / gearRatios[currentInsideGearStage]) - 500;
+                }
+                else
+                {
+                    nextLowRevolutionChangeValue = 1000;
+                }
+            }
+            else
+            {
+                ++currentInsideGearStage;
+                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]);
+                nextLowRevolutionChangeValue = revolution - 500;
+            }
+            Velocity = (int)((revolution) * gearRatios[currentInsideGearStage]);
+            return revolution;
         }
 
         private int ModifyRevolution(int revolution, int enginespeed)
