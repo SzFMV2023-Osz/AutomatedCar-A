@@ -10,7 +10,7 @@
     {
         public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
-        public Polygon SensorTriangle { get; set; }
+        public Polygon SensorTriangle { get; private set; }
 
         public WorldObject HighlightedObject { get; private set; }
 
