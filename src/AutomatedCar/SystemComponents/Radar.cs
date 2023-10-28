@@ -11,10 +11,6 @@
 
     internal class Radar : Sensor
     {  
-        //Would it be better to be implemented in the Sensor class?
-        public int sensorPositionX { get; protected set; }
-        public int sensorPositionY { get; protected set; }
-
         public Radar (int radarPositionX, int radarPositionY)
         {
             this.viewAngle = 60;
