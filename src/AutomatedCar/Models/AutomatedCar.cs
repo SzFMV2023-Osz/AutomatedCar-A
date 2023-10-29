@@ -14,8 +14,6 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.ZIndex = 10;
-            this.radarSensor = new Radar(this.virtualFunctionBus, this);
-            this.virtualFunctionBus.RegisterComponent(this.radarSensor);
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
@@ -25,6 +23,12 @@ namespace AutomatedCar.Models
         public int Velocity { get; set; }
 
         public PolylineGeometry Geometry { get; set; }
+
+        public void CreateRadarSensor()
+        {
+            this.radarSensor = new Radar(this.virtualFunctionBus, this);
+            this.virtualFunctionBus.RegisterComponent(this.radarSensor);
+        }
 
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
         public void Start()

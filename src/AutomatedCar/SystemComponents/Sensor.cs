@@ -17,7 +17,7 @@
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int viewDistance)
             : base(virtualFunctionBus)
         {
-            this.SensorTriangle = this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
+            this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
         }
 
         public void ClosestHighlightedObject(AutomatedCar car)
@@ -33,7 +33,7 @@
             }
         }
 
-        private Polygon CreateSensorTriangle(AutomatedCar automatedCar ,int distanceFromCarCenter, int viewAngle, int range)
+        private void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
             // car x : 480
             // car y : 1425
@@ -43,16 +43,16 @@
             int cSideLength = (int)(range / Math.Cos(alpha));
 
             Point point1 = new Point(
-                           automatedCar.X + (distanceFromCarCenter * (int)Math.Cos(DegToRad(90 + automatedCar.Rotation))),
-                           automatedCar.Y + (distanceFromCarCenter * (int)Math.Sin(DegToRad(90 + automatedCar.Rotation))));
+                           automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(90 - automatedCar.Rotation))),
+                           automatedCar.Y + (int)(distanceFromCarCenter * Math.Sin(DegToRad(90 - automatedCar.Rotation))));
 
             Point point2 = new Point(
-                           (int)(point1.X + (cSideLength * Math.Cos(DegToRad(90 + automatedCar.Rotation + alpha)))),
-                           (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(90 + automatedCar.Rotation + alpha)))));
+                           (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation + alpha)))),
+                           (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation + alpha)))));
 
             Point point3 = new Point(
-                          (int)(point1.X + (cSideLength * Math.Cos(DegToRad(90 + automatedCar.Rotation - alpha)))),
-                          (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(90 + automatedCar.Rotation - alpha)))));
+                           (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation - alpha)))),
+                           (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation - alpha)))));
 
             Polygon triangle = new Polygon();
             triangle.Points = new List<Point>
@@ -62,7 +62,7 @@
                 point3,
             };
 
-            return triangle;
+            this.SensorTriangle = triangle;
         }
 
         private static double DegToRad(double degrees)
