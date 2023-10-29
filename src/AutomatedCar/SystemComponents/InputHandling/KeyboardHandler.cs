@@ -138,7 +138,7 @@
 
         public void HandleKeyDown_Up()
         {
-            this.wheelSmoothReturnIsActive = false;
+            this.throttleSmoothReturnIsActive = false;
             this.throttleTimer.Start();
         }
 
@@ -149,7 +149,7 @@
 
         public void HandleKeyDown_Down()
         {
-            this.wheelSmoothReturnIsActive = false;
+            this.brakeSmoothReturnIsActive = false;
             this.brakeTimer.Start();
         }
 
@@ -166,7 +166,7 @@
 
         public void HandleKeyUp_Left()
         {
-            this.brakeSmoothReturnIsActive = !this.wheelRightTimer.Enabled;
+            this.wheelSmoothReturnIsActive = !this.wheelRightTimer.Enabled;
             if (this.wheelRightTimer.Enabled)
             {
                 this.wheelLeftTimer.Stop();
@@ -181,7 +181,7 @@
 
         public void HandleKeyUp_Right()
         {
-            this.brakeSmoothReturnIsActive = !this.wheelLeftTimer.Enabled;
+            this.wheelSmoothReturnIsActive = !this.wheelLeftTimer.Enabled;
             if (this.wheelLeftTimer.Enabled)
             {
                 this.wheelRightTimer.Stop();
