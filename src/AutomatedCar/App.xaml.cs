@@ -4,7 +4,9 @@ namespace AutomatedCar
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Reflection;
+    using System.Windows.Markup;
     using AutomatedCar.Models;
+    using AutomatedCar.Models.NPC;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
@@ -40,6 +42,7 @@ namespace AutomatedCar
             world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
 
             this.AddControlledCarsTo(world);
+            this.AddNpcPedestrian(world);
 
             return world;
         }
@@ -80,7 +83,7 @@ namespace AutomatedCar
             controlledCar.Geometries.Add(controlledCar.Geometry);
             controlledCar.RotationPoint = new System.Drawing.Point(54, 120);
             controlledCar.Rotation = rotation;
-
+            
             controlledCar.Start();
 
             return controlledCar;
@@ -93,6 +96,31 @@ namespace AutomatedCar
 
             world.AddControlledCar(controlledCar);
             world.AddControlledCar(controlledCar2);
+        }
+
+        private Pedestrian CreateNpcPedestrian(int x, int y, int rotation, string filename)
+        {
+            var NpcPedestrian = new Pedestrian(x, y, filename);
+
+
+            //NpcPedestrian.Geometry = this.GetControlledCarBoundaryBox();
+            //NpcPedestrian.RawGeometries.Add(NpcPedestrian.Geometry);
+            //NpcPedestrian.Geometries.Add(NpcPedestrian.Geometry);
+            //NpcPedestrian.RotationPoint = new System.Drawing.Point(54, 120);
+            //NpcPedestrian.Rotation = rotation;
+
+            //NpcPedestrian.Start();
+            
+
+            return NpcPedestrian;
+        }
+
+        private void AddNpcPedestrian(World world)
+        {
+
+            var Pedestrian = this.CreateNpcPedestrian(480, 1425,0, "woman.png");
+            world.AddObject(Pedestrian);
+
         }
     }
 }

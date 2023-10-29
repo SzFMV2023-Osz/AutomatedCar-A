@@ -8,5 +8,13 @@ using System.Collections.Generic;
         int Speed { get; set; }
 
         void Move();
+
+        void MoveLoad(int speed,bool repeating,Cordinates currentPoint,List<Cordinates> points)
+        {
+            this.Repeating = repeating;
+            this.CurrentPoint = currentPoint;
+            this.Points = points;
+            this.Speed = speed;
+        }
     }
 }

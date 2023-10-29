@@ -1,10 +1,17 @@
 namespace AutomatedCar.Models.NPC{
+    using System.Collections.Generic;
     public class Pedestrian : WorldObject, INPC
     {
-        public List<Coordinates> Points { get; set; }
+        public List<Cordinates> Points { get; set; }
         public bool Repeating { get; set; }
-        public Coordinates CurrentPoint { get; set; }
+        public Cordinates CurrentPoint { get; set; }
         public int Speed { get; set; }
+
+        public Pedestrian(int x,int y,string filename) : base(x,y,filename)
+        {
+
+        }
+
 
         public void Move()
         {
