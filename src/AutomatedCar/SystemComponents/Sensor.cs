@@ -12,6 +12,10 @@
     {
         public double viewAngle { get; protected set; }
         public double viewDistance { get; protected set; }
+
+        public int sensorPositionX { get; protected set; }
+        public int sensorPositionY { get; protected set; }
+
         public List<WorldObject> currentObjectinView { get; protected set; }
         public List<WorldObject> previousObjectinView { get; protected set; }
         public List<RelevantObject> previousRelevant { get; protected set; }

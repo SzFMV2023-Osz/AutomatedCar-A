@@ -11,26 +11,18 @@
 
     internal class Radar : Sensor
     {  
-        //Would it be better to be implemented in the Sensor class?
-       
-
-        public int RadarPositionX { get; set; }
-        public int RadarPositionY { get; set; }
-
-        // It's not necessary, should be a protected setter be better? 
-        public Radar (double ViewAngle, double ViewDistance) 
+        public Radar (int radarPositionX, int radarPositionY)
         {
-            ViewAngle = 60;
-            ViewDistance = 200;
+            this.viewAngle = 60;
+            this.viewDistance = 200;
+            this.sensorPositionX = radarPositionX;
+            this.sensorPositionY = radarPositionY;
         }
 
         public void ObjectInRange (WorldObject worldObject)
         {
             this.currentObjectinView.Add(worldObject);
         }
-
-        //Is this calculation also needed in the camera class? 
-        
 
         //figure out how the PolylineGeometry works
         public void VisualiseRadarVision()
