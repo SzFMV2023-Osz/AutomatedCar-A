@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.Helpers
+﻿namespace AutomatedCar.Models.NPC
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class NPCPathPoint
+    public class NPCPathPoint
     {
         private int x;
         private int y;

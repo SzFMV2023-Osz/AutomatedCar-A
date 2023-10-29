@@ -98,17 +98,15 @@ namespace AutomatedCar
             world.AddControlledCar(controlledCar2);
         }
 
-        private Pedestrian CreateNpcPedestrian(int x, int y, int rotation, string filename)
+
+        private Pedestrian CreateNpcPedestrian(int x, int y, int rotation, string filename,World world)
         {
-            var NpcPedestrian = new Pedestrian(x, y, filename);
-
-
+            var NpcPedestrian = new Pedestrian(x, y, filename, 1, true, 0, GetPathPointsFrom("NPC_test_world_path.json", "pedestrian"), world.npcManager);
             //NpcPedestrian.Geometry = this.GetControlledCarBoundaryBox();
             //NpcPedestrian.RawGeometries.Add(NpcPedestrian.Geometry);
             //NpcPedestrian.Geometries.Add(NpcPedestrian.Geometry);
             //NpcPedestrian.RotationPoint = new System.Drawing.Point(54, 120);
             //NpcPedestrian.Rotation = rotation;
-
             //NpcPedestrian.Start();
             
 
@@ -118,9 +116,44 @@ namespace AutomatedCar
         private void AddNpcPedestrian(World world)
         {
 
-            var Pedestrian = this.CreateNpcPedestrian(480, 1425,0, "woman.png");
+            var Pedestrian = this.CreateNpcPedestrian(1950, 630,0, "woman.png",world);
             world.AddObject(Pedestrian);
 
         }
+
+        private List<NPCPathPoint> GetPathPointsFrom(string filePath, string type)
+        {
+
+
+
+
+            List<NPCPathPoint> pathPoints = new List<NPCPathPoint>();
+
+
+
+            string fullPath = $"AutomatedCar.Assets.NPC_paths." + filePath;
+            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream(fullPath));
+            string json_text = reader.ReadToEnd();
+            dynamic pathPointList = JObject.Parse(json_text);
+
+
+
+            foreach (var point in pathPointList[type])
+            {
+                pathPoints.Add(new NPCPathPoint(
+                point["x"].ToObject<int>(),
+                point["y"].ToObject<int>(),
+                point["rotation"].ToObject<double>(),
+                point["speed"].ToObject<int>()));
+            }
+
+
+
+            return pathPoints;
+        }
     }
+
+
+
 }
