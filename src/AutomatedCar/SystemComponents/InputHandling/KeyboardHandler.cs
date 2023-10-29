@@ -21,8 +21,6 @@
         private bool throttleSmoothReturnIsActive;
         private bool wheelSmoothReturnIsActive;
 
-        //private Gears shifterGear;
-
         public KeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
 
@@ -188,6 +186,16 @@
             {
                 this.wheelRightTimer.Stop();
             }
+        }
+
+        public void HandleKeyDown_Q()
+        {
+            this.KeyboardHandlerPacket.ShiftUpOrDown = 1;
+        }
+
+        public void HandleKeyDown_A()
+        {
+            this.KeyboardHandlerPacket.ShiftUpOrDown = -1;
         }
 
         public override void Process()

@@ -48,6 +48,16 @@ namespace AutomatedCar.Views
                 this.keyboardHandler.HandleKeyDown_Right();
             }
 
+            if (Keyboard.IsKeyDown(Key.Q))
+            {
+                this.keyboardHandler.HandleKeyDown_Q();
+            }
+
+            if (Keyboard.IsKeyDown(Key.A)) 
+            {
+                this.keyboardHandler.HandleKeyDown_A();
+            }
+
             if (Keyboard.IsKeyDown(Key.PageUp))
             {
                 viewModel.CourseDisplay.PageUp();
