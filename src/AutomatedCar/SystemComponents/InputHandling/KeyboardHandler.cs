@@ -17,6 +17,11 @@
         private int brakePercentage;
         private int throttlePercentage;
         private int wheelPercentage;
+        private bool brakeSmoothReturnIsActive;
+        private bool throttleSmoothReturnIsActive;
+        private bool wheelSmoothReturnIsActive;
+
+        //private Gears shifterGear;
 
         public KeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
@@ -32,81 +37,157 @@
             this.wheelLeftTimer = new Timer(10);
             this.wheelRightTimer = new Timer(10);
 
+            this.brakeSmoothReturnIsActive = false;
+            this.throttleSmoothReturnIsActive = false;
+            this.wheelSmoothReturnIsActive = false;
+
             this.brakeTimer.Elapsed += (sender, e) =>
             {
-                if (this.brakePercentage < 100)
+                if (!this.brakeSmoothReturnIsActive)
                 {
-                    this.brakePercentage++;
+                    if (this.brakePercentage < 100)
+                    {
+                        this.brakePercentage++;
+                    }
+                }
+                else
+                {
+                    if (this.brakePercentage > 0)
+                    {
+                        this.brakePercentage--;
+                    }
+                    else
+                    {
+                        this.brakeTimer.Stop();
+                        this.brakeSmoothReturnIsActive = false;
+                    }
                 }
             };
 
             this.throttleTimer.Elapsed += (sender, e) =>
             {
-                if (this.throttlePercentage < 100)
+                if (!this.throttleSmoothReturnIsActive)
                 {
-                    this.throttlePercentage++;
+                    if (this.throttlePercentage < 100)
+                    {
+                        this.throttlePercentage++;
+                    }
+                }
+                else
+                {
+                    if (this.throttlePercentage > 0)
+                    {
+                        this.throttlePercentage--;
+                    }
+                    else
+                    {
+                        this.throttleTimer.Stop();
+                        this.throttleSmoothReturnIsActive = false;
+                    }
                 }
             };
 
             this.wheelLeftTimer.Elapsed += (sender, e) =>
             {
-                if (this.wheelPercentage > -100)
+                if (!this.wheelSmoothReturnIsActive)
                 {
-                    this.wheelPercentage--;
+                    // Normal case
+                    if (this.wheelPercentage > -100)
+                    {
+                        this.wheelPercentage--;
+                    }
+                }
+                else
+                {
+                    // Smooth return
+                    if (this.wheelPercentage < 0)
+                    {
+                        this.wheelPercentage++;
+                    }
+                    else
+                    {
+                        this.wheelLeftTimer.Stop();
+                        this.wheelSmoothReturnIsActive = false;
+                    }
                 }
             };
 
             this.wheelRightTimer.Elapsed += (sender, e) =>
             {
-                if (this.wheelPercentage < 100)
+                if (!this.wheelSmoothReturnIsActive)
                 {
-                    this.wheelPercentage++;
+                    // Normal case
+                    if (this.wheelPercentage < 100)
+                    {
+                        this.wheelPercentage++;
+                    }
+                }
+                else
+                {
+                    // Smooth return
+                    if (this.wheelPercentage > 0)
+                    {
+                        this.wheelPercentage--;
+                    }
+                    else
+                    {
+                        this.wheelRightTimer.Stop();
+                        this.wheelSmoothReturnIsActive = false;
+                    }
                 }
             };
         }
 
         public void HandleKeyDown_Up()
         {
+            this.wheelSmoothReturnIsActive = false;
             this.throttleTimer.Start();
         }
 
         public void HandleKeyUp_Up()
         {
-            this.throttleTimer.Stop();
-            this.throttlePercentage = 0;
+            this.throttleSmoothReturnIsActive = true;
         }
 
         public void HandleKeyDown_Down()
         {
+            this.wheelSmoothReturnIsActive = false;
             this.brakeTimer.Start();
         }
 
         public void HandleKeyUp_Down()
         {
-            this.brakeTimer.Stop();
-            this.brakePercentage = 0;
+            this.brakeSmoothReturnIsActive = true;
         }
 
         public void HandleKeyDown_Left()
         {
+            this.wheelSmoothReturnIsActive = false;
             this.wheelLeftTimer.Start();
         }
 
         public void HandleKeyUp_Left()
         {
-            this.wheelLeftTimer.Stop();
-            this.wheelPercentage = 0;
+            this.brakeSmoothReturnIsActive = !this.wheelRightTimer.Enabled;
+            if (this.wheelRightTimer.Enabled)
+            {
+                this.wheelLeftTimer.Stop();
+            }
         }
 
         public void HandleKeyDown_Right()
         {
+            this.wheelSmoothReturnIsActive = false;
             this.wheelRightTimer.Start();
         }
 
         public void HandleKeyUp_Right()
         {
-            this.wheelRightTimer.Stop();
-            this.wheelPercentage = 0;
+            this.brakeSmoothReturnIsActive = !this.wheelLeftTimer.Enabled;
+            if (this.wheelLeftTimer.Enabled)
+            {
+                this.wheelRightTimer.Stop();
+            }
         }
 
         public override void Process()
@@ -114,7 +195,6 @@
             this.KeyboardHandlerPacket.ThrottlePercentage = this.throttlePercentage;
             this.KeyboardHandlerPacket.BrakePercentage = this.brakePercentage;
             this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
-
         }
     }
 }
