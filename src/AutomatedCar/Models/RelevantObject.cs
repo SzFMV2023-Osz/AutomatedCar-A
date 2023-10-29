@@ -27,5 +27,10 @@
         {
             this.CurrentDistance = distance;
         }
+
+        public void modifyPreviousDistance(double distance)
+        {
+            this.PreviousDistance = distance;
+        }
     }
 }
