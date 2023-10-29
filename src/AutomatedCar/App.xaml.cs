@@ -116,8 +116,9 @@ namespace AutomatedCar
         private void AddNpcPedestrian(World world)
         {
 
-            var Pedestrian = this.CreateNpcPedestrian(1950, 630,0, "woman.png",world);
+            var Pedestrian = this.CreateNpcPedestrian(1950, 630,3, "woman.png",world);
             world.AddObject(Pedestrian);
+            world.npcManager.Start();
 
         }
 
