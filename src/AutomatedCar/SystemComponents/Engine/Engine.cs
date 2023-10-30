@@ -1,17 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents.Engine
 {
-    /*!!! Merge conflict BEGIN --> these are defined in other branches, MUST remove these and using implemented classes !!!*/
-    public interface IGearBox
-    {
-       int CalculateGearSpeed(int revolution, int enginespeed);
-    }
-
-    public interface IThrottle
-    {
-        int GetThrottle();
-    }
-
-    /*!!! Merge conflict END !!!*/
+    using AutomatedCar.SystemComponents.Gearbox;
+    using AutomatedCar.SystemComponents.Packets.InputHandling;
 
     /// <summary>
     /// The engine class.
