@@ -1,6 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
     using System;
+    using System.Linq;
     using AutomatedCar.Models;
 
     internal class Radar : Sensor
@@ -17,7 +18,7 @@
 
         public override void Process()
         {
-            throw new NotImplementedException();
+            this.ObjectsinViewUpdate(World.Instance.WorldObjects);
         }
 
         //figure out how the PolylineGeometry works
