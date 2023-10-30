@@ -38,6 +38,7 @@ namespace AutomatedCar.Models.NPC{
                 }
                 else
                 {
+                    this.Speed = Points[NextPoint].Speed;
                     double distancePerSpeedRatio = distance / this.Speed;
                     this.X += (int)Math.Round(difX / distancePerSpeedRatio);
                     this.Y += (int)Math.Round(difY / distancePerSpeedRatio);

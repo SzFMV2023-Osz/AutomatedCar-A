@@ -10,10 +10,10 @@
     {
         private int x;
         private int y;
-        private double rotation;
+        private int rotation;
         private int speed;
 
-        public NPCPathPoint(int x, int y, double rotation, int speed)
+        public NPCPathPoint(int x, int y, int rotation, int speed)
         {
             this.x = x;
             this.y = y;
@@ -25,7 +25,7 @@
 
         public int Y { get => this.y; }
 
-        public double Rotation { get => this.rotation; }
+        public int Rotation { get => this.rotation; }
 
         public int Speed { get => this.speed; }
     }
