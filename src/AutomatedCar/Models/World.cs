@@ -12,8 +12,12 @@
     using Visualization;
     using Avalonia.Media;
 
+    using NPC;
+
     public class World
     {
+
+        public NPCManager npcManager = new NPCManager();
         private int controlledCarPointer = 0;
         public List<AutomatedCar> controlledCars = new ();
 
