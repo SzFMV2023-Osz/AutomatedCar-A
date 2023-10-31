@@ -7,6 +7,8 @@ namespace AutomatedCar.Models
     {
         private VirtualFunctionBus virtualFunctionBus;
 
+        private Radar radarSensor;
+
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
@@ -22,6 +24,12 @@ namespace AutomatedCar.Models
 
         public PolylineGeometry Geometry { get; set; }
 
+        public void CreateRadarSensor()
+        {
+            this.radarSensor = new Radar(this.virtualFunctionBus, this);
+            this.virtualFunctionBus.RegisterComponent(this.radarSensor);
+        }
+
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
         public void Start()
         {
@@ -33,5 +41,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
+
+        
     }
 }
