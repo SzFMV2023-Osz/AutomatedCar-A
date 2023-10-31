@@ -100,7 +100,7 @@
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
                 if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, car.X, car.Y + this.distanceFromCarCenter)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y + this.distanceFromCarCenter))
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y + this.distanceFromCarCenter) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
                 {
                     this.HighlightedObject = this.CurrentObjectsinView[i];
                     this.automatedCarForSensors.Collideable = true;
@@ -116,7 +116,7 @@
         {
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) == 0)
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) == 0 && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
                 {
                     this.Collided?.Invoke(this, e);
                 }
