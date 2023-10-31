@@ -6,7 +6,7 @@
     internal class Radar : Sensor
     {
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
-            : base(virtualFunctionBus, automatedCar, 10, 60, 200)
+            : base(virtualFunctionBus, automatedCar, 115, 60, 200)
         {
         }
 
