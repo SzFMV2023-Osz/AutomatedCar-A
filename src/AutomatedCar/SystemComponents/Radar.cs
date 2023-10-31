@@ -50,7 +50,7 @@
         {
             foreach (WorldObject WO in this.CurrentObjectsinView)
             {
-                if (!WO.WorldObjectType.Equals(WorldObjectType.Road))
+                if (!WO.WorldObjectType.Equals(WorldObjectType.Road)) 
                 {
                     bool mustadd = true;
                     foreach (RelevantObject prevobj in this.previousObjectinView)
