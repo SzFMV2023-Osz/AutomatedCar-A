@@ -98,7 +98,7 @@
         }
 
 
-        private void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
+        protected void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
             // car x : 480
             // car y : 1425
