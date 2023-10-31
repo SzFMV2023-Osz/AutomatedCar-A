@@ -5,14 +5,13 @@
     using AutomatedCar.Models;
 
     internal class Radar : Sensor
-
-
     {
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
-            : base(virtualFunctionBus, automatedCar, 10, 60, 200)
-
+            : base(virtualFunctionBus, automatedCar)
         {
-
+            this.distanceFromCarCenter = 10;
+            this.viewDistance = 200;
+            this.viewAngle = 60;
         }
 
         public void ObjectInRange (WorldObject worldObject)

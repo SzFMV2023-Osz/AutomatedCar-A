@@ -8,23 +8,24 @@
     using System.Threading.Tasks;
 
     internal class Camera : Sensor
-
-
     {
         public Camera(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
-            : base(virtualFunctionBus, automatedCar, 10, 60, 80)
+            : base(virtualFunctionBus, automatedCar)
 
         {
+            this.distanceFromCarCenter = 10;
+            this.viewDistance = 80;
+            this.viewAngle = 60;
         }
+
         public override void Process()
         {
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
         }
+
         public void ObjectInRange (WorldObject worldObject)
         {
             this.currentObjectinView.Add(worldObject);
         }
-
-       
     }
 }
