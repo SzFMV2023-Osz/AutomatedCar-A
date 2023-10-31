@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using AutomatedCar.Models;
     using Avalonia;
     using Avalonia.Controls.Shapes;
+    using Avalonia.Media;
 
     internal abstract class Sensor : SystemComponent
     {
@@ -24,6 +26,58 @@
             : base(virtualFunctionBus)
         {
             this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
+            this.CurrentObjectsinView = new List<WorldObject>();
+        }
+
+        public void ObjectsinViewUpdate(List<WorldObject> objects)
+        {
+            foreach (var obj in objects)
+            {
+                Points points = new Points();
+                Console.WriteLine(obj.Filename);
+                foreach (var geom in obj.Geometries)
+                {
+                    points.AddRange(geom.Points);
+                }
+
+                if (IsInTriangle(points))
+                {
+                    if (!CurrentObjectsinView.Contains(obj))
+                    {
+                        CurrentObjectsinView.Add(obj);
+                    }
+                }
+                else
+                {
+                    CurrentObjectsinView.Remove(obj);
+                }
+            }
+        }
+
+        private bool IsInTriangle(Points points)
+        {
+            var triPoints = this.SensorTriangle.Points;
+            foreach (var point in points)
+            {
+                double A = area(triPoints[0].X, triPoints[0].Y, triPoints[1].X, triPoints[1].Y, triPoints[2].X, triPoints[2].Y);
+
+                double A1 = area((double)point.X, (double)point.Y, triPoints[1].X, triPoints[1].Y, triPoints[2].X, triPoints[2].Y);
+
+                double A2 = area(triPoints[0].X, triPoints[0].Y, (double)point.X, (double)point.Y, triPoints[2].X, triPoints[2].Y);
+
+                double A3 = area(triPoints[0].X, triPoints[0].Y, triPoints[1].X, triPoints[1].Y, (double)point.X, (double)point.Y);
+                if (A == A1 + A2 + A3)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private double area(double x1, double y1, double x2, double y2, double x3, double y3)
+        {
+            return Math.Abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
         }
 
         public void ClosestHighlightedObject(AutomatedCar car)
