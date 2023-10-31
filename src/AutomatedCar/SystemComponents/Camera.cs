@@ -7,16 +7,18 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    class Camera : Sensor
-    {
-        public int SensorPositionX {get;set;}
-        public int CameraPositionY { get; set; }
-        
+    internal class Camera : Sensor
 
-        public Camera(double ViewAngle, double ViewDistance)
+
+    {
+        public Camera(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
+            : base(virtualFunctionBus, automatedCar, 10, 60, 80)
+
         {
-            ViewAngle = 60;
-            ViewDistance = 80;
+        }
+        public override void Process()
+        {
+            this.ObjectsinViewUpdate(World.Instance.WorldObjects);
         }
         public void ObjectInRange (WorldObject worldObject)
         {
