@@ -32,6 +32,7 @@
             : base(virtualFunctionBus)
         {
             this.CurrentObjectsinView = new List<WorldObject>();
+            this.previousObjectinView = new List<RelevantObject>();
             this.automatedCarForSensors = automatedCar;
             this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
         }

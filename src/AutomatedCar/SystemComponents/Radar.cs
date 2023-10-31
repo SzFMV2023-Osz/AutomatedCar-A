@@ -74,11 +74,14 @@
         // Removes objects that are no longer in view from previousObjectinView List
         private void RemoveObjectsNotinView()
         {
-            foreach (RelevantObject prevobj in this.previousObjectinView)
+            if (this.previousObjectinView.Count > 0)
             {
-                if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
+                foreach (RelevantObject prevobj in this.previousObjectinView)
                 {
-                    this.previousObjectinView.Remove(prevobj);
+                    if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
+                    {
+                        this.previousObjectinView.Remove(prevobj);
+                    }
                 }
             }
         }
