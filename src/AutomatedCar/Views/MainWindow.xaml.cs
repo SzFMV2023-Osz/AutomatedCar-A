@@ -10,7 +10,6 @@ namespace AutomatedCar.Views
 
     public class MainWindow : Window
     {
-
         public MainWindow()
         {
             this.InitializeComponent();
@@ -141,6 +140,8 @@ namespace AutomatedCar.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+            this.virtualFunctionBus = new VirtualFunctionBus();
+            this.keyboardHandler = new KeyboardHandler(this.virtualFunctionBus);
         }
     }
 }
