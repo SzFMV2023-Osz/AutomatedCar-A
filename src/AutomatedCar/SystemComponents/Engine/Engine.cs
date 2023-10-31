@@ -1,7 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents.Engine
 {
     using AutomatedCar.SystemComponents.Gearbox;
-    using AutomatedCar.SystemComponents.Packets.InputHandling;
+    using AutomatedCar.SystemComponents.InputHandling;
 
     /// <summary>
     /// The engine class.

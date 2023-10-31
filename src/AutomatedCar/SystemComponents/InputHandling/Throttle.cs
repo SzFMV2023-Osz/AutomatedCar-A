@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.SystemComponents.Packets.InputHandling
+﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
     using System;
     using System.Collections.Generic;
@@ -12,16 +12,16 @@
 
         public int GetThrottle()
         {
-            return this.throttle;
+            return throttle;
         }
 
-        
+
         public void SetThrottle(int throttleValue)
         {
             if (throttleValue >= 0
                 && throttleValue <= 100)
             {
-                this.throttle = throttleValue;
+                throttle = throttleValue;
             }
         }
     }
