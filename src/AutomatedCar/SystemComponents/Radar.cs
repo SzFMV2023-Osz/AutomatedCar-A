@@ -48,9 +48,7 @@
         // Refreshes previousObjectinView List regarding the elements (excluding roads)
         private void RefreshPreviousObjects()
         {
-            // végig megyünk a mostani objecteken, és ha nem találunk egyet
-            // a korábbi objectek listájában, hozzáadjuk
-            foreach (WorldObject WO in this.currentObjectinView)
+            foreach (WorldObject WO in this.CurrentObjectsinView)
             {
                 if (!WO.WorldObjectType.Equals(WorldObjectType.Road))
                 {
@@ -76,10 +74,9 @@
         // Removes objects that are no longer in view from previousObjectinView List
         private void RemoveObjectsNotinView()
         {
-            // ha előbb láttuk de most nem, töröljük
             foreach (RelevantObject prevobj in this.previousObjectinView)
             {
-                if (!this.currentObjectinView.Contains(prevobj.RelevantWorldObject))
+                if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                 {
                     this.previousObjectinView.Remove(prevobj);
                 }

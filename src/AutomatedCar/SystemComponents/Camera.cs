@@ -25,7 +25,7 @@
 
         public void ObjectInRange (WorldObject worldObject)
         {
-            this.currentObjectinView.Add(worldObject);
+            this.CurrentObjectsinView.Add(worldObject);
         }
     }
 }

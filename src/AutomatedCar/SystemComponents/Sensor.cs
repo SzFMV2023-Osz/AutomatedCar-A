@@ -16,7 +16,7 @@
 
         public WorldObject HighlightedObject { get; private set; }
         
-        public List<WorldObject> currentObjectinView { get; protected set; }
+        public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
         public List<RelevantObject> previousObjectinView { get; protected set; }
         
