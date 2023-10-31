@@ -1,10 +1,13 @@
 namespace AutomatedCar
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Reflection;
+    using System.Runtime.Remoting;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
@@ -95,5 +98,7 @@ namespace AutomatedCar
             world.AddControlledCar(controlledCar);
             world.AddControlledCar(controlledCar2);
         }
+
+        public delegate void CollidedEventArgs(object sender, EventArgs e);
     }
 }

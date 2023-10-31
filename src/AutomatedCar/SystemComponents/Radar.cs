@@ -23,6 +23,7 @@
 
         public override void Process()
         {
+            // this.CollisionDetection();
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
@@ -41,7 +42,7 @@
             foreach (RelevantObject prevobj in this.previousObjectinView)
             {
                 prevobj.modifyPreviousDistance(prevobj.CurrentDistance);
-                prevobj.modifyCurrentDistance(this.CalculateDistance(prevobj.RelevantWorldObject.X, prevobj.RelevantWorldObject.Y, 0, 0));
+                prevobj.modifyCurrentDistance(this.CalculateDistance(prevobj.RelevantWorldObject.X, prevobj.RelevantWorldObject.Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y));
             }
         }
 
@@ -64,7 +65,7 @@
 
                     if (mustadd)
                     {
-                        double distance = this.CalculateDistance(WO.X, WO.Y, 0, 0);
+                        double distance = this.CalculateDistance(WO.X, WO.Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y);
                         this.previousObjectinView.Add(new RelevantObject(WO, distance, distance));
                     }
                 }

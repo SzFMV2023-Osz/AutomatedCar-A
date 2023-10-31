@@ -2,14 +2,19 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Runtime.ConstrainedExecution;
     using AutomatedCar.Models;
     using Avalonia;
     using Avalonia.Controls.Shapes;
     using Avalonia.Media;
+    using Newtonsoft.Json.Linq;
 
     internal abstract class Sensor : SystemComponent
     {
+        public event EventHandler Collided;
         public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
         public Polygon SensorTriangle { get; private set; }
@@ -91,12 +96,29 @@
         public void ClosestHighlightedObject(AutomatedCar car)
         {
             this.HighlightedObject = this.CurrentObjectsinView[0];
+
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, car.X, car.Y)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y))
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, car.X, car.Y + this.distanceFromCarCenter)
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y + this.distanceFromCarCenter))
                 {
                     this.HighlightedObject = this.CurrentObjectsinView[i];
+                    this.automatedCarForSensors.Collideable = true;
+                }
+                else
+                {
+                    this.automatedCarForSensors.Collideable = false;
+                }
+            }
+        }
+
+        public void Collidable(EventArgs e)
+        {
+            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
+            {
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) == 0)
+                {
+                    this.Collided?.Invoke(this, e);
                 }
             }
         }
@@ -145,5 +167,25 @@
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
         }
+
+        protected virtual void CollisionDetection()
+        {
+            //EventHandler<CollidedEventArgs> handler = Collided;
+
+            //if (handler != null)
+            //{
+            //    handler(this, e);
+            //}
+
+            //List<PolylineGeometry> pg = CurrentObjectsinView[0].Geometries;
+
+            
+        }
+    }
+
+    internal class CollidedEventArgs : EventArgs
+    {
+        public bool Collided { get; set; }
     }
 }
+
