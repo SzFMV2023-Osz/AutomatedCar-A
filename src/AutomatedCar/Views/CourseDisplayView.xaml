@@ -84,6 +84,14 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                          
+                          <Popup Name="CollidedPopUp" IsOpen="{Binding Collideable}">
+                            <Border BorderThickness="1">
+                              <TextBlock Name="CollidedText" Background="LightPink" Padding="30">
+                                Your Car Collided!
+                              </TextBlock>
+                            </Border>
+                          </Popup>
                    
                         </Canvas>
                     </Canvas>
