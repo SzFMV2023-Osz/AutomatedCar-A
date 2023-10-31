@@ -24,13 +24,18 @@
 
         public AutomatedCar automatedCarForSensors { get; protected set; }
 
-        public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int viewDistance)
-            : base(virtualFunctionBus)
+        public int viewAngle { get; protected set; }
 
+        public int viewDistance { get; protected set; }
+
+        public int distanceFromCarCenter { get; protected set; }
+        
+        public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
+            : base(virtualFunctionBus)
         {
-            this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
             this.CurrentObjectsinView = new List<WorldObject>();
             this.automatedCarForSensors = automatedCar;
+            this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
         }
 
         public void ObjectsinViewUpdate(List<WorldObject> objects)
