@@ -14,20 +14,18 @@
     {
         private Timer brakeTimer;
         private Timer throttleTimer;
-        //private Timer wheelLeftTimer;
-        //private Timer wheelRightTimer;
-        private Timer wheelReturnTimer;
+        private Timer wheelLeftTimer;
+        private Timer wheelRightTimer;
         private int brakePercentage;
         private int throttlePercentage;
         private int wheelPercentage;
         private SequentialShiftingDirections shiftingDirection;
         private bool brakeSmoothReturnIsActive;
         private bool throttleSmoothReturnIsActive;
-        private bool wheelIsTurningLeft;
-        private bool wheelIsTurningRight;
-        //private bool wheelSmoothReturnIsActive;
+        private bool wheelSmoothReturnIsActive;
 
         public KeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
+
 
         public KeyboardHandler(VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
