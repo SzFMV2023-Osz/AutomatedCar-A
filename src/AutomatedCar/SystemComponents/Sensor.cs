@@ -46,14 +46,7 @@
         {
             foreach (var obj in objects)
             {
-                Points points = new Points();
-                Console.WriteLine(obj.Filename);
-                foreach (var geom in obj.Geometries)
-                {
-                    points.AddRange(geom.Points);
-                }
-
-                if (IsInTriangle(points))
+                if (IsInTriangle(obj))
                 {
                     if (!CurrentObjectsinView.Contains(obj))
                     {
@@ -67,24 +60,16 @@
             }
         }
 
-        private bool IsInTriangle(Points points)
+        private bool IsInTriangle(WorldObject obj)
         {
             var triPoints = this.SensorTriangle.Points;
-            foreach (var point in points)
+            foreach (var g in obj.Geometries)
             {
-                double A = area(triPoints[0].X, triPoints[0].Y, triPoints[1].X, triPoints[1].Y, triPoints[2].X, triPoints[2].Y);
-
-                double A1 = area((double)point.X, (double)point.Y, triPoints[1].X, triPoints[1].Y, triPoints[2].X, triPoints[2].Y);
-
-                double A2 = area(triPoints[0].X, triPoints[0].Y, (double)point.X, (double)point.Y, triPoints[2].X, triPoints[2].Y);
-
-                double A3 = area(triPoints[0].X, triPoints[0].Y, triPoints[1].X, triPoints[1].Y, (double)point.X, (double)point.Y);
-                if (A == A1 + A2 + A3)
+                if (SensorTriangle.DefiningGeometry.Bounds.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
                 {
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -144,6 +129,10 @@
             Point point3 = new Point(
                            (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation - alpha)))),
                            (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation - alpha)))));
+
+            Point point4 = new Point(
+                (int)((point1.X+point2.X) / 2),
+                (int)((point1.Y + point2.Y) / 2));
 
             Polygon triangle = new Polygon();
             triangle.Points = new List<Point>

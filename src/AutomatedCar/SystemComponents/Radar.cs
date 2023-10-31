@@ -24,6 +24,7 @@
         public override void Process()
         {
             // this.CollisionDetection();
+            this.CreateSensorTriangle(automatedCarForSensors,distanceFromCarCenter,viewAngle, viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
