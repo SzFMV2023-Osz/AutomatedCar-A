@@ -5,9 +5,12 @@
     using AutomatedCar.Models;
 
     internal class Radar : Sensor
+
+
     {
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar, 10, 60, 200)
+
         {
         }
 
@@ -26,5 +29,6 @@
         {
             //this.sensorTriangle
         }
+        
     }
 }

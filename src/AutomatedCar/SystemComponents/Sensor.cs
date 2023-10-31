@@ -17,6 +17,7 @@
         public WorldObject HighlightedObject { get; private set; }
         
         public List<WorldObject> currentObjectinView { get; protected set; }
+
         
         public List<WorldObject> previousObjectinView { get; protected set; }
         
@@ -24,6 +25,7 @@
 
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int viewDistance)
             : base(virtualFunctionBus)
+
         {
             this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
             this.CurrentObjectsinView = new List<WorldObject>();
@@ -93,6 +95,7 @@
             }
         }
 
+
         private void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
             // car x : 480
@@ -130,11 +133,13 @@
             return degrees * Math.PI / 180.0;
         }
 
+
         private double CalculateDistance(double xACoordinate, double yACoordinate, double xBCoordinate, double yBCoordinate)
         {
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
         }
+
 
         // Returns relevant objects
         public List<RelevantObject> RelevantObjects()
@@ -184,5 +189,6 @@
 
             return 999; // akkorát adunk visza, hogy mindenképp nagyobb legyen
         }
+
     }
 }
