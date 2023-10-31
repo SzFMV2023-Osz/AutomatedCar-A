@@ -19,8 +19,6 @@
         {
             throw new NotImplementedException();
         }
-
-        //figure out how the PolylineGeometry works
         public void VisualiseRadarVision()
         {
             //this.sensorTriangle

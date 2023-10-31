@@ -53,7 +53,7 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                          
+                          <Polygon Points="0,0 0,30 30,15" Fill="Blue" Stroke="Black" StrokeThickness="2" />
                         </Canvas>
                         <!-- I have to transform the canvas, otherwise the object will be outside of the canvas -->
                         <Canvas RenderTransformOrigin="{Binding RotationPoint, Converter={x:Static visualization:RenderTransformOriginTransformer.Instance}}">
