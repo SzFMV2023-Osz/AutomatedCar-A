@@ -12,6 +12,7 @@
             : base(virtualFunctionBus, automatedCar, 10, 60, 200)
 
         {
+
         }
 
         public void ObjectInRange (WorldObject worldObject)
@@ -29,6 +30,5 @@
         {
             //this.sensorTriangle
         }
-        
     }
 }

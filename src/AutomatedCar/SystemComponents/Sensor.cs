@@ -18,10 +18,13 @@
         
         public List<WorldObject> currentObjectinView { get; protected set; }
 
-        
         public List<WorldObject> previousObjectinView { get; protected set; }
         
         public List<RelevantObject> previousRelevant { get; protected set; }
+
+        public int automatedCarX { get; protected set; }
+
+        public int automatedCarY { get; protected set; }
 
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int viewDistance)
             : base(virtualFunctionBus)
@@ -29,6 +32,8 @@
         {
             this.CreateSensorTriangle(automatedCar, distanceFromCarCenter, viewAngle, viewDistance);
             this.CurrentObjectsinView = new List<WorldObject>();
+            this.automatedCarX = automatedCar.X;
+            this.automatedCarY= automatedCar.Y;
         }
 
         public void ObjectsinViewUpdate(List<WorldObject> objects)
