@@ -84,52 +84,7 @@
         // Returns relevant objects
         public List<RelevantObject> RelevantObjects()
         {
-            /*
-            // visszaadandó relevantobject lista
-            List<RelevantObject> returnRelevants = new List<RelevantObject>();
-            // segédlista
-            List<WorldObject> helpList = new List<WorldObject>();
-
-            // ha egy obj most is és előbb is látva volt, a segédlistába rakjuk
-            foreach (WorldObject relobj in this.currentObjectinView)
-            {
-                if (this.previousObjectinView.Contains(relobj))
-                {
-                    helpList.Add(relobj);
-                }
-            }
-
-            // végig megyünk a korábban releváns objektumok listáján
-            foreach (RelevantObject relobj2 in this.previousRelevant)
-            {
-                // végig megyünk a segédlistán
-                foreach (WorldObject WO in helpList)
-                {
-                    // ha a segédlista eleme megegyezik a korábbi relevánssal és a távolsága is kisebb lett:
-                    if (relobj2.RelevantWorldObject.Equals(WO) && 
-                        this.CalculateDistance(relobj2.RelevantWorldObject.X, relobj2.RelevantWorldObject.Y, 0, 0) <= relobj2.PreviousDistance)
-                    {
-                        // frissítjük a távolságait, hozzáadjuk a visszaadandó listába
-                        // éshogy ne iteráljon rajta végig fölöslegesen megnt, kitöröljük a segédlistából
-                        relobj2.modifyPreviousDistance(relobj2.CurrentDistance);
-                        relobj2.modifyCurrentDistance(this.CalculateDistance(relobj2.RelevantWorldObject.X, relobj2.RelevantWorldObject.Y, 0, 0));
-                        returnRelevants.Add(relobj2);
-                        helpList.Remove(WO);
-                    }
-                    // ha a segédlista eleme megegyezik a korábbi relevánssal, de nem csökkent a távolsága:
-                    else if (relobj2.RelevantWorldObject.Equals(WO) &&
-                             this.CalculateDistance(relobj2.RelevantWorldObject.X, relobj2.RelevantWorldObject.Y, 0, 0) <= relobj2.PreviousDistance)
-                    {
-                        // eltávolítjuk a segédlistából, hogy ne iteráljon végig rajta mégegyszer
-                        // és a korábbi relevánsok közül is
-                        helpList.Remove(WO);
-                        this.previousRelevant.Remove(relobj2);
-                    }
-                }
-            }
-
-            return returnRelevants;
-            */
+            
 
             List<RelevantObject> relevantObjects = new List<RelevantObject>();
 
