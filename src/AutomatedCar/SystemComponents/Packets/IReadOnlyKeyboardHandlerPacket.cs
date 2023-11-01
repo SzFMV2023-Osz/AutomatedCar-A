@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.Helpers.Gearbox_helpers;
 
     public interface IReadOnlyKeyboardHandlerPacket
     {
@@ -14,6 +15,6 @@
 
         double WheelPercentage { get; }
 
-        int ShiftUpOrDown { get; }
+        GearShift ShiftUpOrDown { get; }
     }
 }

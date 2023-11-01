@@ -1,6 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -155,12 +156,12 @@
 
         public void HandleKeyDown_Q()
         {
-            this.KeyboardHandlerPacket.ShiftUpOrDown = 1;
+            this.KeyboardHandlerPacket.ShiftUpOrDown = GearShift.Up;
         }
 
         public void HandleKeyDown_A()
         {
-            this.KeyboardHandlerPacket.ShiftUpOrDown = -1;
+            this.KeyboardHandlerPacket.ShiftUpOrDown = GearShift.Down;
         }
 
 
