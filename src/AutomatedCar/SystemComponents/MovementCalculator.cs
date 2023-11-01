@@ -8,31 +8,31 @@
 
     public class MovementCalculator
     {
-        const double BRAKING = 50;
-        const double DRAG = 0.4257;
+        const double BRAKING = 100;
+        const double DRAG = 1;
         const double ROLLING_RESISTANCE = 12.8;
         const double WHEEL_BASE = 2.6;
-
-
-        private IGearBox gearBox;
 
         public MovementCalculator()
         {
         }
 
-        public void Calculate(int brakePercentage, int wheelPercentage, int velocityFromGearbox, PowertrainPacket powertrainPacket)
+        public PowertrainPacket Calculate(int brakePercentage, int wheelPercentage, int velocityFromGearbox)
         {
-            if (velocityFromGearbox != 0)
+            PowertrainPacket powertrainPacket = new PowertrainPacket();
+            int velocityAsKmph = velocityFromGearbox; //(int)(velocityFromGearbox / 3.6);
+            if (velocityAsKmph != 0)
             {
                 if (wheelPercentage == 0)
                 {
-                    powertrainPacket.MovementVector = CalculateLongitudinalForce(brakePercentage);
+                    powertrainPacket.MovementVector = CalculateLongitudinalForce(brakePercentage, velocityAsKmph);
                 }
                 else
                 {
-                    powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage);
+                    powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
                 }
             }
+            return powertrainPacket;
         }
 
         public void UpdateCarPosition(PowertrainPacket powertrainPacket)
@@ -48,26 +48,26 @@
             double xt = carCoordinate.X * Math.Cos(rotation) - carCoordinate.Y * Math.Sin(rotation);
             double yt = carCoordinate.X * Math.Sin(rotation) + carCoordinate.Y * Math.Cos(rotation);
 
-            return new Vector2(xt, yt);
+            // calculate px from m
+
+            return new Vector2(xt / 50, yt / 50);
         }
 
-        private Vector2 CalculateLongitudinalForce(int brakePercentage)
+        private Vector2 CalculateLongitudinalForce(int brakePercentage, int velocity)
         {
-            double velocity = this.gearBox.Velocity;
             double brakingForce = -BRAKING * brakePercentage;
             double dragForce = -DRAG * velocity * velocity;
-            double rollingResistanceForce = -ROLLING_RESISTANCE * velocity;
+            //double rollingResistanceForce = -ROLLING_RESISTANCE * velocity;
 
-            double longitudinalForce = velocity + brakingForce + dragForce + rollingResistanceForce;
+            double longitudinalForce = velocity; //+ brakingForce + dragForce;
 
             return new Vector2(longitudinalForce, 0);
         }
 
-        private PowertrainPacket CalculateTurning(int brakePercentage, int wheelPercentage)
+        private PowertrainPacket CalculateTurning(int brakePercentage, int wheelPercentage, int velocity)
         {
             PowertrainPacket powertrainPacket = new PowertrainPacket();
 
-            double velocity = this.gearBox.Velocity;
             double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage));
             double angularVelocityAsDegPerSec = RadianPerSecToDegreesPerSec(velocity / radius);
 
