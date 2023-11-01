@@ -119,8 +119,8 @@
             int cSideLength = (int)(range / Math.Cos(alpha));
 
             Point point1 = new Point(
-                           automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(90 - automatedCar.Rotation))),
-                           automatedCar.Y + (int)(distanceFromCarCenter * Math.Sin(DegToRad(90 - automatedCar.Rotation))));
+                           automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(270 + automatedCar.Rotation))),
+                           automatedCar.Y + (int)(distanceFromCarCenter * Math.Sin(DegToRad(270 + automatedCar.Rotation))));
 
             Point point2 = new Point(
                            (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation + alpha)))),
