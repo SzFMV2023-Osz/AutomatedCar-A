@@ -11,6 +11,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyKeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
+        public IPowertrainPacket PowertrainPacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);

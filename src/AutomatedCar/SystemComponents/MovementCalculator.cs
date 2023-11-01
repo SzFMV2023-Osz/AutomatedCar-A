@@ -2,7 +2,6 @@
 {
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Gearbox;
-    using AutomatedCar.SystemComponents.Engine;
     using System;
     using SystemComponents.InputHandling;
 
@@ -20,7 +19,7 @@
         public MovementCalculator(VirtualFunctionBus virtualFunctionBus)
         {
             this.powertrainPacket = new PowertrainPacket();
-            virtualFunctionBus.MovementVectorPacket = this.powertrainPacket;
+            virtualFunctionBus.PowertrainPacket = this.powertrainPacket;
             this.gearBox = new ATGearBox();
         }
 
