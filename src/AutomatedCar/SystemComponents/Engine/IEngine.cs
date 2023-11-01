@@ -14,6 +14,6 @@
         /// This method calculate the engine torque by gas pedal.
         /// </summary>
         /// <returns>The engine torque value (0-7000).</returns>
-        int CalculateRPM();
+        void CalculateRPM();
     }
 }
