@@ -1,7 +1,19 @@
 namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
-    using System.Numerics;
+
+    public struct Vector2
+    {
+        public Vector2(double x, double y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
+        public double X { get; set; }
+
+        public double Y { get; set; }
+    }
 
     public interface IReadOnlyPowertrainPacket
     {
@@ -11,7 +23,7 @@ namespace AutomatedCar.SystemComponents.Packets
 
         public int RPM { get; }
 
-        public int Speed { get; }
+        public int Velocity { get; }
 
         public ATGears GearStage { get; }
     }
