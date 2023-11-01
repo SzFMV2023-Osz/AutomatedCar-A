@@ -1,9 +1,11 @@
 namespace AutomatedCar.Models
 {
+    using Avalonia.Data.Converters;
     using Avalonia.Media;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
 
     public class PropertyChangedEventArgs : EventArgs
     {
@@ -23,6 +25,8 @@ namespace AutomatedCar.Models
         private int y;
 
         private double rotation;
+
+        private bool collediable;
 
         public WorldObject(int x, int y, string filename, int zindex = 1, bool collideable = false, WorldObjectType worldObjectType = WorldObjectType.Other)
         {
@@ -76,7 +80,15 @@ namespace AutomatedCar.Models
 
         public string Filename { get; set; }
 
-        public bool Collideable { get; set; }
+        public bool Collideable 
+        {
+            get => this.collediable;
+            set
+            {
+                this.collediable = value;
+                this.PropertyChangedEvent?.Invoke(this, new PropertyChangedEventArgs(nameof(this.Collideable)));
+            }
+        }
 
         public WorldObjectType WorldObjectType { get; set; }
     }

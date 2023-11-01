@@ -1,13 +1,20 @@
 namespace AutomatedCar
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Reflection;
+
+    using System.Runtime.Remoting;
+    using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents;
+
     using System.Windows.Markup;
     using AutomatedCar.Models;
     using AutomatedCar.Models.NPC;
+
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
@@ -79,18 +86,22 @@ namespace AutomatedCar
         private AutomatedCar CreateControlledCar(int x, int y, int rotation, string filename)
         {
             var controlledCar = new Models.AutomatedCar(x, y, filename);
-            
+
             controlledCar.Geometry = this.GetControlledCarBoundaryBox();
             controlledCar.RawGeometries.Add(controlledCar.Geometry);
             controlledCar.Geometries.Add(controlledCar.Geometry);
             controlledCar.RotationPoint = new System.Drawing.Point(54, 120);
             controlledCar.Rotation = rotation;
-            
+
+            controlledCar.CreateRadarSensor(); // needs to be after Rotation value assignment
+            controlledCar.CreateCameraSensor();
+
+
             controlledCar.Start();
 
             return controlledCar;
         }
-
+public delegate void CollidedEventArgs(object sender, EventArgs e);
         private void AddControlledCarsTo(World world)
         {
             //var controlledCar = this.CreateControlledCar(480, 1425, 0, "car_1_white.png");
@@ -179,6 +190,7 @@ namespace AutomatedCar
 
             return pathPoints;
         }
+
     }
 
 
