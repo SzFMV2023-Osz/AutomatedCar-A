@@ -2,13 +2,13 @@
 {
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Gearbox;
-    using AutomatedCar.SystemComponents.Engine;
     using System;
     using SystemComponents.InputHandling;
+    using AutomatedCar.Models;
 
     public class MovementCalculator
     {
-        const double BRAKING = 10;
+        const double BRAKING = 50;
         const double DRAG = 0.4257;
         const double ROLLING_RESISTANCE = 12.8;
         const double WHEEL_BASE = 2.6;
@@ -39,6 +39,22 @@
             }
         }
 
+        public void UpdateCarPosition()
+        {
+            Vector2 viewCoordinates = TransformCarCoordinateToViewCoordinate(powertrainPacket.MovementVector, powertrainPacket.Rotation);
+            World.Instance.ControlledCar.X += (int)viewCoordinates.X;
+            World.Instance.ControlledCar.Y += (int)viewCoordinates.Y;
+            World.Instance.ControlledCar.Rotation += powertrainPacket.Rotation;
+        }
+
+        private static Vector2 TransformCarCoordinateToViewCoordinate(Vector2 carCoordinate, double rotation)
+        {
+            double xt = carCoordinate.X * Math.Cos(rotation) - carCoordinate.Y * Math.Sin(rotation);
+            double yt = carCoordinate.X * Math.Sin(rotation) + carCoordinate.Y * Math.Cos(rotation);
+
+            return new Vector2(xt, yt);
+        }
+
         private Vector2 CalculateLongitudinalForce(int brakePercentage)
         {
             double velocity = this.gearBox.Velocity;
@@ -53,17 +69,17 @@
 
         private PowertrainPacket CalculateTurning(int brakePercentage, int wheelPercentage)
         {
-            PowertrainPacket movementVectorPacket = new PowertrainPacket();
+            PowertrainPacket powertrainPacket = new PowertrainPacket();
 
             double velocity = this.gearBox.Velocity;
             double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage));
             double angularVelocityAsDegPerSec = RadianPerSecToDegreesPerSec(velocity / radius);
 
             // ticks per sec = 60
-            movementVectorPacket.Rotation = angularVelocityAsDegPerSec / 60;
-            movementVectorPacket.MovementVector = new Vector2(velocity, 0);
+            powertrainPacket.Rotation = angularVelocityAsDegPerSec / 60;
+            powertrainPacket.MovementVector = new Vector2(velocity, 0);
 
-            return movementVectorPacket;
+            return powertrainPacket;
         }
 
         private static double RadianPerSecToDegreesPerSec(double radianPerSec)
