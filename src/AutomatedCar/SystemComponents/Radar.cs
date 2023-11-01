@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutomatedCar.Models;
+    using Avalonia;
     using DynamicData;
 
     internal class Radar : Sensor
@@ -24,7 +25,7 @@
         public override void Process()
         {
             this.ClosestHighlightedObject();
-            this.Collideable();
+            this.DetectCollision();
             this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
@@ -78,7 +79,7 @@
                 helper.Add(item);
             }
 
-            if ( this.previousObjectinView.Count > 0)
+            if (this.previousObjectinView.Count > 0)
             {
                 foreach (RelevantObject prevobj in this.previousObjectinView)
                 {
@@ -90,7 +91,8 @@
                     }
                     }
                 }
-            this.previousObjectinView = helper;
+
+                this.previousObjectinView = helper;
             }
         }
 
@@ -108,6 +110,42 @@
             }
 
             return relevantObjects;
+        }
+
+        public void DetectCollision()
+        {
+            var data = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
+                     && x.WorldObjectType != WorldObjectType.Road
+                     && x.WorldObjectType != WorldObjectType.Other
+                     && x.WorldObjectType != WorldObjectType.ParkingSpace);
+
+            foreach (var obj in data)
+            {
+                if (this.IsInCar(obj))
+                {
+                    this.automatedCarForSensors.Collideable = true;
+                    return;
+                }
+            }
+
+            this.automatedCarForSensors.Collideable = false;
+        }
+
+        private bool IsInCar(WorldObject obj)
+        {
+            foreach (var g in obj.Geometries)
+            {
+                Rect old = this.automatedCarForSensors.Geometries[0].Bounds;
+                AutomatedCar car = this.automatedCarForSensors;
+                Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
+
+                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

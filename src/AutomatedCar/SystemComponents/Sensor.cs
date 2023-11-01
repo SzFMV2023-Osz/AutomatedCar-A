@@ -15,9 +15,12 @@
     internal abstract class Sensor : SystemComponent
     {
         public event EventHandler Collided;
+
         public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
         public Polygon SensorTriangle { get; private set; }
+
+        public Point SensorPosition { get; set; }
 
         public WorldObject HighlightedObject { get; private set; }
 
@@ -62,49 +65,32 @@
         {
             foreach (var g in obj.Geometries)
             {
-                if (SensorTriangle.DefiningGeometry.Bounds.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
+                if (this.SensorTriangle.DefiningGeometry.Bounds.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
         public void ClosestHighlightedObject()
         {
-            if (CurrentObjectsinView.Count > 0)
+            if (this.CurrentObjectsinView.Count > 0)
             {
                 this.HighlightedObject = this.CurrentObjectsinView[0];
             }
 
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter)
+
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.SensorPosition.X, this.SensorPosition.Y)
                     && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
                     && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
-                    this.HighlightedObject = this.CurrentObjectsinView[i];
-                }
-            }
-        }
 
-        public void Collideable()
-        {
-            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
-            {
-                if (!CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && 
-                    !CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace) && 
-                    !CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other)) 
-                {
-                    if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y,
-                        this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) <= 205
-                        && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) &&
-                        !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
-                        && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other))
-                    {
-                        this.automatedCarForSensors.Collideable = true;
-                    }
+                    this.HighlightedObject = this.CurrentObjectsinView[i];
                 }
             }
         }
@@ -130,9 +116,7 @@
                            (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation - alpha)))),
                            (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation - alpha)))));
 
-            Point point4 = new Point(
-                (int)((point1.X + point2.X) / 2),
-                (int)((point1.Y + point2.Y) / 2));
+            this.SensorPosition = point1;
 
             Polygon triangle = new Polygon();
             triangle.Points = new List<Point>
