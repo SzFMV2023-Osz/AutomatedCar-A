@@ -7,6 +7,7 @@ namespace AutomatedCar.Models
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
+        private Powertrain powertrain;
 
         private Powertrain powertrain;
         public AutomatedCar(int x, int y, string filename)
@@ -18,6 +19,8 @@ namespace AutomatedCar.Models
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+
+        public Powertrain Powertrain { get => this.powertrain; }
 
         public int Revolution { get; set; }
 

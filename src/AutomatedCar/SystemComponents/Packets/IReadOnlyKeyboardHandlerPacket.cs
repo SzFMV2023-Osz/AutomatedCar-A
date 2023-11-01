@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,6 +16,6 @@
 
         int WheelPercentage { get; }
 
-        GearShift ShiftUpOrDown { get; }
+        SequentialShiftingDirections ShiftUpOrDown { get; }
     }
 }

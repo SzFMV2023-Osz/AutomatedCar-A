@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
     using System.IO;
     using AutomatedCar.Helpers.Gearbox_helpers;
@@ -28,7 +29,7 @@
         /// 0 meaning don't shift,
         /// +1 meaning shift up.
         /// </summary>
-        private GearShift shiftUpOrDown;
+        private SequentialShiftingDirections shiftUpOrDown;
 
         public int BrakePercentage
         {
@@ -48,7 +49,7 @@
             set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
         }
 
-        public GearShift ShiftUpOrDown
+        public SequentialShiftingDirections ShiftUpOrDown
         {
             get => this.shiftUpOrDown;
             set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);

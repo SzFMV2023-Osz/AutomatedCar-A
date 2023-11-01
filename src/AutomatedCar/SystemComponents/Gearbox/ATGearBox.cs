@@ -155,7 +155,7 @@
             }
         }
 
-        public void ShiftingGear(GearShift shift)
+        public void ShiftingGear(SequentialShiftingDirections shift)
         {
             ATGears nextGearStage = GearStage + ((int)shift);
             if (Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
@@ -171,6 +171,7 @@
                     {
                         GearStage = nextGearStage;
                     }
+
                     return;
                 }
                 else if (GearStage == ATGears.N)

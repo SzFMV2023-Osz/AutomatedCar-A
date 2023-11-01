@@ -21,7 +21,7 @@
         /// This method can use to shift gears in transmission.
         /// </summary>
         /// <param name="shift"> The direction to shift.</param>
-        void ShiftingGear(GearShift shift);
+        void ShiftingGear(SequentialShiftingDirections shift);
 
         /// <summary>
         /// This method use for calculate engine speed and Velocity.

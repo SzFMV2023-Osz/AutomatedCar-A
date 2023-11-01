@@ -54,6 +54,9 @@
 
             int velocity = this.GearBox.Velocity;
 
+            this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
+
             MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity, this.PowertrainPacket);
             MovementCalculator.UpdateCarPosition(PowertrainPacket);
 
