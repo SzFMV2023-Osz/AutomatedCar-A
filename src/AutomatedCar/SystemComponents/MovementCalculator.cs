@@ -2,6 +2,7 @@
 {
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Gearbox;
+    using AutomatedCar.SystemComponents.Engine;
     using System;
     using SystemComponents.InputHandling;
 
