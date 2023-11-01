@@ -27,5 +27,21 @@
         {
             this.CurrentObjectsinView.Add(worldObject);
         }
+
+        // Returns relevant objects (Roads)
+        public List<WorldObject> RelevantObjects()
+        {
+            List<WorldObject> relevantObjects = new List<WorldObject>();
+
+            foreach (WorldObject relobj in this.CurrentObjectsinView)
+            {
+                if (relobj.WorldObjectType.Equals(WorldObjectType.Road) || relobj.WorldObjectType.Equals(WorldObjectType.Crosswalk))
+                {
+                    relevantObjects.Add(relobj);
+                }
+            }
+
+            return relevantObjects;
+        }
     }
 }
