@@ -140,8 +140,7 @@ namespace AutomatedCar.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            this.virtualFunctionBus = new VirtualFunctionBus();
-            this.keyboardHandler = new KeyboardHandler(this.virtualFunctionBus);
+            this.keyboardHandler = new KeyboardHandler(World.Instance.ControlledCar.VirtualFunctionBus);
         }
     }
 }
