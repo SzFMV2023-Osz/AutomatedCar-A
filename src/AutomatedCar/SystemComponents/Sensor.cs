@@ -22,7 +22,7 @@
 
         public Point SensorPosition { get; set; }
 
-        public WorldObject HighlightedObject { get; private set; }
+        public WorldObject HighlightedObject { get; protected set; }
 
         public List<RelevantObject> previousObjectinView { get; protected set; }
 
@@ -72,27 +72,6 @@
             }
 
             return false;
-        }
-
-        public void ClosestHighlightedObject()
-        {
-            if (this.CurrentObjectsinView.Count > 0)
-            {
-                this.HighlightedObject = this.CurrentObjectsinView[0];
-            }
-
-            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
-            {
-
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.SensorPosition.X, this.SensorPosition.Y)
-                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
-                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
-                {
-
-                    this.HighlightedObject = this.CurrentObjectsinView[i];
-                }
-            }
         }
 
         protected void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)

@@ -17,16 +17,11 @@
             this.viewAngle = 60;
         }
 
-        public void ObjectInRange (WorldObject worldObject)
-        {
-            this.CurrentObjectsinView.Add(worldObject);
-        }
-
         public override void Process()
         {
             this.ClosestHighlightedObject();
             this.DetectCollision();
-            this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
+            this.CreateSensorTriangle(this.automatedCarForSensors, this.distanceFromCarCenter, this.viewAngle, this.viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
@@ -146,6 +141,25 @@
             }
 
             return false;
+        }
+
+        public void ClosestHighlightedObject()
+        {
+            if (this.CurrentObjectsinView.Count > 0)
+            {
+                this.HighlightedObject = this.CurrentObjectsinView[0];
+            }
+
+            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
+            {
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.SensorPosition.X, this.SensorPosition.Y)
+                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
+                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
+                {
+                    this.HighlightedObject = this.CurrentObjectsinView[i];
+                }
+            }
         }
     }
 }

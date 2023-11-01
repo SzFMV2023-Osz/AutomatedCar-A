@@ -84,6 +84,7 @@ namespace AutomatedCar
             controlledCar.RotationPoint = new System.Drawing.Point(54, 120);
             controlledCar.Rotation = rotation;
             controlledCar.CreateRadarSensor(); // needs to be after Rotation value assignment
+            controlledCar.CreateCameraSensor();
 
             controlledCar.Start();
 

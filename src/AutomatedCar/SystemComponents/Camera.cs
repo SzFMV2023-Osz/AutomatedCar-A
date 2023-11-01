@@ -9,9 +9,10 @@
 
     internal class Camera : Sensor
     {
+        public List<WorldObject> RelevantObjects { get; set; }
+
         public Camera(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
-
         {
             this.distanceFromCarCenter = 10;
             this.viewDistance = 80;
@@ -21,19 +22,16 @@
         public override void Process()
         {
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
-        }
-
-        public void ObjectInRange (WorldObject worldObject)
-        {
-            this.CurrentObjectsinView.Add(worldObject);
+            this.RefreshRelevantObjects();
+            this.GetClosestHighlightedObject();
         }
 
         // Returns relevant objects (Roads)
-        public List<WorldObject> RelevantObjects()
+        public void RefreshRelevantObjects()
         {
             List<WorldObject> relevantObjects = new List<WorldObject>();
 
-            foreach (WorldObject relobj in this.CurrentObjectsinView)
+            foreach (WorldObject relobj in World.Instance.WorldObjects)
             {
                 if (relobj.WorldObjectType.Equals(WorldObjectType.Road) || relobj.WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
@@ -41,7 +39,19 @@
                 }
             }
 
-            return relevantObjects;
+            this.RelevantObjects = relevantObjects;
+        }
+
+        public void GetClosestHighlightedObject()
+        {
+            for (int i = 0; i < this.RelevantObjects.Count - 1; i++)
+            {
+                if (this.CalculateDistance(this.RelevantObjects[i].X, this.RelevantObjects[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
+                    <= this.CalculateDistance(this.RelevantObjects[i + 1].X, this.RelevantObjects[i + 1].Y, this.SensorPosition.X, this.SensorPosition.Y))
+                {
+                    this.HighlightedObject = this.RelevantObjects[i];
+                }
+            }
         }
     }
 }

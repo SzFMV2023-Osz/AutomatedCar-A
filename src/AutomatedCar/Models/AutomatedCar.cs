@@ -34,13 +34,11 @@ namespace AutomatedCar.Models
         public void CreateRadarSensor()
         {
             this.radarSensor = new Radar(this.virtualFunctionBus, this);
-            this.virtualFunctionBus.RegisterComponent(this.radarSensor);
         }
 
         public void CreateCameraSensor()
         {
             this.cameraSensor = new Camera(this.virtualFunctionBus, this);
-            this.virtualFunctionBus.RegisterComponent(this.cameraSensor);
         }
 
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
