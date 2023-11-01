@@ -11,7 +11,7 @@
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
-            this.distanceFromCarCenter = 10;
+            this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
         }
