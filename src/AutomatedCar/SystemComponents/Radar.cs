@@ -24,7 +24,9 @@
         public override void Process()
         {
             // this.CollisionDetection();
-            this.CreateSensorTriangle(automatedCarForSensors,distanceFromCarCenter,viewAngle, viewDistance);
+            
+            this.ClosestHighlightedObject();
+            this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
@@ -76,16 +78,32 @@
         // Removes objects that are no longer in view from previousObjectinView List
         private void RemoveObjectsNotinView()
         {
-            if (this.previousObjectinView.Count > 0)
+            if (automatedCarForSensors.Y > 2495)
             {
+                ;
+            }
+
+            List<RelevantObject> helper = new List<RelevantObject>();
+            foreach (RelevantObject item in this.previousObjectinView)
+            {
+                helper.Add(item);
+            }
+
+            //if ( this.previousObjectinView.Count > 0)
+            //{
                 foreach (RelevantObject prevobj in this.previousObjectinView)
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                     {
-                        this.previousObjectinView.Remove(prevobj);
+                    if (this.previousObjectinView.Contains(prevobj))
+                    {
+                        helper.Remove(prevobj);
+                    }
                     }
                 }
-            }
+
+            this.previousObjectinView = helper;
+            //}
         }
 
         // Returns relevant objects

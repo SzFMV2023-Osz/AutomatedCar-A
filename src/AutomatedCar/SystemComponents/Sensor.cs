@@ -38,6 +38,7 @@
         {
             this.CurrentObjectsinView = new List<WorldObject>();
             this.previousObjectinView = new List<RelevantObject>();
+            //this.previousObjectinView.Add(new RelevantObject(new WorldObject(200, 200, "road_2lane_45right", 0, false, WorldObjectType.Road), (double)200, (double)200));
             this.automatedCarForSensors = automatedCar;
             this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
         }
@@ -78,21 +79,26 @@
             return Math.Abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
         }
 
-        public void ClosestHighlightedObject(AutomatedCar car)
+        public void ClosestHighlightedObject(/*AutomatedCar car*/)
         {
-            this.HighlightedObject = this.CurrentObjectsinView[0];
+            if (CurrentObjectsinView.Count > 0)
+            {
+                this.HighlightedObject = this.CurrentObjectsinView[0];
+            }
 
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, car.X, car.Y + this.distanceFromCarCenter)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y + this.distanceFromCarCenter) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
+                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter)
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) 
+                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
+                    && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
                     this.HighlightedObject = this.CurrentObjectsinView[i];
-                    this.automatedCarForSensors.Collideable = true;
+                    //this.automatedCarForSensors.Collideable = true;
                 }
                 else
                 {
-                    this.automatedCarForSensors.Collideable = false;
+                    //this.automatedCarForSensors.Collideable = false;
                 }
             }
         }
