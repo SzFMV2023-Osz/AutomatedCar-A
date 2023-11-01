@@ -23,7 +23,6 @@
 
         public KeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
-
         public KeyboardHandler(VirtualFunctionBus virtualFunctionBus)
             : base(virtualFunctionBus)
         {

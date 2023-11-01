@@ -1,5 +1,6 @@
 namespace AutomatedCar.Views
 {
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents;
     using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.ViewModels;
@@ -9,9 +10,8 @@ namespace AutomatedCar.Views
 
     public class MainWindow : Window
     {
-        private VirtualFunctionBus virtualFunctionBus;
-        KeyboardHandler keyboardHandler;
-        
+        private KeyboardHandler keyboardHandler;
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -26,25 +26,21 @@ namespace AutomatedCar.Views
 
             if (Keyboard.IsKeyDown(Key.Up))
             {
-                //viewModel.CourseDisplay.KeyUp();
                 this.keyboardHandler.HandleKeyDown_Up();
             }
 
             if (Keyboard.IsKeyDown(Key.Down))
             {
-                //viewModel.CourseDisplay.KeyDown();
                 this.keyboardHandler.HandleKeyDown_Down();
             }
 
             if (Keyboard.IsKeyDown(Key.Left))
             {
-                //viewModel.CourseDisplay.KeyLeft();
                 this.keyboardHandler.HandleKeyDown_Left();
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
-                //viewModel.CourseDisplay.KeyRight();
                 this.keyboardHandler.HandleKeyDown_Right();
             }
 
@@ -53,7 +49,7 @@ namespace AutomatedCar.Views
                 this.keyboardHandler.HandleKeyDown_Q();
             }
 
-            if (Keyboard.IsKeyDown(Key.A)) 
+            if (Keyboard.IsKeyDown(Key.A))
             {
                 this.keyboardHandler.HandleKeyDown_A();
             }
@@ -145,8 +141,7 @@ namespace AutomatedCar.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            this.virtualFunctionBus = new VirtualFunctionBus();
-            this.keyboardHandler = new KeyboardHandler(this.virtualFunctionBus);
+            this.keyboardHandler = new KeyboardHandler(World.Instance.ControlledCar.VirtualFunctionBus);
         }
     }
 }

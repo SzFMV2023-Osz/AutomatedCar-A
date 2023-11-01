@@ -57,16 +57,8 @@
                     throw new InvalidDataException("Inappropriate gear shift value. The value has to be between -1 and +1.");
                 }
 
-                this.shiftUpOrDown = value;
+                this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
             }
-        }
-
-        public KeyboardHandlerPacket()
-        {
-            this.brakePercentage = 0;
-            this.throttlePercentage = 0;
-            this.wheelPercentage = 0;
-            this.shiftUpOrDown = 0;
         }
     }
 }
