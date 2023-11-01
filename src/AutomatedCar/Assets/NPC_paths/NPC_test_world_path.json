@@ -225,9 +225,9 @@
       "speed": 4,
       "rotation": 90
     },
-	
-	//turn left
-	
+
+    //turn left
+
     {
       "x": 1575,
       "y": 610,
@@ -244,7 +244,7 @@
       "x": 1575,
       "y": 610,
       "speed": 3,
-      "rotation":  240
+      "rotation": 240
     },
     {
       "x": 1575,
@@ -300,18 +300,18 @@
       "speed": 3,
       "rotation": 0
     },
-	
-	//go down
-	
-	{
+
+    //go down
+
+    {
       "x": 1950,
       "y": 630,
       "speed": 3,
       "rotation": 0
     },
-	
-	//turn right
-	
+
+    //turn right
+
     {
       "x": 1950,
       "y": 630,
@@ -330,7 +330,7 @@
       "speed": 3,
       "rotation": 300
     },
-	{
+    {
       "x": 1950,
       "y": 630,
       "speed": 3,
@@ -410,142 +410,142 @@
     },
     {
       "x": 3480,
-      "y": 2550,
+      "y": 2620,
       "speed": 3,
       "rotation": 260
     },
     {
       "x": 3440,
-      "y": 2580,
+      "y": 2620,
       "speed": 5,
       "rotation": 270
     },
     {
       "x": 810,
-      "y": 2580,
+      "y": 2620,
       "speed": 5,
       "rotation": 270
     },
     //dupla kanyar 1
     {
       "x": 800,
-      "y": 2570,
+      "y": 2620,
       "speed": 3,
       "rotation": 275
     },
     {
       "x": 780,
-      "y": 2560,
+      "y": 2610,
       "speed": 3,
       "rotation": 280
     },
     {
       "x": 760,
-      "y": 2550,
+      "y": 2600,
       "speed": 3,
       "rotation": 285
     },
     {
       "x": 730,
-      "y": 2540,
+      "y": 2590,
       "speed": 3,
       "rotation": 290
     },
 
     {
       "x": 705,
-      "y": 2530,
+      "y": 2580,
       "speed": 3,
       "rotation": 295
     },
 
     {
       "x": 690,
-      "y": 2520,
+      "y": 2570,
       "speed": 3,
       "rotation": 300
     },
 
     {
       "x": 685,
-      "y": 2510,
+      "y": 2560,
       "speed": 3,
       "rotation": 305
     },
     {
       "x": 680,
-      "y": 2500,
+      "y": 2550,
       "speed": 3,
       "rotation": 315
     },
 
     {
       "x": 435,
-      "y": 2210,
+      "y": 2260,
       "speed": 3,
       "rotation": 315
     },
 
     {
       "x": 425,
-      "y": 2200,
+      "y": 2250,
       "speed": 3,
       "rotation": 320
     },
     {
       "x": 420,
-      "y": 2180,
+      "y": 2230,
       "speed": 3,
       "rotation": 325
     },
     {
       "x": 415,
-      "y": 2170,
+      "y": 2220,
       "speed": 3,
       "rotation": 330
     },
     {
       "x": 410,
-      "y": 2160,
+      "y": 2210,
       "speed": 3,
       "rotation": 335
     },
 
     {
       "x": 400,
-      "y": 2150,
+      "y": 2200,
       "speed": 3,
       "rotation": 340
     },
 
     {
       "x": 395,
-      "y": 2140,
+      "y": 2190,
       "speed": 3,
       "rotation": 345
     },
 
     {
       "x": 390,
-      "y": 2130,
+      "y": 2180,
       "speed": 3,
       "rotation": 350
     },
     {
       "x": 385,
-      "y": 2120,
+      "y": 2170,
       "speed": 3,
       "rotation": 355
     },
     {
       "x": 380,
-      "y": 2110,
+      "y": 2160,
       "speed": 3,
       "rotation": 0
     },
     {
       "x": 380,
-      "y": 2110,
+      "y": 2170,
       "speed": 5,
       "rotation": 0
     },
