@@ -20,11 +20,9 @@
         public Polygon SensorTriangle { get; private set; }
 
         public WorldObject HighlightedObject { get; private set; }
-        
-        // public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
         public List<RelevantObject> previousObjectinView { get; protected set; }
-        
+
         public AutomatedCar automatedCarForSensors { get; protected set; }
 
         public int viewAngle { get; protected set; }
@@ -32,13 +30,12 @@
         public int viewDistance { get; protected set; }
 
         public int distanceFromCarCenter { get; protected set; }
-        
+
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus)
         {
             this.CurrentObjectsinView = new List<WorldObject>();
             this.previousObjectinView = new List<RelevantObject>();
-            //this.previousObjectinView.Add(new RelevantObject(new WorldObject(200, 200, "road_2lane_45right", 0, false, WorldObjectType.Road), (double)200, (double)200));
             this.automatedCarForSensors = automatedCar;
             this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
         }
@@ -83,31 +80,34 @@
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
                 if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) 
+                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter)
                     && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
                     && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
                     this.HighlightedObject = this.CurrentObjectsinView[i];
-                    //this.automatedCarForSensors.Collideable = true;
-                }
-                else
-                {
-                    //this.automatedCarForSensors.Collideable = false;
                 }
             }
         }
 
-        public void Collidable(EventArgs e)
+        public void Collideable()
         {
             for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
             {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) == 0 && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
+                if (!CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) && 
+                    !CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace) && 
+                    !CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other)) 
                 {
-                    this.Collided?.Invoke(this, e);
+                    if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y,
+                        this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) <= 205
+                        && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road) &&
+                        !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.ParkingSpace)
+                        && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other))
+                    {
+                        this.automatedCarForSensors.Collideable = true;
+                    }
                 }
             }
         }
-
 
         protected void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
@@ -131,7 +131,7 @@
                            (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation - alpha)))));
 
             Point point4 = new Point(
-                (int)((point1.X+point2.X) / 2),
+                (int)((point1.X + point2.X) / 2),
                 (int)((point1.Y + point2.Y) / 2));
 
             Polygon triangle = new Polygon();
@@ -156,25 +156,5 @@
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
         }
-
-        protected virtual void CollisionDetection()
-        {
-            //EventHandler<CollidedEventArgs> handler = Collided;
-
-            //if (handler != null)
-            //{
-            //    handler(this, e);
-            //}
-
-            //List<PolylineGeometry> pg = CurrentObjectsinView[0].Geometries;
-
-            
-        }
-    }
-
-    internal class CollidedEventArgs : EventArgs
-    {
-        public bool Collided { get; set; }
     }
 }
-
