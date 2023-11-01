@@ -12,7 +12,7 @@
 
         int ThrottlePercentage { get; }
 
-        int WheelPercentage { get; }
+        double WheelPercentage { get; }
 
         int ShiftUpOrDown { get; }
     }
