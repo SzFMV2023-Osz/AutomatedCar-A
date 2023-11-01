@@ -25,14 +25,9 @@
             this.throttle = throttle;
         }
 
-        public int CalculateRPM()
+        public void CalculateRPM()
         {
-            return throttle.GetThrottle() * 70;
-        }
-
-        public void Process()
-        {
-            Revolution = gearbox.CalculateGearSpeed(Revolution, CalculateRPM());
+            Revolution = gearbox.CalculateGearSpeed(Revolution, throttle.GetThrottle() * 70);
         }
     }
 }

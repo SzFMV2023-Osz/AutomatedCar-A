@@ -51,10 +51,14 @@
             this.Throttle.SetThrottle(throttlePercentage);
             this.GearBox.ShiftingGear(shiftUpOrDown);
             this.Brake.SetBrake(brakePercentage);
+            this.Engine.CalculateRPM();
 
             int velocity = this.GearBox.Velocity;
 
-            MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity, this.PowertrainPacket);
+            this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
+
+            this.PowertrainPacket = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
             MovementCalculator.UpdateCarPosition(PowertrainPacket);
 
         }
