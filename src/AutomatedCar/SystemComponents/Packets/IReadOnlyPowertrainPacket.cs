@@ -1,5 +1,7 @@
 namespace AutomatedCar.SystemComponents.Packets
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
+
     public struct Vector2
     {
         public Vector2(double x, double y)
@@ -13,10 +15,13 @@ namespace AutomatedCar.SystemComponents.Packets
         public double Y { get; set; }
     }
 
-    public interface IPowertrainPacket
+    public interface IReadOnlyPowertrainPacket
     {
         public Vector2 MovementVector { get; }
 
         public double Rotation { get; }
+
+        public ATGears GearStage { get; }
+
     }
 }

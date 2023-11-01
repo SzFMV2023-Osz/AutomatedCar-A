@@ -35,10 +35,14 @@
 
         public override void Process()
         {
-            int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-            int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
+            int brakePercentage = this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+            int wheelPercentage = this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
             int velocity = this.GearBox.Velocity;
-            MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity, this.PowertrainPacket);
+
+            this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
+
+            //MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity, this.PowertrainPacket);
             //MovementCalculator.UpdateCarPosition();
         }
     }

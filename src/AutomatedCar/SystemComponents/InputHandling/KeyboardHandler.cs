@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
@@ -17,6 +18,7 @@
         private int brakePercentage;
         private int throttlePercentage;
         private int wheelPercentage;
+        private SequentialShiftingDirections shiftingDirection;
         private bool brakeSmoothReturnIsActive;
         private bool throttleSmoothReturnIsActive;
         private bool wheelSmoothReturnIsActive;
@@ -37,6 +39,8 @@
             this.brakeSmoothReturnIsActive = false;
             this.throttleSmoothReturnIsActive = false;
             this.wheelSmoothReturnIsActive = false;
+
+            this.shiftingDirection = SequentialShiftingDirections.Nothing;
 
             this.brakeTimer.Elapsed += (sender, e) =>
             {
@@ -189,16 +193,18 @@
 
         public void HandleKeyDown_Q()
         {
-            this.KeyboardHandlerPacket.ShiftUpOrDown = 1;
+            this.shiftingDirection = SequentialShiftingDirections.Up;
         }
 
         public void HandleKeyDown_A()
         {
-            this.KeyboardHandlerPacket.ShiftUpOrDown = -1;
+            this.shiftingDirection = SequentialShiftingDirections.Down;
         }
 
         public override void Process()
         {
+            this.KeyboardHandlerPacket.ShiftUpOrDown = this.shiftingDirection;
+            this.shiftingDirection = SequentialShiftingDirections.Nothing;
             this.KeyboardHandlerPacket.ThrottlePercentage = this.throttlePercentage;
             this.KeyboardHandlerPacket.BrakePercentage = this.brakePercentage;
             this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
