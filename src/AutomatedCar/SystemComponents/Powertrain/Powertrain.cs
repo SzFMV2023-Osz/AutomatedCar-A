@@ -56,10 +56,12 @@
             int velocity = this.GearBox.Velocity;
 
             this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
-            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
 
-            this.PowertrainPacket = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
+            //this.PowertrainPacket = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
             MovementCalculator.UpdateCarPosition(PowertrainPacket);
+            this.PowertrainPacket.RPM = this.Engine.Revolution;
+            this.PowertrainPacket.Velocity = this.GearBox.Velocity;
+            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
 
         }
     }

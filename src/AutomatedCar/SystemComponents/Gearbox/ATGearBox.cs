@@ -158,7 +158,7 @@
         public void ShiftingGear(SequentialShiftingDirections shift)
         {
             ATGears nextGearStage = GearStage + ((int)shift);
-            if (Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
+            if (((int)shift != 0 ) && Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
             {
                 if (GearStage == ATGears.R)
                 {
