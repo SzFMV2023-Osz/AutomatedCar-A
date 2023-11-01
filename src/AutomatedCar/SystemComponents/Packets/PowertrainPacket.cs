@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
     using AutomatedCar.Helpers.Gearbox_helpers;
 
