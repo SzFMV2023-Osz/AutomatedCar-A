@@ -63,7 +63,6 @@
 
         private bool IsInTriangle(WorldObject obj)
         {
-            var triPoints = this.SensorTriangle.Points;
             foreach (var g in obj.Geometries)
             {
                 if (SensorTriangle.DefiningGeometry.Bounds.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
@@ -74,12 +73,7 @@
             return false;
         }
 
-        private double area(double x1, double y1, double x2, double y2, double x3, double y3)
-        {
-            return Math.Abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-        }
-
-        public void ClosestHighlightedObject(/*AutomatedCar car*/)
+        public void ClosestHighlightedObject()
         {
             if (CurrentObjectsinView.Count > 0)
             {

@@ -89,8 +89,8 @@
                 helper.Add(item);
             }
 
-            //if ( this.previousObjectinView.Count > 0)
-            //{
+            if ( this.previousObjectinView.Count > 0)
+            {
                 foreach (RelevantObject prevobj in this.previousObjectinView)
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
@@ -103,7 +103,7 @@
                 }
 
             this.previousObjectinView = helper;
-            //}
+            }
         }
 
         // Returns relevant objects
