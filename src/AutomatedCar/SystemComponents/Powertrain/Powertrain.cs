@@ -20,22 +20,26 @@
 
         public IGearBox GearBox { get; set; }
 
-        // public MovementVector MovementVector { get; set; }
+        public MovementCalculator MovementCalculator { get; set; }
 
-        public IMovementVectorPacket MovementVectorPacket { get; set; }
+        public PowertrainPacket PowertrainPacket { get; set; }
 
         public Powertrain(VirtualFunctionBus virtualFunctionBus) : base (virtualFunctionBus) { 
             this.Wheel = new Wheel();
             this.Throttle = new Throttle();
             this.GearBox = new ATGearBox();
             this.Engine = new Engine(this.GearBox, this.Throttle);
-            this.MovementVectorPacket = new MovementVectorPacket();
+            this.PowertrainPacket = new PowertrainPacket();
 
         }
 
         public override void Process()
         {
-            (this.MovementVectorPacket as MovementVectorPacket).MovementVector = (0, 0);
+            int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+            int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
+            int velocity = this.GearBox.Velocity;
+            MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity, this.PowertrainPacket);
+            //MovementCalculator.UpdateCarPosition();
         }
     }
 }
