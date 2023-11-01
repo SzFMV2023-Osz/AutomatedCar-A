@@ -13,33 +13,29 @@
         const double ROLLING_RESISTANCE = 12.8;
         const double WHEEL_BASE = 2.6;
 
-        PowertrainPacket powertrainPacket;
 
         private IGearBox gearBox;
 
-        public MovementCalculator(VirtualFunctionBus virtualFunctionBus)
+        public MovementCalculator()
         {
-            this.powertrainPacket = new PowertrainPacket();
-            virtualFunctionBus.PowertrainPacket = this.powertrainPacket;
-            this.gearBox = new ATGearBox();
         }
 
-        public void Calculate(int brakePercentage, int wheelPercentage, int velocityFromGearbox)
+        public void Calculate(int brakePercentage, int wheelPercentage, int velocityFromGearbox, PowertrainPacket powertrainPacket)
         {
             if (velocityFromGearbox != 0)
             {
                 if (wheelPercentage == 0)
                 {
-                    this.powertrainPacket.MovementVector = CalculateLongitudinalForce(brakePercentage);
+                    powertrainPacket.MovementVector = CalculateLongitudinalForce(brakePercentage);
                 }
                 else
                 {
-                    this.powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage);
+                    powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage);
                 }
             }
         }
 
-        public void UpdateCarPosition()
+        public void UpdateCarPosition(PowertrainPacket powertrainPacket)
         {
             Vector2 viewCoordinates = TransformCarCoordinateToViewCoordinate(powertrainPacket.MovementVector, powertrainPacket.Rotation);
             World.Instance.ControlledCar.X += (int)viewCoordinates.X;
