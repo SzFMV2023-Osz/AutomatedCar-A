@@ -23,18 +23,13 @@
 
         public override void Process()
         {
-            // this.CollisionDetection();
-            this.CreateSensorTriangle(automatedCarForSensors,distanceFromCarCenter,viewAngle, viewDistance);
+            this.ClosestHighlightedObject();
+            this.Collideable();
+            this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
-        }
-
-        //figure out how the PolylineGeometry works
-        public void VisualiseRadarVision()
-        {
-            //this.sensorTriangle
         }
 
         // Refreshes the distance of elements in previousObjectinView List
@@ -76,23 +71,32 @@
         // Removes objects that are no longer in view from previousObjectinView List
         private void RemoveObjectsNotinView()
         {
-            if (this.previousObjectinView.Count > 0)
+            // if other similar methods dont work properly a similar solution should be implemented as here
+            List<RelevantObject> helper = new List<RelevantObject>();
+            foreach (RelevantObject item in this.previousObjectinView)
+            {
+                helper.Add(item);
+            }
+
+            if ( this.previousObjectinView.Count > 0)
             {
                 foreach (RelevantObject prevobj in this.previousObjectinView)
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                     {
-                        this.previousObjectinView.Remove(prevobj);
+                    if (this.previousObjectinView.Contains(prevobj))
+                    {
+                        helper.Remove(prevobj);
+                    }
                     }
                 }
+            this.previousObjectinView = helper;
             }
         }
 
         // Returns relevant objects
         public List<RelevantObject> RelevantObjects()
         {
-
-
             List<RelevantObject> relevantObjects = new List<RelevantObject>();
 
             foreach (RelevantObject relobj in this.previousObjectinView)

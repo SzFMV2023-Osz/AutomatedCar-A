@@ -1,7 +1,11 @@
 namespace AutomatedCar.Models
 {
     using Avalonia.Media;
+    using System.ComponentModel;
+    using System;
+    using System.ComponentModel.DataAnnotations;
     using SystemComponents;
+    using ReactiveUI;
 
     public class AutomatedCar : Car
     {
@@ -10,6 +14,7 @@ namespace AutomatedCar.Models
         private Radar radarSensor;
 
         private Camera cameraSensor;
+
 
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
@@ -49,7 +54,5 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
-
-        
     }
 }
