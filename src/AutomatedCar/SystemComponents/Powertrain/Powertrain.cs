@@ -45,7 +45,7 @@
             int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
             int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
             int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-            GearShift shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+            SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
             this.Wheel.AngleAsDegree = wheelPercentage;
             this.Throttle.SetThrottle(throttlePercentage);
