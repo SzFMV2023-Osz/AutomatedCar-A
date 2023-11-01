@@ -53,15 +53,17 @@
             this.Brake.SetBrake(brakePercentage);
             this.Engine.CalculateRPM();
 
-            int velocity = this.GearBox.Velocity;
+            int velocity = this.GearBox.Velocity - (int)(((double)this.Brake.GetBrake() / 100) * 10);
 
             this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
 
-            //this.PowertrainPacket = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
-            MovementCalculator.UpdateCarPosition(PowertrainPacket);
+            var asd = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
+            this.PowertrainPacket.MovementVector = asd.MovementVector;
+            this.PowertrainPacket.Rotation = asd.Rotation;
             this.PowertrainPacket.RPM = this.Engine.Revolution;
             this.PowertrainPacket.Velocity = this.GearBox.Velocity;
             this.PowertrainPacket.GearStage = this.GearBox.GearStage;
+            MovementCalculator.UpdateCarPosition(PowertrainPacket);
 
         }
     }

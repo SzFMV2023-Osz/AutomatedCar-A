@@ -8,8 +8,8 @@
 
     public class MovementCalculator
     {
-        const double BRAKING = 100;
-        const double DRAG = 1;
+        const double BRAKING = 50;
+        const double DRAG = 20;
         const double ROLLING_RESISTANCE = 12.8;
         const double WHEEL_BASE = 2.6;
 
@@ -29,7 +29,9 @@
                 }
                 else
                 {
-                    powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
+                     var kekw = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
+                    powertrainPacket.MovementVector = kekw.MovementVector;
+                    powertrainPacket.Rotation = kekw.Rotation;
                 }
             }
             return powertrainPacket;
@@ -55,11 +57,11 @@
 
         private Vector2 CalculateLongitudinalForce(int brakePercentage, int velocity)
         {
-            double brakingForce = -BRAKING * brakePercentage;
-            double dragForce = -DRAG * velocity * velocity;
-            //double rollingResistanceForce = -ROLLING_RESISTANCE * velocity;
+            double brakingForce = BRAKING * brakePercentage * (velocity > 0 ? 1 : -1);
+            double dragForce = -DRAG * velocity;
+            double rollingResistanceForce = -ROLLING_RESISTANCE * velocity * (velocity > 0 ? 1 : -1);
 
-            double longitudinalForce = velocity; //+ brakingForce + dragForce;
+            double longitudinalForce = brakingForce + dragForce;
 
             return new Vector2(longitudinalForce, 0);
         }
