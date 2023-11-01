@@ -43,6 +43,7 @@
             {
                 if (!this.brakeSmoothReturnIsActive)
                 {
+                    this.throttlePercentage = 0;
                     if (this.brakePercentage < 100)
                     {
                         this.brakePercentage++;
@@ -66,6 +67,7 @@
             {
                 if (!this.throttleSmoothReturnIsActive)
                 {
+                    this.brakePercentage = 0;
                     if (this.throttlePercentage < 100)
                     {
                         this.throttlePercentage++;
