@@ -1,10 +1,10 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
-    using AutomatedCar.SystemComponents.Packets;
-    using AutomatedCar.SystemComponents.Gearbox;
     using System;
-    using SystemComponents.InputHandling;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Gearbox;
+    using AutomatedCar.SystemComponents.Packets;
+    using SystemComponents.InputHandling;
 
     public class MovementCalculator
     {
@@ -29,11 +29,12 @@
                 }
                 else
                 {
-                     var kekw = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
+                    var kekw = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
                     powertrainPacket.MovementVector = kekw.MovementVector;
                     powertrainPacket.Rotation = kekw.Rotation;
                 }
             }
+
             return powertrainPacket;
         }
 
@@ -57,11 +58,11 @@
 
         private Vector2 CalculateLongitudinalForce(int brakePercentage, int velocity)
         {
-            double brakingForce = BRAKING * brakePercentage * (velocity > 0 ? 1 : -1);
-            double dragForce = -DRAG * velocity;
-            double rollingResistanceForce = -ROLLING_RESISTANCE * velocity * (velocity > 0 ? 1 : -1);
+            double dragForce = DRAG * velocity;
+            double rollingResistanceForce = ROLLING_RESISTANCE * velocity;
+            int forceDirection = velocity > 0 ? 1 : -1;
 
-            double longitudinalForce = dragForce + (brakingForce < dragForce ? brakingForce : dragForce);
+            double longitudinalForce = (dragForce + rollingResistanceForce) * forceDirection;
 
             return new Vector2(longitudinalForce, 0);
         }
