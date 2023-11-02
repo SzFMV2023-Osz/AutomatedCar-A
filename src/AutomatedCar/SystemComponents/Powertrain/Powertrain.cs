@@ -49,11 +49,10 @@
 
             this.Wheel.AngleAsDegree = wheelPercentage;
             this.Throttle.SetThrottle(throttlePercentage);
-            this.GearBox.ShiftingGear(shiftUpOrDown);
             this.Brake.SetBrake(brakePercentage);
             this.Engine.CalculateRPM();
-
             this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+
             this.PowertrainPacket.GearStage = this.GearBox.GearStage;
             this.PowertrainPacket.RPM = this.Engine.Revolution;
             this.PowertrainPacket.Speed = (int)this.GearBox.Speed;
