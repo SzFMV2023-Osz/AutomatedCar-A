@@ -3,13 +3,14 @@
     using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
     using AutomatedCar.Helpers.Gearbox_helpers;
+    using System.Numerics;
 
     public class PowertrainPacket : ReactiveObject, IReadOnlyPowertrainPacket
     {
         private Vector2 movementVector;
         private double rotation;
         private int rpm;
-        private int velocity;
+        private int speed;
         private ATGears gearStage;
 
         public Vector2 MovementVector
@@ -30,10 +31,10 @@
             set => this.RaiseAndSetIfChanged(ref this.rpm, value);
         }
 
-        public int Velocity
+        public int Speed
         {
-            get => this.velocity;
-            set => this.RaiseAndSetIfChanged(ref this.velocity, value);
+            get => this.speed;
+            set => this.RaiseAndSetIfChanged(ref this.speed, value);
         }
 
         public ATGears GearStage

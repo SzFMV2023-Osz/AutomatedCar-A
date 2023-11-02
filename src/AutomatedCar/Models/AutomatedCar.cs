@@ -9,7 +9,7 @@ namespace AutomatedCar.Models
         private VirtualFunctionBus virtualFunctionBus;
         private Powertrain powertrain;
 
-        public AutomatedCar(int x, int y, string filename)
+        public AutomatedCar(double x, double y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();

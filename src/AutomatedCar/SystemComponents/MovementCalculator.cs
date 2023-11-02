@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
+    using System.Numerics;
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Gearbox;
     using System;
@@ -8,79 +9,75 @@
 
     public class MovementCalculator
     {
-        const double BRAKING = 100;
-        const double DRAG = 1;
-        const double ROLLING_RESISTANCE = 12.8;
+        const float BRAKING = 0.1f;
+        const float ROLLING_RESISTANCE = 0.01f;
         const double WHEEL_BASE = 2.6;
+
+        private Vector2 aggregatedVelocity;
 
         public MovementCalculator()
         {
         }
 
-        public PowertrainPacket Calculate(int brakePercentage, int wheelPercentage, int velocityFromGearbox)
+        public void Process(int brakePercentage, int wheelPercentage, IGearBox gearBox)
         {
-            PowertrainPacket powertrainPacket = new PowertrainPacket();
-            int velocityAsKmph = velocityFromGearbox; //(int)(velocityFromGearbox / 3.6);
-            if (velocityAsKmph != 0)
+            float brakingFroce = brakePercentage * BRAKING;
+            float rollingResistance = gearBox.Speed * ROLLING_RESISTANCE;
+            float aggregatedForces = brakingFroce + rollingResistance;
+            if (gearBox.Speed > 0)
             {
-                if (wheelPercentage == 0)
+                if (gearBox.Speed - aggregatedForces < 0)
                 {
-                    powertrainPacket.MovementVector = CalculateLongitudinalForce(brakePercentage, velocityAsKmph);
+                    gearBox.Speed = 0;
                 }
                 else
                 {
-                    powertrainPacket = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
+                    gearBox.Speed -= aggregatedForces;
                 }
             }
-            return powertrainPacket;
+            else if (gearBox.Speed < 0)
+            {
+                if (gearBox.Speed - aggregatedForces > 0)
+                {
+                    gearBox.Speed = 0;
+                }
+                else
+                {
+                    gearBox.Speed += aggregatedForces;
+                }
+            }
+
+            AutomatedCar car = World.Instance.ControlledCar;
+            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI/180);
+            car.Rotation += gearBox.Speed / radius;
+
+            float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
+            Vector2 directionVector = new Vector2((float)Math.Sin(rotationInRadian), (float)Math.Cos(rotationInRadian));
+            Vector2 velocity = directionVector * gearBox.Speed;
+
+            velocity = ConvertVelocity(velocity);
+
+            car.X += (int)velocity.X;
+            car.Y += (int)velocity.Y;
         }
 
-        public void UpdateCarPosition(PowertrainPacket powertrainPacket)
+        public Vector2 ConvertVelocity(Vector2 velocity)
         {
-            Vector2 viewCoordinates = TransformCarCoordinateToViewCoordinate(powertrainPacket.MovementVector, powertrainPacket.Rotation);
-            World.Instance.ControlledCar.X += (int)viewCoordinates.X;
-            World.Instance.ControlledCar.Y += (int)viewCoordinates.Y;
-            World.Instance.ControlledCar.Rotation += powertrainPacket.Rotation;
-        }
+            Vector2 convertedVelocity = new Vector2();
+            this.aggregatedVelocity += velocity;
 
-        private static Vector2 TransformCarCoordinateToViewCoordinate(Vector2 carCoordinate, double rotation)
-        {
-            double xt = carCoordinate.X * Math.Cos(rotation) - carCoordinate.Y * Math.Sin(rotation);
-            double yt = carCoordinate.X * Math.Sin(rotation) + carCoordinate.Y * Math.Cos(rotation);
+            if (Math.Abs(this.aggregatedVelocity.X) >= 1)
+            {
+                convertedVelocity.X = (int)Math.Floor(this.aggregatedVelocity.X);
+                this.aggregatedVelocity.X = this.aggregatedVelocity.X % 1;
+            }
+            if (Math.Abs(this.aggregatedVelocity.Y) >= 1)
+            {
+                convertedVelocity.Y = (int)Math.Floor(this.aggregatedVelocity.Y);
+                this.aggregatedVelocity.Y = this.aggregatedVelocity.Y % 1;
+            }
 
-            // calculate px from m
-
-            return new Vector2(xt / 50, yt / 50);
-        }
-
-        private Vector2 CalculateLongitudinalForce(int brakePercentage, int velocity)
-        {
-            double brakingForce = -BRAKING * brakePercentage;
-            double dragForce = -DRAG * velocity * velocity;
-            //double rollingResistanceForce = -ROLLING_RESISTANCE * velocity;
-
-            double longitudinalForce = velocity; //+ brakingForce + dragForce;
-
-            return new Vector2(longitudinalForce, 0);
-        }
-
-        private PowertrainPacket CalculateTurning(int brakePercentage, int wheelPercentage, int velocity)
-        {
-            PowertrainPacket powertrainPacket = new PowertrainPacket();
-
-            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage));
-            double angularVelocityAsDegPerSec = RadianPerSecToDegreesPerSec(velocity / radius);
-
-            // ticks per sec = 60
-            powertrainPacket.Rotation = angularVelocityAsDegPerSec / 60;
-            powertrainPacket.MovementVector = new Vector2(velocity, 0);
-
-            return powertrainPacket;
-        }
-
-        private static double RadianPerSecToDegreesPerSec(double radianPerSec)
-        {
-            return radianPerSec * 57.2958;
+            return -convertedVelocity;
         }
     }
 }

@@ -8,10 +8,10 @@
     /// </summary>
     public class ATGearBox : IGearBox
     {
-        private double[] gearRatios = { 0.002, 0.005, 0.01, 0.015, 0.0225, 0.027 };
+        private double[] gearRatios = { 0.001, 0.005, 0.01, 0.015, 0.0225, 0.027 };
         private int currentInsideGearStage = 0;
         private int nextLowRevolutionChangeValue = 1000;
-        public int Velocity { get; set; } // velocity = revolution * gearRation
+        public float Speed { get; set; } // velocity = revolution * gearRation
         public ATGears GearStage { get; private set; }
         public int CalculateGearSpeed(int revolution, int enginespeed)
         {
@@ -37,7 +37,7 @@
         private int ReverseCalculate(int revolution, int enginespeed)
         {
             revolution = ModifyRevolution(revolution, enginespeed);
-            Velocity = -((revolution - 1000) / 200);
+            Speed = -((revolution - 1000) / 200);
             return revolution;
         }
 
@@ -73,7 +73,7 @@
             {
                 // changing to lower gears
                 --currentInsideGearStage;
-                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]) + 1000;
+                revolution = (int)(Speed / gearRatios[currentInsideGearStage]) + 1000;
                 if (currentInsideGearStage - 1 > 0)
                 {
                     // if not in first gear
@@ -89,11 +89,11 @@
             {
                 // changing to higher gears
                 ++currentInsideGearStage;
-                revolution = (int)(Velocity / gearRatios[currentInsideGearStage]) + 1000;
+                revolution = (int)(Speed / gearRatios[currentInsideGearStage]) + 1000;
                 nextLowRevolutionChangeValue = revolution - 500;
             }
 
-            Velocity = (int)((revolution - 1000) * gearRatios[currentInsideGearStage]);
+            Speed = (int)((revolution - 1000) * gearRatios[currentInsideGearStage]);
             return revolution;
         }
 
@@ -112,9 +112,9 @@
             }
             else
             {
-                if (Math.Abs(Velocity) != (int)((revolution - 1000) * gearRatios[currentInsideGearStage])) // aka has break input
+                if (Math.Abs(Speed) != (int)((revolution - 1000) * gearRatios[currentInsideGearStage])) // aka has break input
                 {
-                    revolution = (int)(Math.Abs(Velocity) / gearRatios[currentInsideGearStage]) + 1000;
+                    revolution = (int)(Math.Abs(Speed) / gearRatios[currentInsideGearStage]) + 1000;
                 }
 
                 return SlowsDownRevolution(revolution);
@@ -158,7 +158,7 @@
         public void ShiftingGear(SequentialShiftingDirections shift)
         {
             ATGears nextGearStage = GearStage + ((int)shift);
-            if (Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
+            if ((int)shift != 0 && Enum.IsDefined(typeof(ATGears), GearStage + ((int)shift)))
             {
                 if (GearStage == ATGears.R)
                 {
@@ -167,7 +167,7 @@
                         GearStage = nextGearStage;
                         currentInsideGearStage = 0;
                     }
-                    else if (Velocity == 0) // if shifting to the Park mode
+                    else if (Speed == 0) // if shifting to the Park mode
                     {
                         GearStage = nextGearStage;
                     }
@@ -177,7 +177,7 @@
                 else if (GearStage == ATGears.N)
                 {
                     // for to not change direction in moving immediately while changing from Neutral
-                    if ((nextGearStage == ATGears.R && Velocity <= 0) || (nextGearStage == ATGears.D && Velocity >= 0))
+                    if ((nextGearStage == ATGears.R && Speed <= 0) || (nextGearStage == ATGears.D && Speed >= 0))
                     {
                         GearStage = nextGearStage;
                         currentInsideGearStage = 1;
