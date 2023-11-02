@@ -40,11 +40,11 @@
                 if (gearBox.Speed - aggregatedForces > 0)
                 {
                     gearBox.Speed = 0;
-                }
+        }
                 else
-                {
+        {
                     gearBox.Speed += aggregatedForces;
-                }
+        }
             }
 
             AutomatedCar car = World.Instance.ControlledCar;
@@ -62,7 +62,7 @@
         }
 
         public Vector2 ConvertVelocity(Vector2 velocity)
-        {
+            {
             Vector2 convertedVelocity = new Vector2();
             this.aggregatedVelocity += velocity;
 
@@ -70,12 +70,12 @@
             {
                 convertedVelocity.X = (int)Math.Floor(this.aggregatedVelocity.X);
                 this.aggregatedVelocity.X = this.aggregatedVelocity.X % 1;
-            }
+        }
             if (Math.Abs(this.aggregatedVelocity.Y) >= 1)
-            {
+        {
                 convertedVelocity.Y = (int)Math.Floor(this.aggregatedVelocity.Y);
                 this.aggregatedVelocity.Y = this.aggregatedVelocity.Y % 1;
-            }
+        }
 
             return -convertedVelocity;
         }
