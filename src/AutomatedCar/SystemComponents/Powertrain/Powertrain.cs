@@ -42,20 +42,25 @@
 
         public override void Process()
         {
-            if (virtualFunctionBus.KeyboardHandlerPacket != null)
+            if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
+                int brakePercentage = this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+                int wheelPercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
+                int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+                SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
-            this.Wheel.AngleAsDegree = wheelPercentage;
-            this.Throttle.SetThrottle(throttlePercentage);
-            this.Brake.SetBrake(brakePercentage);
-            this.Engine.CalculateRPM();
-            this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+                this.Wheel.AngleAsDegree = wheelPercentage;
+                this.Throttle.SetThrottle(throttlePercentage);
+                this.Brake.SetBrake(brakePercentage);
+                this.Engine.CalculateRPM();
+                this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
 
-            this.PowertrainPacket.GearStage = this.GearBox.GearStage;
-            this.PowertrainPacket.RPM = this.Engine.Revolution;
-            this.PowertrainPacket.Speed = (int)this.GearBox.Speed;
+                this.PowertrainPacket.GearStage = this.GearBox.GearStage;
+                this.PowertrainPacket.RPM = this.Engine.Revolution;
+                this.PowertrainPacket.Speed = (int)this.GearBox.Speed;
 
-            this.MovementCalculator.Process(brakePercentage, wheelPercentage, this.GearBox);
+                this.MovementCalculator.Process(brakePercentage, wheelPercentage, this.GearBox);
+            }
         }
     }
 }
