@@ -59,7 +59,7 @@
                 this.GearBox.Velocity = this.GearBox.Velocity - (int)(((double)this.Brake.GetBrake() / 100) * 1.6) * (this.GearBox.Velocity > 0 ? 1 : -1);
                 int velocity = this.GearBox.Velocity;
 
-                this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+                
 
                 var asd = MovementCalculator.Calculate(brakePercentage, wheelPercentage, velocity);
                 this.PowertrainPacket.MovementVector = asd.MovementVector;
