@@ -13,7 +13,7 @@ namespace AutomatedCar.Models
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
-            this.powertrain = new Powertrain(this.virtualFunctionBus);
+            this.powertrain = new Powertrain(this.virtualFunctionBus, this);
             this.ZIndex = 10;
         }
 

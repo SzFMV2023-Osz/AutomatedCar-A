@@ -170,6 +170,14 @@
             this.shiftingDirection = SequentialShiftingDirections.Down;
         }
 
+        public void ResetAllValues()
+        {
+            this.throttlePercentage = 0;
+            this.brakePercentage = 0;
+            this.wheelPercentage = 0;
+            this.shiftingDirection = SequentialShiftingDirections.Nothing;
+        }
+
 
 
         public override void Process()
@@ -181,12 +189,12 @@
 
             if (this.wheelIsTurningLeft && this.wheelPercentage > -100)
             {
-                this.wheelPercentage -= 100 / 60;
+                this.wheelPercentage -= 100 / 30;
             }
 
             if (this.wheelIsTurningRight && this.wheelPercentage < 100)
             {
-                this.wheelPercentage += 100 / 60;
+                this.wheelPercentage += 100 / 30;
             }
 
             this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
