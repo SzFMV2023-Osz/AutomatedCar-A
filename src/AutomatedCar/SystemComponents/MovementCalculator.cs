@@ -29,9 +29,9 @@
                 }
                 else
                 {
-                     var kekw = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
-                    powertrainPacket.MovementVector = kekw.MovementVector;
-                    powertrainPacket.Rotation = kekw.Rotation;
+                    var newpowertrainPacket = CalculateTurning(brakePercentage, wheelPercentage, velocityAsKmph);
+                    powertrainPacket.MovementVector = newpowertrainPacket.MovementVector;
+                    powertrainPacket.Rotation = newpowertrainPacket.Rotation;
                 }
             }
             return powertrainPacket;
@@ -60,8 +60,15 @@
             double brakingForce = BRAKING * brakePercentage * (velocity > 0 ? 1 : -1);
             double dragForce = -DRAG * velocity;
             double rollingResistanceForce = -ROLLING_RESISTANCE * velocity * (velocity > 0 ? 1 : -1);
-
-            double longitudinalForce = dragForce + (brakingForce < dragForce ? brakingForce : dragForce);
+            double longitudinalForce;
+            if (dragForce < 0)
+            {
+                longitudinalForce = dragForce + (brakingForce < dragForce ? brakingForce : dragForce);
+            }
+            else
+            {
+                longitudinalForce = dragForce + (brakingForce < dragForce ? dragForce : brakingForce);
+            }
 
             return new Vector2(longitudinalForce, 0);
         }
