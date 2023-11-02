@@ -4,6 +4,7 @@
     using AutomatedCar.SystemComponents.Gearbox;
     using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.Models;
     using AutomatedCar.Helpers.Gearbox_helpers;
     using System;
     using System.Collections.Generic;
@@ -27,10 +28,10 @@
 
         public PowertrainPacket PowertrainPacket { get; set; }
 
-        public Powertrain(VirtualFunctionBus virtualFunctionBus)
+        public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car)
             : base(virtualFunctionBus)
         {
-            this.MovementCalculator = new MovementCalculator();
+            this.MovementCalculator = new MovementCalculator(car);
             this.Wheel = new Wheel();
             this.Throttle = new Throttle();
             this.GearBox = new ATGearBox();

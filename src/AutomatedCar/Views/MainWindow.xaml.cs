@@ -96,12 +96,14 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.F5))
             {
                 viewModel.NextControlledCar();
+                viewModel.KeyboardHandler.ResetAllValues();
                 Keyboard.Keys.Remove(Key.F5);
             }
 
             if (Keyboard.IsKeyDown(Key.F6))
             {
                 viewModel.PrevControlledCar();
+                viewModel.KeyboardHandler.ResetAllValues();
                 Keyboard.Keys.Remove(Key.F5);
             }
 
