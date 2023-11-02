@@ -14,7 +14,7 @@
 
         int ThrottlePercentage { get; }
 
-        int WheelPercentage { get; }
+        double WheelPercentage { get; }
 
         SequentialShiftingDirections ShiftUpOrDown { get; }
     }
