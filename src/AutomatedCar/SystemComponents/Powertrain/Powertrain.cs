@@ -28,7 +28,7 @@
         public PowertrainPacket PowertrainPacket { get; set; }
 
         public Powertrain(VirtualFunctionBus virtualFunctionBus)
-            : base (virtualFunctionBus)
+            : base(virtualFunctionBus)
         {
             this.MovementCalculator = new MovementCalculator();
             this.Wheel = new Wheel();
@@ -42,10 +42,8 @@
 
         public override void Process()
         {
-            int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-            int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-            int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-            SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+            if (virtualFunctionBus.KeyboardHandlerPacket != null)
+            {
 
             this.Wheel.AngleAsDegree = wheelPercentage;
             this.Throttle.SetThrottle(throttlePercentage);
