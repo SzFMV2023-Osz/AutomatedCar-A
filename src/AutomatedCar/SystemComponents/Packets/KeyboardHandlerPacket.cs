@@ -19,7 +19,7 @@
         /// <summary>
         /// Represents steering wheel rotation between values -100 and +100 (left to right). 0 means that the wheel is centered.
         /// </summary>
-        private int wheelPercentage;
+        private double wheelPercentage;
 
         /// <summary>
         /// Value can be:
@@ -41,7 +41,7 @@
             set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
         }
 
-        public int WheelPercentage
+        public double WheelPercentage
         {
             get => this.wheelPercentage;
             set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
