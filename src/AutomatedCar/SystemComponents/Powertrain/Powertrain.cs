@@ -43,7 +43,7 @@
         public override void Process()
         {
                 int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-            int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
+                int wheelPercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
                 int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
                 SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
