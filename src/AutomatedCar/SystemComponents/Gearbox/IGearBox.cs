@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets or sets the transmission Speed.
         /// </summary>
-        int Velocity { get; set; }
+        float Speed { get; set; }
 
         /// <summary>
         /// Gets current Gear Stage.
