@@ -14,15 +14,15 @@
     {
         private Timer brakeTimer;
         private Timer throttleTimer;
-        private Timer wheelLeftTimer;
-        private Timer wheelRightTimer;
+        private Timer wheelReturnTimer;
         private int brakePercentage;
         private int throttlePercentage;
         private int wheelPercentage;
         private SequentialShiftingDirections shiftingDirection;
         private bool brakeSmoothReturnIsActive;
         private bool throttleSmoothReturnIsActive;
-        private bool wheelSmoothReturnIsActive;
+        private bool wheelIsTurningLeft;
+        private bool wheelIsTurningRight;
 
         public KeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
@@ -38,7 +38,6 @@
 
             this.brakeSmoothReturnIsActive = false;
             this.throttleSmoothReturnIsActive = false;
-            this.wheelSmoothReturnIsActive = false;
 
             this.shiftingDirection = SequentialShiftingDirections.Nothing;
 

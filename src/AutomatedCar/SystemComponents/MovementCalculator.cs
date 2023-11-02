@@ -61,7 +61,7 @@
             double dragForce = -DRAG * velocity;
             double rollingResistanceForce = -ROLLING_RESISTANCE * velocity * (velocity > 0 ? 1 : -1);
 
-            double longitudinalForce = brakingForce + dragForce;
+            double longitudinalForce = dragForce + (brakingForce < dragForce ? brakingForce : dragForce);
 
             return new Vector2(longitudinalForce, 0);
         }
