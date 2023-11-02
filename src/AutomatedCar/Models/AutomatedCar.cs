@@ -6,10 +6,12 @@ namespace AutomatedCar.Models
     using System.ComponentModel.DataAnnotations;
     using SystemComponents;
     using ReactiveUI;
+    using SystemComponents.Powertrain;
 
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
+        private Powertrain powertrain;
 
         private Radar radarSensor;
 
@@ -20,10 +22,13 @@ namespace AutomatedCar.Models
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
+            this.powertrain = new Powertrain(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+
+        public Powertrain Powertrain { get => this.powertrain; }
 
         public int Revolution { get; set; }
 

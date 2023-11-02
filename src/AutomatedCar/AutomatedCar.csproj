@@ -6,7 +6,6 @@
   <ItemGroup>
 
     <Folder Include="Assets\NPC_paths\" />
-    <Folder Include="Helpers\Gearbox_helpers\" />
     <Folder Include="Models\" />
 
     <Compile Update="**\*.xaml.cs">

@@ -3,7 +3,7 @@
     /// <summary>
     /// Gear Shifting helper Enum.
     /// </summary>
-    public enum GearShift
+    public enum SequentialShiftingDirections
     {
         /// <summary>
         /// Shifting down
@@ -11,8 +11,13 @@
         Down = -1,
 
         /// <summary>
+        /// Don't shift gear
+        /// </summary>
+        Nothing = 0,
+
+        /// <summary>
         /// Shifting up
         /// </summary>
-        Up = 1
+        Up = 1,
     }
 }
