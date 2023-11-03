@@ -14,9 +14,19 @@
 
     internal abstract class Sensor : SystemComponent
     {
-        public event EventHandler Collided;
+        public event EventHandler<PropertyChangedEventArgs> PropertyChangedEvent;
 
         public List<WorldObject> CurrentObjectsinView { get; protected set; }
+
+        public List<WorldObject> currentObjectinView
+        {
+            get => this.CurrentObjectsinView;
+            set
+            {
+                this.CurrentObjectsinView = value;
+                this.PropertyChangedEvent?.Invoke(this, new PropertyChangedEventArgs(nameof(this.CurrentObjectsinView)));
+            }
+        }
 
         public Polygon SensorTriangle { get; private set; }
 
