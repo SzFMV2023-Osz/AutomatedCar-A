@@ -6,6 +6,7 @@
     using System;
     using SystemComponents.InputHandling;
     using AutomatedCar.Models;
+    using AutomatedCar.Helpers.Gearbox_helpers;
 
     public class MovementCalculator
     {
@@ -26,30 +27,16 @@
             float brakingFroce = brakePercentage * BRAKING;
             float rollingResistance = gearBox.Speed * ROLLING_RESISTANCE;
             float aggregatedForces = brakingFroce + rollingResistance;
-            if (gearBox.Speed > 0)
+            if (gearBox.GearStage == ATGears.N)
             {
-                if (gearBox.Speed - aggregatedForces < 0)
-                {
-                    gearBox.Speed = 0;
-                }
-                else
-                {
-                    gearBox.Speed -= aggregatedForces;
-                }
+                ResistanceMethod(gearBox, aggregatedForces);
             }
-            else if (gearBox.Speed < 0)
+            else
             {
-                if (gearBox.Speed - aggregatedForces > 0)
-                {
-                    gearBox.Speed = 0;
-                }
-                else
-                {
-                    gearBox.Speed += aggregatedForces;
-                }
+                ResistanceMethod(gearBox, brakingFroce);
             }
 
-            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI/180);
+            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI / 180);
             this.car.Rotation += gearBox.Speed / radius;
 
             float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
@@ -60,6 +47,32 @@
 
             this.car.X += (int)velocity.X;
             this.car.Y += (int)velocity.Y;
+        }
+
+        private static void ResistanceMethod(IGearBox gearBox, float forces)
+        {
+            if (gearBox.Speed > 0)
+            {
+                if (gearBox.Speed - forces < 0)
+                {
+                    gearBox.Speed = 0;
+                }
+                else
+                {
+                    gearBox.Speed -= forces;
+                }
+            }
+            else if (gearBox.Speed < 0)
+            {
+                if (gearBox.Speed - forces > 0)
+                {
+                    gearBox.Speed = 0;
+                }
+                else
+                {
+                    gearBox.Speed += forces;
+                }
+            }
         }
 
         public Vector2 ConvertVelocity(Vector2 velocity)
