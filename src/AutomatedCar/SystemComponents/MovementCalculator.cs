@@ -10,8 +10,8 @@
 
     public class MovementCalculator
     {
-        const float BRAKING = 0.1f;
-        const float ROLLING_RESISTANCE = 0.01f;
+        const float BRAKING = 0.03f;
+        const float ROLLING_RESISTANCE = 0.003f;
         const double WHEEL_BASE = 2.6;
 
         private Vector2 aggregatedVelocity;
@@ -37,13 +37,13 @@
             }
 
             double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI / 180);
-            this.car.Rotation += gearBox.Speed / radius;
+            this.car.Rotation += gearBox.Speed / radius / 5;
 
             float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
             Vector2 directionVector = new Vector2((float)Math.Sin(rotationInRadian), (float)Math.Cos(rotationInRadian));
             Vector2 velocity = directionVector * gearBox.Speed;
 
-            velocity = ConvertVelocity(velocity);
+            velocity = ConvertVelocity(velocity / 5);
 
             this.car.X += (int)velocity.X;
             this.car.Y += (int)velocity.Y;

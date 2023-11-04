@@ -8,7 +8,7 @@
     /// </summary>
     public class ATGearBox : IGearBox
     {
-        private double[] gearRatios = { 0.001, 0.005, 0.01, 0.015, 0.0225, 0.027 };
+        private double[] gearRatios = { 0.003, 0.005, 0.01, 0.015, 0.0225, 0.027 };
         private int currentInsideGearStage = 0;
         private int nextLowRevolutionChangeValue = 1000;
         public float Speed { get; set; } // velocity = revolution * gearRation
