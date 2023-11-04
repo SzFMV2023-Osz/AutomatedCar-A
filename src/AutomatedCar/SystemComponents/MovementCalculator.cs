@@ -29,7 +29,7 @@
             float aggregatedForces = brakingFroce + rollingResistance;
             if (gearBox.GearStage == ATGears.N)
             {
-                ResistanceMethod(gearBox, aggregatedForces);
+                ResistanceMethod(gearBox, Math.Abs(aggregatedForces));
             }
             else
             {
