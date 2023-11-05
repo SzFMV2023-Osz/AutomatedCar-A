@@ -20,7 +20,7 @@ namespace AutomatedCar.SystemComponents.InputHandling
             }
         }
 
-        public double IntToDegrees(int angleInt)
+        public static double IntToDegrees(int angleInt)
         {
             // +60 deg -> -60 deg
             return angleInt * 0.6;

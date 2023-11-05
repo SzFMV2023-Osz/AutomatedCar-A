@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets or sets the transmission Speed.
         /// </summary>
-        int Velocity { get; set; }
+        float Speed { get; set; }
 
         /// <summary>
         /// Gets current Gear Stage.
@@ -21,7 +21,7 @@
         /// This method can use to shift gears in transmission.
         /// </summary>
         /// <param name="shift"> The direction to shift.</param>
-        void ShiftingGear(GearShift shift);
+        void ShiftingGear(SequentialShiftingDirections shift);
 
         /// <summary>
         /// This method use for calculate engine speed and Velocity.
