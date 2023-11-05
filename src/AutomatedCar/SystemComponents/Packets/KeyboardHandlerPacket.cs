@@ -3,7 +3,6 @@
     using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
     using System.IO;
-    using AutomatedCar.Helpers.Gearbox_helpers;
 
     public class KeyboardHandlerPacket : ReactiveObject, IReadOnlyKeyboardHandlerPacket
     {
