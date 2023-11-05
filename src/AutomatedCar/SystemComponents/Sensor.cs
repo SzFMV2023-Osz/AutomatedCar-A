@@ -65,9 +65,13 @@
             var triPoints = this.SensorTriangle.Points;
             foreach (var g in obj.Geometries)
             {
-                if (SensorTriangle.DefiningGeometry.Bounds.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
+                foreach (var p in g.Points)
                 {
-                    return true;
+                    Point point = new Point(p.X + obj.X, p.Y + obj.Y);
+                    if (SensorTriangle.DefiningGeometry.FillContains(point))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
