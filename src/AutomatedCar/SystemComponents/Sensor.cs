@@ -108,7 +108,7 @@
             this.SensorTriangle = triangle;
         }
 
-        private static double DegToRad(double degrees)
+        protected static double DegToRad(double degrees)
         {
             return degrees * Math.PI / 180.0;
         }

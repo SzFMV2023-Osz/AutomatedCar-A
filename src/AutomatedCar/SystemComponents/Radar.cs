@@ -9,9 +9,15 @@
 
     internal class Radar : Sensor
     {
+        private List<WorldObject> collidableObjects;
+
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
+            this.collidableObjects = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
+                     && x.WorldObjectType != WorldObjectType.Road
+                     && x.WorldObjectType != WorldObjectType.Other
+                     && x.WorldObjectType != WorldObjectType.ParkingSpace).ToList();
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
@@ -109,12 +115,7 @@
 
         public void DetectCollision()
         {
-            var data = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
-                     && x.WorldObjectType != WorldObjectType.Road
-                     && x.WorldObjectType != WorldObjectType.Other
-                     && x.WorldObjectType != WorldObjectType.ParkingSpace);
-
-            foreach (var obj in data)
+            foreach (var obj in this.collidableObjects)
             {
                 if (this.IsInCar(obj))
                 {
@@ -130,17 +131,53 @@
         {
             foreach (var g in obj.Geometries)
             {
-                Rect old = this.automatedCarForSensors.Geometries[0].Bounds;
+                Rect staticBound = this.automatedCarForSensors.Geometry.Bounds;
                 AutomatedCar car = this.automatedCarForSensors;
-                Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
 
-                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
+                // X: 172 Y: 67
+                Point rotatedTopLeft = this.RotatePoint(staticBound.TopLeft, staticBound.Center, DegToRad(-90 - car.Rotation));
+                // X: -66 Y: 173
+                Point rotatedBottomRight = this.RotatePoint(staticBound.BottomRight, staticBound.Center, DegToRad(-90 - car.Rotation));
+
+                // update with the actual coordinates of the car
+                // X: 4167 Y: 1521
+                Point updatedTopLeft = new Point(rotatedTopLeft.X + car.X - (staticBound.Width / 2), rotatedTopLeft.Y + car.Y - (staticBound.Height / 2));
+                // X: 4332 Y: 1320
+                Point updatedBottomRight = new Point(rotatedBottomRight.X + car.X - (staticBound.Width / 2), rotatedBottomRight.Y + car.Y - (staticBound.Height / 2));
+
+                Rect actualPos = new Rect(updatedTopLeft, updatedBottomRight);
+
+                // Point topl = new Point(old.TopLeft.X + car.X - (old.Width / 2), old.TopLeft.Y + car.Y - (old.Height / 2));
+                // Point botr = new Point(old.BottomRight.X + car.X - (old.Width / 2), old.BottomRight.Y + car.Y - (old.Height / 2));
+
+                // Point newTopL = RotatePoint(topl, new Point(car.X, car.Y),);
+
+                // Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
+                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X - (g.Bounds.Width / 2), g.Bounds.Y + obj.Y - (g.Bounds.Height / 2), g.Bounds.Width, g.Bounds.Height)))
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private Point RotatePoint(Point cornerPoint, Point centerPoint, double angleInRad)
+        {
+            double tempX = cornerPoint.X - centerPoint.X;
+            double tempY = cornerPoint.Y - centerPoint.Y;
+
+            // now apply rotation
+            double rotatedX = (tempX * Math.Cos(angleInRad)) - (tempY * Math.Sin(angleInRad));
+            double rotatedY = (tempX * Math.Sin(angleInRad)) + (tempY * Math.Cos(angleInRad));
+
+            // translate back
+            Point newPoint = new Point(rotatedX + centerPoint.X, rotatedY + centerPoint.Y);
+
+            // x = rotatedX + cx;
+            // y = rotatedY + cy;
+
+            return newPoint;
         }
 
         public void ClosestHighlightedObject()
