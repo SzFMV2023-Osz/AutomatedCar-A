@@ -15,16 +15,17 @@
     internal abstract class Sensor : SystemComponent
     {
         public event EventHandler Collided;
+
         public List<WorldObject> CurrentObjectsinView { get; protected set; }
 
         public Polygon SensorTriangle { get; private set; }
 
-        public WorldObject HighlightedObject { get; private set; }
-        
-        // public List<WorldObject> CurrentObjectsinView { get; protected set; }
+        public Point SensorPosition { get; set; }
+
+        public WorldObject HighlightedObject { get; protected set; }
 
         public List<RelevantObject> previousObjectinView { get; protected set; }
-        
+
         public AutomatedCar automatedCarForSensors { get; protected set; }
 
         public int viewAngle { get; protected set; }
@@ -32,7 +33,7 @@
         public int viewDistance { get; protected set; }
 
         public int distanceFromCarCenter { get; protected set; }
-        
+
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus)
         {
@@ -62,7 +63,6 @@
 
         private bool IsInTriangle(WorldObject obj)
         {
-            var triPoints = this.SensorTriangle.Points;
             foreach (var g in obj.Geometries)
             {
                 foreach (var p in g.Points)
@@ -77,42 +77,6 @@
             return false;
         }
 
-        private double area(double x1, double y1, double x2, double y2, double x3, double y3)
-        {
-            return Math.Abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
-        }
-
-        public void ClosestHighlightedObject(AutomatedCar car)
-        {
-            this.HighlightedObject = this.CurrentObjectsinView[0];
-
-            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
-            {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, car.X, car.Y + this.distanceFromCarCenter)
-                    <= this.CalculateDistance(this.CurrentObjectsinView[i + 1].X, this.CurrentObjectsinView[i + 1].Y, car.X, car.Y + this.distanceFromCarCenter) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
-                {
-                    this.HighlightedObject = this.CurrentObjectsinView[i];
-                    this.automatedCarForSensors.Collideable = true;
-                }
-                else
-                {
-                    this.automatedCarForSensors.Collideable = false;
-                }
-            }
-        }
-
-        public void Collidable(EventArgs e)
-        {
-            for (int i = 0; i < this.CurrentObjectsinView.Count - 1; i++)
-            {
-                if (this.CalculateDistance(this.CurrentObjectsinView[i].X, this.CurrentObjectsinView[i].Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y + this.distanceFromCarCenter) == 0 && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Road))
-                {
-                    this.Collided?.Invoke(this, e);
-                }
-            }
-        }
-
-
         protected void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
             // car x : 480
@@ -123,8 +87,8 @@
             int cSideLength = (int)(range / Math.Cos(alpha));
 
             Point point1 = new Point(
-                           automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(90 - automatedCar.Rotation))),
-                           automatedCar.Y + (int)(distanceFromCarCenter * Math.Sin(DegToRad(90 - automatedCar.Rotation))));
+                           automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(270 + automatedCar.Rotation))),
+                           automatedCar.Y + (int)(distanceFromCarCenter * Math.Sin(DegToRad(270 + automatedCar.Rotation))));
 
             Point point2 = new Point(
                            (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation + alpha)))),
@@ -134,9 +98,7 @@
                            (int)(point1.X + (cSideLength * Math.Cos(DegToRad(270 + automatedCar.Rotation - alpha)))),
                            (int)(point1.Y + (cSideLength * Math.Sin(DegToRad(270 + automatedCar.Rotation - alpha)))));
 
-            Point point4 = new Point(
-                (int)((point1.X+point2.X) / 2),
-                (int)((point1.Y + point2.Y) / 2));
+            this.SensorPosition = point1;
 
             Polygon triangle = new Polygon();
             triangle.Points = new List<Point>
@@ -160,25 +122,5 @@
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
         }
-
-        protected virtual void CollisionDetection()
-        {
-            //EventHandler<CollidedEventArgs> handler = Collided;
-
-            //if (handler != null)
-            //{
-            //    handler(this, e);
-            //}
-
-            //List<PolylineGeometry> pg = CurrentObjectsinView[0].Geometries;
-
-            
-        }
-    }
-
-    internal class CollidedEventArgs : EventArgs
-    {
-        public bool Collided { get; set; }
     }
 }
-

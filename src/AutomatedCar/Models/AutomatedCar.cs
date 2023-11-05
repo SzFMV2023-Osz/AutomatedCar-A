@@ -1,24 +1,34 @@
 namespace AutomatedCar.Models
 {
     using Avalonia.Media;
+    using System.ComponentModel;
+    using System;
+    using System.ComponentModel.DataAnnotations;
     using SystemComponents;
+    using ReactiveUI;
+    using SystemComponents.Powertrain;
 
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
+        private Powertrain powertrain;
 
         private Radar radarSensor;
 
         private Camera cameraSensor;
 
+
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
+            this.powertrain = new Powertrain(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
+
+        public Powertrain Powertrain { get => this.powertrain; }
 
         public int Revolution { get; set; }
 
@@ -29,13 +39,11 @@ namespace AutomatedCar.Models
         public void CreateRadarSensor()
         {
             this.radarSensor = new Radar(this.virtualFunctionBus, this);
-            this.virtualFunctionBus.RegisterComponent(this.radarSensor);
         }
 
         public void CreateCameraSensor()
         {
             this.cameraSensor = new Camera(this.virtualFunctionBus, this);
-            this.virtualFunctionBus.RegisterComponent(this.cameraSensor);
         }
 
         /// <summary>Starts the automated cor by starting the ticker in the Virtual Function Bus, that cyclically calls the system components.</summary>
@@ -49,7 +57,5 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
-
-        
     }
 }
