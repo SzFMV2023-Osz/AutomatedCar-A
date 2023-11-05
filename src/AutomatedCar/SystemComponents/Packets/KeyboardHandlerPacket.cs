@@ -1,5 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
     using System.IO;
 
@@ -27,7 +28,7 @@
         /// 0 meaning don't shift,
         /// +1 meaning shift up.
         /// </summary>
-        private int shiftUpOrDown;
+        private SequentialShiftingDirections shiftUpOrDown;
 
         public int BrakePercentage
         {
@@ -47,26 +48,10 @@
             set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
         }
 
-        public int ShiftUpOrDown
+        public SequentialShiftingDirections ShiftUpOrDown
         {
             get => this.shiftUpOrDown;
-            set
-            {
-                if (value < -1 || value > 1)
-                {
-                    throw new InvalidDataException("Inappropriate gear shift value. The value has to be between -1 and +1.");
-                }
-
-                this.shiftUpOrDown = value;
-            }
-        }
-
-        public KeyboardHandlerPacket()
-        {
-            this.brakePercentage = 0;
-            this.throttlePercentage = 0;
-            this.wheelPercentage = 0;
-            this.shiftUpOrDown = 0;
+            set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
         }
     }
 }

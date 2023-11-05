@@ -6,15 +6,11 @@ namespace AutomatedCar
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
     using System.Runtime.Remoting;
-    using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents;
-
     using System.Windows.Markup;
     using AutomatedCar.Models;
     using AutomatedCar.Models.NPC;
-
+    using AutomatedCar.SystemComponents;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
