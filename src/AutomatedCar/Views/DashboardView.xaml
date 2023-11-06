@@ -67,6 +67,20 @@
                                 <TextBlock Grid.Row="5" Grid.Column="0">Distance Y:</TextBlock>
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
+
+                                <!-- Nem biztos hogy kell ide stackpanel -->
+                                <StackPanel Grid.Row ="7" Grid.Column="0">
+                                  <DataGrid AutoGenerateColumns="True" Grid.Row ="7" Grid.Column="0" Items="{Binding ObjectsInView}" >
+                                    <DataGrid.Columns>
+                                      <DataGridTextColumn Header="WorldObject"  Binding="{Binding }" Width="2*"/>
+                                    </DataGrid.Columns>
+                                  </DataGrid>
+                                </StackPanel>
+
+                                <ListBox Grid.Row="7" Grid.Column="0" Items="{Binding ObjectsInView}"/>
+                                
+                                <!--<ItemsRepeater Items="{Binding radarSensor.CurrentObjectinView.Filename}"/>-->
+                              
                             </Grid>
                         </StackPanel>
                     </DataTemplate>

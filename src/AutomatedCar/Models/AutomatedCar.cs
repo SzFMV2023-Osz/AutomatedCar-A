@@ -7,6 +7,8 @@ namespace AutomatedCar.Models
     using SystemComponents;
     using ReactiveUI;
     using SystemComponents.Powertrain;
+    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
 
     public class AutomatedCar : Car
     {
@@ -14,8 +16,13 @@ namespace AutomatedCar.Models
         private Powertrain powertrain;
 
         private Radar radarSensor;
-
         private Camera cameraSensor;
+
+        public ObservableCollection<string> ObjectsInView 
+        { 
+            get { return this.radarSensor.ObjcetinViewReturn; }
+            //set { SetProperty(ref this.radarSensor.ObjcetinViewReturn, value }
+        }
 
 
         public AutomatedCar(int x, int y, string filename)

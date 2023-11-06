@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using AutomatedCar.Models;
     using Avalonia;
@@ -15,6 +16,18 @@
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
+            ObjcetinViewReturn = new ObservableCollection<string>();
+        }
+
+        public ObservableCollection<string> ObjcetinViewReturn { get; set; }
+
+        public void ObjectReturnRefresh()
+        {
+            this.ObjcetinViewReturn.Clear();
+            foreach (WorldObject item in this.CurrentObjectsinView)
+            {
+                ObjcetinViewReturn.Add(item.Filename);
+            }
         }
 
         public override void Process()
@@ -26,6 +39,9 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+
+            
+            this.ObjectReturnRefresh();
         }
 
         // Refreshes the distance of elements in previousObjectinView List
