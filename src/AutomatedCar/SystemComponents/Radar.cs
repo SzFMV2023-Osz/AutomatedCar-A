@@ -3,9 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Numerics;
     using AutomatedCar.Models;
     using Avalonia;
+    using Avalonia.Controls;
+    using Avalonia.Media;
     using DynamicData;
+    using ReactiveUI;
 
     internal class Radar : Sensor
     {
@@ -17,6 +21,44 @@
             this.viewAngle = 60;
         }
 
+        public WorldObject ClosestObjInLane()
+        {
+            var roadsInView = CurrentObjectsinView
+                .Where(x => x.WorldObjectType == WorldObjectType.Road)
+                .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y))
+                .ToList();
+            PolylineGeometry aLane = MakeLane(roadsInView, 0);
+            PolylineGeometry bLane = MakeLane(roadsInView, 2);
+            if (aLane.FillContains(this.SensorTriangle.Points[0]))
+            {
+                return CurrentObjectsinView.Where(x => aLane
+                    .FillContains(new Point(x.X, x.Y)) && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
+                    .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+            }
+            else if (bLane.FillContains(this.SensorTriangle.Points[0]))
+            {
+                return CurrentObjectsinView.Where(x => bLane
+                    .FillContains(new Point(x.X, x.Y)) && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
+                    .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        private PolylineGeometry MakeLane(List<WorldObject> roads, int lane)
+        {
+            PolylineGeometry pl = new PolylineGeometry();
+            foreach (var road in roads)
+            {
+                var points = Enumerable.Concat(road.Geometries[1].Points, road.Geometries[lane].Points);
+                foreach (var p in points)
+                {
+                    pl.Points.Add(new Point(p.X + road.X, p.Y + road.Y));
+                }
+            }
+            return pl;
+        }
+
         public override void Process()
         {
             this.ClosestHighlightedObject();
@@ -26,6 +68,7 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+            //this.ClosestObjInLane();
         }
 
         // Refreshes the distance of elements in previousObjectinView List
