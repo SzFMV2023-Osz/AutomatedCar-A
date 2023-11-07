@@ -5,6 +5,7 @@
     using System.Linq;
     using AutomatedCar.Models;
     using Avalonia;
+    using Avalonia.Media;
     using DynamicData;
 
     internal class Radar : Sensor
@@ -14,10 +15,11 @@
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
-            this.collidableObjects = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
-                     && x.WorldObjectType != WorldObjectType.Road
-                     && x.WorldObjectType != WorldObjectType.Other
-                     && x.WorldObjectType != WorldObjectType.ParkingSpace).ToList();
+            //this.collidableObjects = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
+            //         && x.WorldObjectType != WorldObjectType.Road
+            //         && x.WorldObjectType != WorldObjectType.Other
+            //         && x.WorldObjectType != WorldObjectType.ParkingSpace).ToList();
+            this.collidableObjects = World.Instance.WorldObjects.Where(x => x.Collideable && x != automatedCar).ToList();
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
@@ -129,50 +131,96 @@
 
         private bool IsInCar(WorldObject obj)
         {
-            foreach (var g in obj.Geometries)
+            List<Point> updatedCarPoints = new List<Point>();
+            AutomatedCar car = this.automatedCarForSensors;
+
+            foreach (var item in car.Geometry.Points)
             {
-                Rect staticBound = this.automatedCarForSensors.Geometry.Bounds;
-                AutomatedCar car = this.automatedCarForSensors;
+                Point rotationPoint = new Point(car.RotationPoint.X, car.RotationPoint.Y);
 
-                // X: 172 Y: 67
-                Point rotatedTopLeft = this.RotatePoint(staticBound.TopLeft, staticBound.Center, DegToRad(-90 - car.Rotation));
-                // X: -66 Y: 173
-                Point rotatedBottomRight = this.RotatePoint(staticBound.BottomRight, staticBound.Center, DegToRad(-90 - car.Rotation));
+                Point rotatedPoint = this.RotatePoint(item, rotationPoint, DegToRad(car.Rotation));
 
-                // update with the actual coordinates of the car
-                // X: 4167 Y: 1521
-                Point updatedTopLeft = new Point(rotatedTopLeft.X + car.X - (staticBound.Width / 2), rotatedTopLeft.Y + car.Y - (staticBound.Height / 2));
-                // X: 4332 Y: 1320
-                Point updatedBottomRight = new Point(rotatedBottomRight.X + car.X - (staticBound.Width / 2), rotatedBottomRight.Y + car.Y - (staticBound.Height / 2));
+                Point updatedPoint = this.UpdatePointWithActualCoordinates(rotatedPoint, car, car.Geometry);
 
-                Rect actualPos = new Rect(updatedTopLeft, updatedBottomRight);
+                updatedCarPoints.Add(updatedPoint);
+            }
 
-                // Point topl = new Point(old.TopLeft.X + car.X - (old.Width / 2), old.TopLeft.Y + car.Y - (old.Height / 2));
-                // Point botr = new Point(old.BottomRight.X + car.X - (old.Width / 2), old.BottomRight.Y + car.Y - (old.Height / 2));
+            PolylineGeometry newCarGeometry = new PolylineGeometry(updatedCarPoints, false);
 
-                // Point newTopL = RotatePoint(topl, new Point(car.X, car.Y),);
-
-                // Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
-                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X - (g.Bounds.Width / 2), g.Bounds.Y + obj.Y - (g.Bounds.Height / 2), g.Bounds.Width, g.Bounds.Height)))
+            foreach (var geom in obj.Geometries)
+            {
+                foreach (var item in geom.Points)
                 {
-                    return true;
+                    //Point rotationPoint = new Point(obj.RotationPoint.X, obj.RotationPoint.Y);
+
+                    //Point rotatedPoint = this.RotatePoint(item, rotationPoint, DegToRad(obj.Rotation));
+
+                    Point rotatedPoint = item;
+
+                    Point updatedPoint = this.UpdatePointWithActualCoordinates(rotatedPoint, obj, geom);
+
+                    if (newCarGeometry.FillContains(updatedPoint))
+                    {
+                        return true;
+                    }
                 }
+                //Rect staticBound = this.automatedCarForSensors.Geometry.Bounds;
+                //AutomatedCar car = this.automatedCarForSensors;
+
+                //// X: 172 Y: 67
+                //Point rotatedTopLeft = this.RotatePoint(staticBound.TopLeft, staticBound.Center, DegToRad(car.Rotation));
+                //// X: -66 Y: 173
+                //Point rotatedBottomRight = this.RotatePoint(staticBound.BottomRight, staticBound.Center, DegToRad(car.Rotation));
+
+                //Rect before = new Rect(rotatedTopLeft, rotatedBottomRight);
+
+                //// update with the actual coordinates of the car
+                //// X: 4167 Y: 1521
+                //Point updatedTopLeft = new Point(rotatedTopLeft.X + car.X - (staticBound.Width / 2), rotatedTopLeft.Y + car.Y - (staticBound.Height / 2));
+                //// X: 4332 Y: 1320
+                //Point updatedBottomRight = new Point(rotatedBottomRight.X + car.X - (staticBound.Width / 2), rotatedBottomRight.Y + car.Y - (staticBound.Height / 2));
+
+                //Rect actualPos = new Rect(updatedTopLeft, updatedBottomRight);
+
+                //// Point topl = new Point(old.TopLeft.X + car.X - (old.Width / 2), old.TopLeft.Y + car.Y - (old.Height / 2));
+                //// Point botr = new Point(old.BottomRight.X + car.X - (old.Width / 2), old.BottomRight.Y + car.Y - (old.Height / 2));
+
+                //// Point newTopL = RotatePoint(topl, new Point(car.X, car.Y),);
+
+                //// Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
+                //Rect je = new Rect(g.Bounds.X + obj.X - (g.Bounds.Width / 2), g.Bounds.Y + obj.Y - (g.Bounds.Height / 2), g.Bounds.Width, g.Bounds.Height);
+                //if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X /*- (g.Bounds.Width / 2)*/, g.Bounds.Y + obj.Y /*- (g.Bounds.Height / 2)*/, g.Bounds.Width, g.Bounds.Height)))
+                //{
+                //    return true;
+                //}
             }
 
             return false;
         }
 
+        private Point UpdatePointWithActualCoordinates(Point oldPoint, WorldObject obj, PolylineGeometry geom)
+        {
+            return new Point(
+                        oldPoint.X + obj.X - geom.Bounds.Center.X,
+                        oldPoint.Y + obj.Y - geom.Bounds.Center.Y);
+        }
+
         private Point RotatePoint(Point cornerPoint, Point centerPoint, double angleInRad)
         {
-            double tempX = cornerPoint.X - centerPoint.X;
-            double tempY = cornerPoint.Y - centerPoint.Y;
+            //double tempX = cornerPoint.X - centerPoint.X;
+            //double tempY = cornerPoint.Y - centerPoint.Y;
+
+            double tempX = centerPoint.X - cornerPoint.X;
+            double tempY = centerPoint.Y - cornerPoint.Y;
 
             // now apply rotation
             double rotatedX = (tempX * Math.Cos(angleInRad)) - (tempY * Math.Sin(angleInRad));
             double rotatedY = (tempX * Math.Sin(angleInRad)) + (tempY * Math.Cos(angleInRad));
 
             // translate back
-            Point newPoint = new Point(rotatedX + centerPoint.X, rotatedY + centerPoint.Y);
+            //Point newPoint = new Point(rotatedX + centerPoint.X, rotatedY + centerPoint.Y);
+
+            Point newPoint = new Point(rotatedX + cornerPoint.X, rotatedY + cornerPoint.Y);
 
             // x = rotatedX + cx;
             // y = rotatedY + cy;
