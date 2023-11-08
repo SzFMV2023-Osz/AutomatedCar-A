@@ -10,16 +10,9 @@
 
     internal class Radar : Sensor
     {
-        private List<WorldObject> collidableObjects;
-
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
-            //this.collidableObjects = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
-            //         && x.WorldObjectType != WorldObjectType.Road
-            //         && x.WorldObjectType != WorldObjectType.Other
-            //         && x.WorldObjectType != WorldObjectType.ParkingSpace).ToList();
-            this.collidableObjects = World.Instance.WorldObjects.Where(x => x.Collideable && x != automatedCar).ToList();
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
@@ -117,7 +110,9 @@
 
         public void DetectCollision()
         {
-            foreach (var obj in this.collidableObjects)
+            var collidableObjects = World.Instance.WorldObjects.Where(x => x != this.automatedCarForSensors 
+            && (x.Collideable || x.WorldObjectType == WorldObjectType.Other)).ToList();
+            foreach (var obj in collidableObjects)
             {
                 if (this.IsInCar(obj))
                 {
