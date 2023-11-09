@@ -6,11 +6,12 @@
     using System;
     using SystemComponents.InputHandling;
     using AutomatedCar.Models;
+    using AutomatedCar.Helpers.Gearbox_helpers;
 
     public class MovementCalculator
     {
-        const float BRAKING = 0.1f;
-        const float ROLLING_RESISTANCE = 0.01f;
+        const float BRAKING = 0.03f;
+        const float ROLLING_RESISTANCE = 0.003f;
         const double WHEEL_BASE = 2.6;
 
         private Vector2 aggregatedVelocity;
@@ -26,40 +27,52 @@
             float brakingFroce = brakePercentage * BRAKING;
             float rollingResistance = gearBox.Speed * ROLLING_RESISTANCE;
             float aggregatedForces = brakingFroce + rollingResistance;
-            if (gearBox.Speed > 0)
+            if (gearBox.GearStage == ATGears.N)
             {
-                if (gearBox.Speed - aggregatedForces < 0)
-                {
-                    gearBox.Speed = 0;
-                }
-                else
-                {
-                    gearBox.Speed -= aggregatedForces;
-                }
+                ResistanceMethod(gearBox, Math.Abs(aggregatedForces));
             }
-            else if (gearBox.Speed < 0)
+            else
             {
-                if (gearBox.Speed - aggregatedForces > 0)
-                {
-                    gearBox.Speed = 0;
-                }
-                else
-                {
-                    gearBox.Speed += aggregatedForces;
-                }
+                ResistanceMethod(gearBox, brakingFroce);
             }
 
-            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI/180);
-            this.car.Rotation += gearBox.Speed / radius;
+            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI / 180);
+            this.car.Rotation += gearBox.Speed / radius / 5;
 
             float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
             Vector2 directionVector = new Vector2((float)Math.Sin(rotationInRadian), (float)Math.Cos(rotationInRadian));
             Vector2 velocity = directionVector * gearBox.Speed;
 
-            velocity = ConvertVelocity(velocity);
+            velocity = ConvertVelocity(velocity / 5);
 
             this.car.X += (int)velocity.X;
             this.car.Y += (int)velocity.Y;
+        }
+
+        private static void ResistanceMethod(IGearBox gearBox, float forces)
+        {
+            if (gearBox.Speed > 0)
+            {
+                if (gearBox.Speed - forces < 0)
+                {
+                    gearBox.Speed = 0;
+                }
+                else
+                {
+                    gearBox.Speed -= forces;
+                }
+            }
+            else if (gearBox.Speed < 0)
+            {
+                if (gearBox.Speed - forces > 0)
+                {
+                    gearBox.Speed = 0;
+                }
+                else
+                {
+                    gearBox.Speed += forces;
+                }
+            }
         }
 
         public Vector2 ConvertVelocity(Vector2 velocity)
