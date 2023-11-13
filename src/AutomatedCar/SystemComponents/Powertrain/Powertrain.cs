@@ -45,16 +45,17 @@
         {
             if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
-                int brakePercentage = this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+                // FIX ME: type casting should be fixed once input device priority handling has been implemented.
+                int brakePercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
                 int wheelPercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-                int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-                SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+                int throttlePercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+                SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
                 this.Throttle.SetThrottle(throttlePercentage);
                 this.Brake.SetBrake(brakePercentage);
                 this.Engine.CalculateRPM();
-                this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+                this.GearBox.ShiftingGear((SequentialShiftingDirections)this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
 
                 this.PowertrainPacket.GearStage = this.GearBox.GearStage;
                 this.PowertrainPacket.RPM = this.Engine.Revolution;
