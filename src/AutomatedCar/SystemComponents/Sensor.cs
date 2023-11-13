@@ -7,6 +7,7 @@
     using System.Reflection;
     using System.Runtime.ConstrainedExecution;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using Avalonia.Controls.Shapes;
     using Avalonia.Media;
@@ -43,7 +44,7 @@
             this.CreateSensorTriangle(automatedCarForSensors, distanceFromCarCenter, viewAngle, viewDistance);
         }
 
-        public void ObjectsinViewUpdate(List<WorldObject> objects)
+        public virtual void ObjectsinViewUpdate(List<WorldObject> objects)
         {
             foreach (var obj in objects)
             {
@@ -61,7 +62,7 @@
             }
         }
 
-        private bool IsInTriangle(WorldObject obj)
+        protected bool IsInTriangle(WorldObject obj)
         {
             foreach (var g in obj.Geometries)
             {

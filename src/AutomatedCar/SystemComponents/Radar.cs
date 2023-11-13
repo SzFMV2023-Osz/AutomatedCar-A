@@ -4,17 +4,23 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using DynamicData;
 
     internal class Radar : Sensor
     {
+        public ObjectsInViewPacket ObjectInViewPacket { get; set; }
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
+
+            this.ObjectInViewPacket = new ObjectsInViewPacket();
+            this.ObjectInViewPacket.ObjectsInView = new List<string>();
+            this.virtualFunctionBus.ObjectsInViewPacket = this.ObjectInViewPacket;
         }
 
         public override void Process()
@@ -26,6 +32,32 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+
+            ObjectsInViewPacketRefresher();
+        }
+
+        public override void ObjectsinViewUpdate(List<WorldObject> objects)
+        {
+            foreach (var obj in objects)
+            {
+                if(!obj.WorldObjectType.Equals(WorldObjectType.Road) &&
+                    !obj.WorldObjectType.Equals(WorldObjectType.ParkingSpace) &&
+                    !obj.WorldObjectType.Equals(WorldObjectType.Other) &&
+                    !obj.WorldObjectType.Equals(WorldObjectType.Crosswalk))
+                {
+                    if (this.IsInTriangle(obj))
+                    {
+                        if (!CurrentObjectsinView.Contains(obj))
+                        {
+                            CurrentObjectsinView.Add(obj);
+                        }
+                    }
+                    else
+                    {
+                        CurrentObjectsinView.Remove(obj);
+                    }
+                }
+            }
         }
 
         // Refreshes the distance of elements in previousObjectinView List
@@ -43,7 +75,10 @@
         {
             foreach (WorldObject WO in this.CurrentObjectsinView)
             {
-                if (!WO.WorldObjectType.Equals(WorldObjectType.Road))
+                if (!WO.WorldObjectType.Equals(WorldObjectType.Road) &&
+                    !WO.WorldObjectType.Equals(WorldObjectType.ParkingSpace) &&
+                    !WO.WorldObjectType.Equals(WorldObjectType.Other) &&
+                    !WO.WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
                     bool mustadd = true;
                     foreach (RelevantObject prevobj in this.previousObjectinView)
@@ -58,7 +93,7 @@
                     if (mustadd)
                     {
                         double distance = this.CalculateDistance(WO.X, WO.Y, this.automatedCarForSensors.X, this.automatedCarForSensors.Y);
-                        this.previousObjectinView.Add(new RelevantObject(WO, distance, distance));
+                        this.previousObjectinView.Add(new RelevantObject(WO, distance, distance + 1));
                     }
                 }
             }
@@ -69,6 +104,7 @@
         {
             // if other similar methods dont work properly a similar solution should be implemented as here
             List<RelevantObject> helper = new List<RelevantObject>();
+
             foreach (RelevantObject item in this.previousObjectinView)
             {
                 helper.Add(item);
@@ -80,10 +116,10 @@
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                     {
-                    if (this.previousObjectinView.Contains(prevobj))
-                    {
-                        helper.Remove(prevobj);
-                    }
+                        if (this.previousObjectinView.Contains(prevobj))
+                        {
+                            helper.Remove(prevobj);
+                        }
                     }
                 }
 
@@ -105,6 +141,45 @@
             }
 
             return relevantObjects;
+        }
+
+        // Refreshes the ObjectsInViewPacket in the VirtualFunctionBus
+        public void ObjectsInViewPacketRefresher()
+        {
+            foreach (WorldObject WO in this.CurrentObjectsinView)
+            {
+                if (!this.ObjectInViewPacket.ObjectsInView.Contains(WO.Filename))
+                {
+                    this.ObjectInViewPacket.ObjectsInView.Add(WO.Filename);
+                }
+            }
+
+            List<string> helper = new List<string>();
+
+            foreach (string obj in this.ObjectInViewPacket.ObjectsInView)
+            {
+                helper.Add(obj);
+            }
+
+            foreach (string obj in this.ObjectInViewPacket.ObjectsInView)
+            {
+                bool notinit = true;
+
+                foreach (WorldObject WO in this.CurrentObjectsinView)
+                {
+                    if (WO.Filename.Equals(obj))
+                    {
+                        notinit = false;
+                    }
+                }
+
+                if (notinit && helper.Contains(obj))
+                {
+                    helper.Remove(obj);
+                }
+            }
+
+            this.ObjectInViewPacket.ObjectsInView = helper;
         }
 
         public void DetectCollision()
