@@ -5,6 +5,7 @@
     using System.Linq;
     using AutomatedCar.Models;
     using Avalonia;
+    using Avalonia.Media;
     using DynamicData;
 
     internal class Radar : Sensor
@@ -107,42 +108,6 @@
             return relevantObjects;
         }
 
-        public void DetectCollision()
-        {
-            var data = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
-                     && x.WorldObjectType != WorldObjectType.Road
-                     && x.WorldObjectType != WorldObjectType.Other
-                     && x.WorldObjectType != WorldObjectType.ParkingSpace);
-
-            foreach (var obj in data)
-            {
-                if (this.IsInCar(obj))
-                {
-                    this.automatedCarForSensors.Collideable = true;
-                    return;
-                }
-            }
-
-            this.automatedCarForSensors.Collideable = false;
-        }
-
-        private bool IsInCar(WorldObject obj)
-        {
-            foreach (var g in obj.Geometries)
-            {
-                Rect old = this.automatedCarForSensors.Geometries[0].Bounds;
-                AutomatedCar car = this.automatedCarForSensors;
-                Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
-
-                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public void ClosestHighlightedObject()
         {
             if (this.CurrentObjectsinView.Count > 0)
@@ -160,6 +125,86 @@
                     this.HighlightedObject = this.CurrentObjectsinView[i];
                 }
             }
+        }
+
+        public void DetectCollision()
+        {
+            var collidableObjects = World.Instance.WorldObjects.Where(x => x != this.automatedCarForSensors
+            && (x.Collideable || x.WorldObjectType == WorldObjectType.Other)).ToList();
+
+            PolylineGeometry newCarGeometry = this.ActualizeGeometry(
+                                                                     this.automatedCarForSensors.Geometry,
+                                                                     this.automatedCarForSensors);
+
+            foreach (var obj in collidableObjects)
+            {
+                if (IntersectsWithObject(newCarGeometry, obj))
+                {
+                    this.automatedCarForSensors.Collideable = true;
+                    return;
+                }
+            }
+
+            this.automatedCarForSensors.Collideable = false;
+        }
+
+        private PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
+        {
+            List<Point> updatedPoints = new List<Point>();
+
+            foreach (var item in oldGeom.Points)
+            {
+                Point updatedPoint = GetTransformedPoint(item, obj);
+
+                updatedPoints.Add(updatedPoint);
+            }
+
+            return new PolylineGeometry(updatedPoints, false);
+        }
+
+        private static bool IntersectsWithObject(PolylineGeometry updatedGeometry, WorldObject obj)
+        {
+            foreach (var geom in obj.Geometries)
+            {
+                foreach (var item in geom.Points)
+                {
+                    Point updatedPoint = GetTransformedPoint(item, obj);
+
+                    if (updatedGeometry.FillContains(updatedPoint))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
+        {
+            double angleInRad = DegToRad(obj.Rotation);
+
+            Point transformedPoint;
+
+            if (!obj.RotationPoint.IsEmpty)
+            {
+                // offset with the rotationPoint coordinate
+                Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+
+                // now apply rotation
+                double rotatedX = (offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                double rotatedY = (offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+
+                // offset with the actual coordinate
+                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
+            }
+            else
+            {
+                // offset with the actual coordinate
+                 transformedPoint = new Point(geomPoint.X + obj.X, geomPoint.Y + obj.Y);
+            }
+
+            return transformedPoint;
         }
     }
 }
