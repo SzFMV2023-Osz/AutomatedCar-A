@@ -1,6 +1,8 @@
 namespace AutomatedCar.Models.NPC{
     using System.Collections.Generic;
     using System;
+    using Avalonia.Media;
+
     public class Pedestrian : WorldObject, INPC
     {
         public List<NPCPathPoint> Points { get; set; }
@@ -9,7 +11,7 @@ namespace AutomatedCar.Models.NPC{
         public int Speed { get; set; }
 
         private NPCManager nPCManager;
-
+        public PolylineGeometry Geometry { get; set; }
         public Pedestrian(int x, int y, string filename, int speed, bool repeating, int currentPoint, List<NPCPathPoint> points, NPCManager nPCManager) : base(x, y, filename)
         {
             this.MoveLoad(speed, repeating, currentPoint, points);
