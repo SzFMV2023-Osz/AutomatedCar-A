@@ -12,7 +12,7 @@
     using Avalonia.Media;
     using Newtonsoft.Json.Linq;
 
-    internal abstract class Sensor : SystemComponent
+    public abstract class Sensor : SystemComponent
     {
         public event EventHandler Collided;
 

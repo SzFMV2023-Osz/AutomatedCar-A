@@ -30,6 +30,8 @@ namespace AutomatedCar.Models
 
         public Powertrain Powertrain { get => this.powertrain; }
 
+        public Camera CameraSensor { get => this.cameraSensor; }
+
         public int Revolution { get; set; }
 
         public int Velocity { get; set; }
