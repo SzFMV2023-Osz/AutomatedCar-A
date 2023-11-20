@@ -13,6 +13,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
 
+        public IReadOnlyLKAHandlerPacket LKAHandlerPacket { get; set; }
+
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);

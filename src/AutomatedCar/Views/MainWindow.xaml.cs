@@ -107,6 +107,11 @@ namespace AutomatedCar.Views
                 Keyboard.Keys.Remove(Key.F5);
             }
 
+            if (Keyboard.IsKeyDown(Key.L))
+            {
+                viewModel.LKATurnOnOff();
+            }
+
             var scrollViewer = this.Get<CourseDisplayView>("courseDisplay").Get<ScrollViewer>("scrollViewer");
             viewModel.CourseDisplay.FocusCar(scrollViewer);
         }
