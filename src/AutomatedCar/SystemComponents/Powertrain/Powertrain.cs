@@ -49,16 +49,15 @@
         {
             if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
-                if (this.virtualFunctionBus.AEBInputPacket == null)
-                {
+                if (this.virtualFunctionBus.AEBInputPacket == null) {
                     this.virtualFunctionBus.AEBInputPacket = new AEBInputPacket();
                 }
-                if (this.virtualFunctionBus.LCCInputPacket == null)
-                {
+
+                if (this.virtualFunctionBus.LCCInputPacket == null) {
                     this.virtualFunctionBus.LCCInputPacket = new LCCInputPacket();
                 }
-                if (this.virtualFunctionBus.LKAInputPacket == null)
-                {
+
+                if (this.virtualFunctionBus.LKAInputPacket == null) {
                     this.virtualFunctionBus.LKAInputPacket = new LKAInputPacket();
                 }
 
