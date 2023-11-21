@@ -1,6 +1,7 @@
 namespace AutomatedCar.SystemComponents
 {
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
     using System.Collections.Generic;
 
     public class VirtualFunctionBus : GameBase
@@ -12,6 +13,10 @@ namespace AutomatedCar.SystemComponents
         public IReadOnlyKeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
 
         public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
+
+        public IReadOnlyInputPacket AEBInputPacket { get; set; }
+        public IReadOnlyInputPacket LCCInputPacket { get; set; }
+        public IReadOnlyInputPacket LKAInputPacket { get; set; }
 
         public void RegisterComponent(SystemComponent component)
         {
