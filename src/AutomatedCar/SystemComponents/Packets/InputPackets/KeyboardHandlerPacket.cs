@@ -33,26 +33,26 @@
 
         public int BrakePercentage
         {
-            get => brakePercentage;
-            set => this.RaiseAndSetIfChanged(ref brakePercentage, value);
+            get => this.brakePercentage;
+            set => this.RaiseAndSetIfChanged(ref this.brakePercentage, value);
         }
 
         public int ThrottlePercentage
         {
             get => throttlePercentage;
-            set => this.RaiseAndSetIfChanged(ref throttlePercentage, value);
+            set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
         }
 
         public double WheelPercentage
         {
-            get => wheelPercentage;
-            set => this.RaiseAndSetIfChanged(ref wheelPercentage, value);
+            get => this.wheelPercentage;
+            set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
         }
 
         public SequentialShiftingDirections ShiftUpOrDown
         {
-            get => shiftUpOrDown;
-            set => this.RaiseAndSetIfChanged(ref shiftUpOrDown, value);
+            get => this.shiftUpOrDown;
+            set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
         }
     }
 }
