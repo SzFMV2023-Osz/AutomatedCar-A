@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.SystemComponents.Packets.InputPackets
+﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
@@ -33,26 +33,26 @@
 
         public int BrakePercentage
         {
-            get => this.brakePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.brakePercentage, value);
+            get => brakePercentage;
+            set => this.RaiseAndSetIfChanged(ref brakePercentage, value);
         }
 
         public int ThrottlePercentage
         {
-            get => this.throttlePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
+            get => throttlePercentage;
+            set => this.RaiseAndSetIfChanged(ref throttlePercentage, value);
         }
 
         public double WheelPercentage
         {
-            get => this.wheelPercentage;
-            set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
+            get => wheelPercentage;
+            set => this.RaiseAndSetIfChanged(ref wheelPercentage, value);
         }
 
         public SequentialShiftingDirections ShiftUpOrDown
         {
-            get => this.shiftUpOrDown;
-            set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
+            get => shiftUpOrDown;
+            set => this.RaiseAndSetIfChanged(ref shiftUpOrDown, value);
         }
     }
 }

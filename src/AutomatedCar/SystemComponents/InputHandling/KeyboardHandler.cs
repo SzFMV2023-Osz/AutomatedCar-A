@@ -8,7 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
-    using AutomatedCar.SystemComponents.Packets.InputPackets;
+    using AutomatedCar.SystemComponents.Packets;
 
     public class KeyboardHandler : SystemComponent, IInputHandler
     {
