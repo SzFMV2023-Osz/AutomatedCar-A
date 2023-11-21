@@ -18,16 +18,19 @@
         }
         /// <summary>
         /// Represents how far the brake pedal is being pushed down. 0 meaning not at all, 100 meaning fully pressed.
+        /// Null represents "NOT CONTROLLING" state!
         /// </summary>
         private int? brakePercentage;
 
         /// <summary>
         /// Represents how far the throttle pedal is being pushed down. 0 meaning not at all, 100 meaning fully pressed.
+        /// Null represents "NOT CONTROLLING" state!
         /// </summary>
         private int? throttlePercentage;
 
         /// <summary>
         /// Represents steering wheel rotation between values -100 and +100 (left to right). 0 means that the wheel is centered.
+        /// Null represents "NOT CONTROLLING" state!
         /// </summary>
         private double? wheelPercentage;
 
@@ -36,6 +39,7 @@
         /// -1 meaning shift down,
         /// 0 meaning don't shift,
         /// +1 meaning shift up.
+        /// Null represents "NOT CONTROLLING" state!
         /// </summary>
         private SequentialShiftingDirections? shiftUpOrDown;
 

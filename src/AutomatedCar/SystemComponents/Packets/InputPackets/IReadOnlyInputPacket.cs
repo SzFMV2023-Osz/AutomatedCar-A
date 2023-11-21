@@ -17,10 +17,4 @@
 
         SequentialShiftingDirections? ShiftUpOrDown { get; }
     }
-
-    //public interface IReadOnlyAEBInputPacket : IReadOnlyInputPacket { }
-
-    //public interface IReadOnlyLCCInputPacket : IReadOnlyInputPacket { }
-
-    //public interface IReadOnlyLKAInputPacket : IReadOnlyInputPacket { }
 }
