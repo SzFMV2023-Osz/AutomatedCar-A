@@ -1,5 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents.Powertrain
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Engine;
     using AutomatedCar.SystemComponents.Gearbox;
     using AutomatedCar.SystemComponents.InputHandling;
@@ -11,7 +13,6 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using AutomatedCar.SystemComponents.Packets.InputPackets;
 
     public class Powertrain : SystemComponent
     {

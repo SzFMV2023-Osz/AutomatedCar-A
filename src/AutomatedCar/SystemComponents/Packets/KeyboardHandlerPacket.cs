@@ -1,13 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
-    using AutomatedCar.Helpers.Gearbox_helpers;
-    using ReactiveUI;
-    using System.IO;
-    using AutomatedCar.Helpers.Gearbox_helpers;
-
-    public class KeyboardHandlerPacket : ReactiveObject, IReadOnlyKeyboardHandlerPacket
+    public class KeyboardHandlerPacket : InputDevicePacket, IReadOnlyKeyboardHandlerPacket
     {
-
         /// <summary>
         /// Represents how far the brake pedal is being pushed down. 0 meaning not at all, 100 meaning fully pressed.
         /// </summary>

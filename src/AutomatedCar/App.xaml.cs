@@ -9,10 +9,6 @@ namespace AutomatedCar
 
     using System.Runtime.Remoting;
     using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents;
-
-    using System.Windows.Markup;
-    using AutomatedCar.Models;
     using AutomatedCar.Models.NPC;
 
     using AutomatedCar.ViewModels;
