@@ -68,6 +68,7 @@
         public void LKATurnOnOff()
         {
             this.LKAHandlerPacket.LKAOnOff = !this.LKAHandlerPacket.LKAOnOff;
+
             if (this.LKAHandlerPacket.LKAOnOff)
             {
                 this.LKAHandlerPacket.Message = "LKA OFF";
