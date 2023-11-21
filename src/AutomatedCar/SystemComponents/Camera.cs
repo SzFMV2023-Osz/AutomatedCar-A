@@ -1,6 +1,7 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.LaneKeepingAssistant;
     using AutomatedCar.SystemComponents.Packets;
     using System;
     using System.Collections.Generic;
@@ -15,6 +16,8 @@
 
         public LKAHandlerPacket LKAHandlerPacket { get; set; }
 
+        public _45degreeCheck LKA45degreeCheck { get; set; }
+
         public Camera(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
@@ -28,13 +31,16 @@
             this.LKAHandlerPacket.LKAAvailable = true;
             this.LKAHandlerPacket.LKAOnOff = true;
             this.LKAHandlerPacket.Message = "LKA ON";
-        }
+            this.LKA45degreeCheck = new _45degreeCheck(virtualFunctionBus);
 
+        }
+        
         public override void Process()
         {
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RefreshRelevantObjects();
             this.GetClosestHighlightedObject();
+            LKAOnOffControll();
         }
 
         // Returns relevant objects (Roads)
@@ -68,14 +74,18 @@
         public void LKATurnOnOff()
         {
             this.LKAHandlerPacket.LKAOnOff = !this.LKAHandlerPacket.LKAOnOff;
-
+            
+            
+        }
+        public void LKAOnOffControll()
+        {
             if (this.LKAHandlerPacket.LKAOnOff)
             {
-                this.LKAHandlerPacket.Message = "LKA OFF";
+                this.LKAHandlerPacket.Message = "LKA ON";
             }
             else
             {
-                this.LKAHandlerPacket.Message = "LKA ON";
+                this.LKAHandlerPacket.Message = "LKA OFF";
             }
         }
     }
