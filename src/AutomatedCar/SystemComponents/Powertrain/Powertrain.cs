@@ -1,16 +1,11 @@
 ﻿namespace AutomatedCar.SystemComponents.Powertrain
 {
+    using AutomatedCar.Helpers.Gearbox_helpers;
+    using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Engine;
     using AutomatedCar.SystemComponents.Gearbox;
     using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.SystemComponents.Packets;
-    using AutomatedCar.Models;
-    using AutomatedCar.Helpers.Gearbox_helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class Powertrain : SystemComponent
     {
@@ -45,16 +40,17 @@
         {
             if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
-                int brakePercentage = this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+                // FIX ME: type casting should be fixed once input device priority handling has been implemented.
+                int brakePercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
                 int wheelPercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-                int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-                SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+                int throttlePercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+                SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
                 this.Throttle.SetThrottle(throttlePercentage);
                 this.Brake.SetBrake(brakePercentage);
                 this.Engine.CalculateRPM();
-                this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+                this.GearBox.ShiftingGear(shiftUpOrDown);
 
                 this.PowertrainPacket.GearStage = this.GearBox.GearStage;
                 this.PowertrainPacket.RPM = this.Engine.Revolution;

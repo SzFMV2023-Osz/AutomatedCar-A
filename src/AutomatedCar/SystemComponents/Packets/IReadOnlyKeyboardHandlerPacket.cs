@@ -1,21 +1,8 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using AutomatedCar.Helpers.Gearbox_helpers;
 
-    public interface IReadOnlyKeyboardHandlerPacket
+    public interface IReadOnlyKeyboardHandlerPacket : IInputDevicePacket
     {
-        int BrakePercentage { get; }
-
-        int ThrottlePercentage { get; }
-
-        double WheelPercentage { get; }
-
-        SequentialShiftingDirections ShiftUpOrDown { get; }
     }
 }
