@@ -1,7 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.InputHandling
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
-    using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.Helpers.Gearbox_helpers;
     using System;
     using System.Collections.Generic;
@@ -9,6 +8,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
 
     public class KeyboardHandler : SystemComponent, IInputHandler
     {
