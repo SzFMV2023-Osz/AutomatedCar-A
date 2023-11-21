@@ -39,7 +39,7 @@
 
         public int ThrottlePercentage
         {
-            get => throttlePercentage;
+            get => this.throttlePercentage;
             set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
         }
 
