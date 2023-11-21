@@ -11,6 +11,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
 
     public class Powertrain : SystemComponent
     {
@@ -27,6 +28,9 @@
         public MovementCalculator MovementCalculator { get; set; }
 
         public PowertrainPacket PowertrainPacket { get; set; }
+
+        InputPacket inputPacket;
+        InputPriorityHandler inputPriorityHandler = new InputPriorityHandler();
 
         public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car)
             : base(virtualFunctionBus)
@@ -45,16 +49,30 @@
         {
             if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
-                int brakePercentage = this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-                int wheelPercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-                int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-                SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+                if (this.virtualFunctionBus.AEBInputPacket == null)
+                {
+                    this.virtualFunctionBus.AEBInputPacket = new AEBInputPacket();
+                }
+                if (this.virtualFunctionBus.LCCInputPacket == null)
+                {
+                    this.virtualFunctionBus.LCCInputPacket = new LCCInputPacket();
+                }
+                if (this.virtualFunctionBus.LKAInputPacket == null)
+                {
+                    this.virtualFunctionBus.LKAInputPacket = new LKAInputPacket();
+                }
+
+                this.inputPacket = this.inputPriorityHandler.GetInputs(this.virtualFunctionBus);
+                int brakePercentage = (int)this.inputPacket.BrakePercentage;
+                int wheelPercentage = (int)this.inputPacket.WheelPercentage;
+                int throttlePercentage = (int)this.inputPacket.ThrottlePercentage;
+                SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.inputPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
                 this.Throttle.SetThrottle(throttlePercentage);
                 this.Brake.SetBrake(brakePercentage);
                 this.Engine.CalculateRPM();
-                this.GearBox.ShiftingGear(this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown);
+                this.GearBox.ShiftingGear(shiftUpOrDown);
 
                 this.PowertrainPacket.GearStage = this.GearBox.GearStage;
                 this.PowertrainPacket.RPM = this.Engine.Revolution;
