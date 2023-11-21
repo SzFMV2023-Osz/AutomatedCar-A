@@ -8,9 +8,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class LCCInputPacket : ReactiveObject, IReadOnlyInputPacket
+    public class ACCInputPacket : ReactiveObject, IReadOnlyInputPacket
     {
-        public LCCInputPacket() {
+        public ACCInputPacket() {
             this.throttlePercentage = null;
             this.brakePercentage = null;
             this.wheelPercentage = null;

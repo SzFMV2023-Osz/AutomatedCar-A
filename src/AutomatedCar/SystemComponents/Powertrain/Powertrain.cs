@@ -13,6 +13,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
 
     public class Powertrain : SystemComponent
     {
@@ -55,7 +56,7 @@
                 }
 
                 if (this.virtualFunctionBus.LCCInputPacket == null) {
-                    this.virtualFunctionBus.LCCInputPacket = new LCCInputPacket();
+                    this.virtualFunctionBus.LCCInputPacket = new ACCInputPacket();
                 }
 
                 if (this.virtualFunctionBus.LKAInputPacket == null) {
