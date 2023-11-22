@@ -6,6 +6,8 @@
     using AutomatedCar.SystemComponents.Gearbox;
     using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
 
     public class Powertrain : SystemComponent
     {
@@ -22,6 +24,9 @@
         public MovementCalculator MovementCalculator { get; set; }
 
         public PowertrainPacket PowertrainPacket { get; set; }
+
+        InputDevicePacket inputPacket;
+        InputPriorityHandler inputPriorityHandler = new InputPriorityHandler();
 
         public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car)
             : base(virtualFunctionBus)
@@ -40,11 +45,23 @@
         {
             if (this.virtualFunctionBus.KeyboardHandlerPacket != null)
             {
-                // FIX ME: type casting should be fixed once input device priority handling has been implemented.
-                int brakePercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-                int wheelPercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-                int throttlePercentage = (int)this.virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
-                SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
+                if (this.virtualFunctionBus.AEBInputPacket == null) {
+                    this.virtualFunctionBus.AEBInputPacket = new AEBInputPacket();
+                }
+
+                if (this.virtualFunctionBus.LCCInputPacket == null) {
+                    this.virtualFunctionBus.LCCInputPacket = new ACCInputPacket();
+                }
+
+                if (this.virtualFunctionBus.LKAInputPacket == null) {
+                    this.virtualFunctionBus.LKAInputPacket = new LKAInputPacket();
+                }
+
+                this.inputPacket = this.inputPriorityHandler.GetInputs(this.virtualFunctionBus);
+                int brakePercentage = (int)this.inputPacket.BrakePercentage;
+                int wheelPercentage = (int)this.inputPacket.WheelPercentage;
+                int throttlePercentage = (int)this.inputPacket.ThrottlePercentage;
+                SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.inputPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
                 this.Throttle.SetThrottle(throttlePercentage);
