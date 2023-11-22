@@ -6,14 +6,8 @@
     using AutomatedCar.SystemComponents.Gearbox;
     using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.SystemComponents.Packets;
-    using AutomatedCar.Models;
-    using AutomatedCar.Helpers.Gearbox_helpers;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using AutomatedCar.SystemComponents.Packets.InputPackets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
 
     public class Powertrain : SystemComponent
     {
@@ -31,7 +25,7 @@
 
         public PowertrainPacket PowertrainPacket { get; set; }
 
-        InputPacket inputPacket;
+        InputDevicePacket inputPacket;
         InputPriorityHandler inputPriorityHandler = new InputPriorityHandler();
 
         public Powertrain(VirtualFunctionBus virtualFunctionBus, AutomatedCar car)

@@ -1,28 +1,17 @@
-﻿namespace AutomatedCar.SystemComponents.Packets
+﻿namespace AutomatedCar.SystemComponents.Packets.InputPackets
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
     using ReactiveUI;
 
     /// <summary>
-    /// Abstract class for a generic input device packet. Every input device packet should be created using this class.
+    /// Class for a generic input device packet. Every input device packet should be created using this class.
     /// </summary>
-    public abstract class InputDevicePacket : ReactiveObject, IInputDevicePacket
+    public class InputDevicePacket : ReactiveObject, IReadOnlyInputDevicePacket
     {
-        private int? brakePercentage;
-        private int? throttlePercentage;
-        private double? wheelPercentage;
-        private SequentialShiftingDirections? shiftUpOrDown;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InputDevicePacket"/> class.
-        /// </summary>
-        public InputDevicePacket()
-        {
-            this.brakePercentage = 0;
-            this.throttlePercentage = 0;
-            this.wheelPercentage = 0;
-            this.shiftUpOrDown = 0;
-        }
+        protected int? brakePercentage;
+        protected int? throttlePercentage;
+        protected double? wheelPercentage;
+        protected SequentialShiftingDirections? shiftUpOrDown;
 
         /// <summary>
         /// Gets or sets the brake pedal's value.
@@ -30,10 +19,10 @@
         /// The packet class using this class should send null here if it does not affect the brake pedal (e.g. lane keeping assist)
         /// or the input device affecting it is inactive.
         /// </summary>
-        public int? BrakePercentage
+        public virtual int? BrakePercentage
         {
-            get => this.brakePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.brakePercentage, value);
+            get => brakePercentage;
+            set => this.RaiseAndSetIfChanged(ref brakePercentage, value);
         }
 
         /// <summary>
@@ -42,10 +31,10 @@
         ///  The packet class using this class should send null here if it does not affect the throttle pedal (e.g. lane keeping assist)
         ///  or the input device affecting it is inactive.
         /// </summary>
-        public int? ThrottlePercentage
+        public virtual int? ThrottlePercentage
         {
-            get => this.throttlePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
+            get => throttlePercentage;
+            set => this.RaiseAndSetIfChanged(ref throttlePercentage, value);
         }
 
         /// <summary>
@@ -54,10 +43,10 @@
         /// The packet class using this class should send null here if it does not affect the steering wheel (e.g. autonomous emergency breaking)
         /// or the input device affecting it is inactive.
         /// </summary>
-        public double? WheelPercentage
+        public virtual double? WheelPercentage
         {
-            get => this.wheelPercentage;
-            set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
+            get => wheelPercentage;
+            set => this.RaiseAndSetIfChanged(ref wheelPercentage, value);
         }
 
         /// <summary>
@@ -66,10 +55,10 @@
         /// The packet class using this class should send null here if it does not affect the shifter (anything but the keyboard input)
         /// or the input device affecting it is inactive.
         /// </summary>
-        public SequentialShiftingDirections? ShiftUpOrDown
+        public virtual SequentialShiftingDirections? ShiftUpOrDown
         {
-            get => this.shiftUpOrDown;
-            set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
+            get => shiftUpOrDown;
+            set => this.RaiseAndSetIfChanged(ref shiftUpOrDown, value);
         }
     }
 }

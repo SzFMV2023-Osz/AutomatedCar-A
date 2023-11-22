@@ -1,21 +1,14 @@
 ﻿namespace AutomatedCar.SystemComponents.Powertrain
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
-    using AutomatedCar.SystemComponents.Gearbox;
-    using AutomatedCar.SystemComponents.InputHandling;
-    using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Packets.InputPackets;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using Packets;
 
     public class InputPriorityHandler
     {
-        private InputPacket inputPacket = new InputPacket();
+        private InputDevicePacket inputPacket = new InputDevicePacket();
 
-        public InputPacket GetInputs(VirtualFunctionBus vfb)
+        public InputDevicePacket GetInputs(VirtualFunctionBus vfb)
         {
             this.inputPacket.BrakePercentage = PriorityHandler<int?>(
                 vfb.AEBInputPacket.BrakePercentage,
