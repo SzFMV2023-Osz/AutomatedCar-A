@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
+    using System.Runtime.CompilerServices;
     using AutomatedCar.Models;
     using Avalonia;
     using Avalonia.Controls;
@@ -23,23 +24,31 @@
 
         public WorldObject ClosestObjInLane()
         {
+
             var roadsInView = CurrentObjectsinView
                 .Where(x => x.WorldObjectType == WorldObjectType.Road)
                 .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y))
                 .ToList();
-            PolylineGeometry aLane = MakeLane(roadsInView, 0);
-            PolylineGeometry bLane = MakeLane(roadsInView, 2);
-            if (aLane.FillContains(this.SensorTriangle.Points[0]))
+            if (roadsInView.Count > 0)
             {
-                return CurrentObjectsinView.Where(x => aLane
-                    .FillContains(new Point(x.X, x.Y)) && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
-                    .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
-            }
-            else if (bLane.FillContains(this.SensorTriangle.Points[0]))
-            {
-                return CurrentObjectsinView.Where(x => bLane
-                    .FillContains(new Point(x.X, x.Y)) && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
-                    .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+                PolylineGeometry aLane = MakeLane(roadsInView, 0);
+                PolylineGeometry bLane = MakeLane(roadsInView, 2);
+                if (aLane.FillContains(this.SensorTriangle.Points[0]))
+                {
+                    return CurrentObjectsinView.Where(x => x.Geometries.All(y=>y.Points.All(p=> aLane.FillContains(GetTransformedPoint(p, x))))
+                         && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
+                        .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+                }
+                else if (bLane.FillContains(this.SensorTriangle.Points[0]))
+                {
+                    return CurrentObjectsinView.Where(x => x.Geometries.All(y => y.Points.All(p => bLane.FillContains(GetTransformedPoint(p, x))))
+                         && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
+                        .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+
+                    //return CurrentObjectsinView.Where(x => bLane
+                    //    .FillContains(new Point(x.X, x.Y)) && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
+                    //    .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+                }
             }
 
             return null;
@@ -50,12 +59,22 @@
             PolylineGeometry pl = new PolylineGeometry();
             foreach (var road in roads)
             {
-                var points = Enumerable.Concat(road.Geometries[1].Points, road.Geometries[lane].Points);
-                foreach (var p in points)
+                pl.Points.AddRange(ActualizeGeometry(road.Geometries[lane], road).Points);
+            }
+
+            for (int i = roads.Count-1; i >= 0; i--)
+            {
+                for (int j = roads[i].Geometries[1].Points.Count-1; j >= 0; j--)
                 {
-                    pl.Points.Add(new Point(p.X + road.X, p.Y + road.Y));
+                    pl.Points.Add(ActualizeGeometry(roads[i].Geometries[1], roads[i]).Points[j]);
                 }
             }
+            //foreach (var road in roads)
+            //{
+            //    pl.Points.AddRange(ActualizeGeometry(road.Geometries[1], road).Points);
+            //}
+
+            pl.Points.Add(pl.Points.First());
             return pl;
         }
 
@@ -68,7 +87,15 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
-            //this.ClosestObjInLane();
+            try
+            {
+                this.ClosestObjInLane();
+            }
+
+            catch (Exception a)
+            {
+                Console.WriteLine(a.Message);
+            }
         }
 
         // Refreshes the distance of elements in previousObjectinView List
@@ -190,63 +217,6 @@
             this.automatedCarForSensors.Collideable = false;
         }
 
-        private PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
-        {
-            List<Point> updatedPoints = new List<Point>();
 
-            foreach (var item in oldGeom.Points)
-            {
-                Point updatedPoint = GetTransformedPoint(item, obj);
-
-                updatedPoints.Add(updatedPoint);
-            }
-
-            return new PolylineGeometry(updatedPoints, false);
-        }
-
-        private static bool IntersectsWithObject(PolylineGeometry updatedGeometry, WorldObject obj)
-        {
-            foreach (var geom in obj.Geometries)
-            {
-                foreach (var item in geom.Points)
-                {
-                    Point updatedPoint = GetTransformedPoint(item, obj);
-
-                    if (updatedGeometry.FillContains(updatedPoint))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
-        {
-            double angleInRad = DegToRad(obj.Rotation);
-
-            Point transformedPoint;
-
-            if (!obj.RotationPoint.IsEmpty)
-            {
-                // offset with the rotationPoint coordinate
-                Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
-
-                // now apply rotation
-                double rotatedX = (offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
-                double rotatedY = (offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
-
-                // offset with the actual coordinate
-                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
-            }
-            else
-            {
-                // offset with the actual coordinate
-                 transformedPoint = new Point(geomPoint.X + obj.X, geomPoint.Y + obj.Y);
-            }
-
-            return transformedPoint;
-        }
     }
 }

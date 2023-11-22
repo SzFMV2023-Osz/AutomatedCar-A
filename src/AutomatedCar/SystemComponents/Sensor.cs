@@ -67,7 +67,7 @@
             {
                 foreach (var p in g.Points)
                 {
-                    Point point = new Point(p.X + obj.X, p.Y + obj.Y);
+                    Point point = GetTransformedPoint(p, obj);
                     if (SensorTriangle.DefiningGeometry.FillContains(point))
                     {
                         return true;
@@ -121,6 +121,64 @@
         {
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
+        }
+        protected PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
+        {
+            List<Point> updatedPoints = new List<Point>();
+
+            foreach (var item in oldGeom.Points)
+            {
+                Point updatedPoint = GetTransformedPoint(item, obj);
+
+                updatedPoints.Add(updatedPoint);
+            }
+
+            return new PolylineGeometry(updatedPoints, false);
+        }
+
+        protected static bool IntersectsWithObject(PolylineGeometry updatedGeometry, WorldObject obj)
+        {
+            foreach (var geom in obj.Geometries)
+            {
+                foreach (var item in geom.Points)
+                {
+                    Point updatedPoint = GetTransformedPoint(item, obj);
+
+                    if (updatedGeometry.FillContains(updatedPoint))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        protected static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
+        {
+            double angleInRad = DegToRad(obj.Rotation);
+
+            Point transformedPoint;
+
+            if (!obj.RotationPoint.IsEmpty)
+            {
+                // offset with the rotationPoint coordinate
+                Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+
+                // now apply rotation
+                double rotatedX = (offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                double rotatedY = (offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+
+                // offset with the actual coordinate
+                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
+            }
+            else
+            {
+                // offset with the actual coordinate
+                transformedPoint = new Point(geomPoint.X + obj.X, geomPoint.Y + obj.Y);
+            }
+
+            return transformedPoint;
         }
     }
 }
