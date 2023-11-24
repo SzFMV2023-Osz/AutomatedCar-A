@@ -10,8 +10,6 @@ namespace AutomatedCar.Views
 
     public class MainWindow : Window
     {
-        private KeyboardHandler keyboardHandler;
-
         public MainWindow()
         {
             this.InitializeComponent();
@@ -26,32 +24,32 @@ namespace AutomatedCar.Views
 
             if (Keyboard.IsKeyDown(Key.Up))
             {
-                this.keyboardHandler.HandleKeyDown_Up();
+                viewModel.KeyboardHandler.HandleKeyDown_Up();
             }
 
             if (Keyboard.IsKeyDown(Key.Down))
             {
-                this.keyboardHandler.HandleKeyDown_Down();
+                viewModel.KeyboardHandler.HandleKeyDown_Down();
             }
 
             if (Keyboard.IsKeyDown(Key.Left))
             {
-                this.keyboardHandler.HandleKeyDown_Left();
+                viewModel.KeyboardHandler.HandleKeyDown_Left();
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
-                this.keyboardHandler.HandleKeyDown_Right();
+                viewModel.KeyboardHandler.HandleKeyDown_Right();
             }
 
             if (Keyboard.IsKeyDown(Key.Q))
             {
-                this.keyboardHandler.HandleKeyDown_Q();
+                viewModel.KeyboardHandler.HandleKeyDown_Q();
             }
 
             if (Keyboard.IsKeyDown(Key.A))
             {
-                this.keyboardHandler.HandleKeyDown_A();
+                viewModel.KeyboardHandler.HandleKeyDown_A();
             }
 
             if (Keyboard.IsKeyDown(Key.PageUp))
@@ -98,12 +96,14 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.F5))
             {
                 viewModel.NextControlledCar();
+                viewModel.KeyboardHandler.ResetAllValues();
                 Keyboard.Keys.Remove(Key.F5);
             }
 
             if (Keyboard.IsKeyDown(Key.F6))
             {
                 viewModel.PrevControlledCar();
+                viewModel.KeyboardHandler.ResetAllValues();
                 Keyboard.Keys.Remove(Key.F5);
             }
 
@@ -118,24 +118,22 @@ namespace AutomatedCar.Views
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Up))
+            MainWindowViewModel viewModel = (MainWindowViewModel)this.DataContext;
+            if (e.Key == Key.Up)
             {
-                this.keyboardHandler.HandleKeyUp_Up();
+                viewModel.KeyboardHandler.HandleKeyUp_Up();
             }
-
-            if (Keyboard.IsKeyDown(Key.Down))
+            else if (e.Key == Key.Down)
             {
-                this.keyboardHandler.HandleKeyUp_Down();
+                viewModel.KeyboardHandler.HandleKeyUp_Down();
             }
-
-            if (Keyboard.IsKeyDown(Key.Left))
+            else if (e.Key == Key.Left)
             {
-                this.keyboardHandler.HandleKeyUp_Left();
+                viewModel.KeyboardHandler.HandleKeyUp_Left();
             }
-
-            if (Keyboard.IsKeyDown(Key.Right))
+            else if (e.Key == Key.Right)
             {
-                this.keyboardHandler.HandleKeyUp_Right();
+                viewModel.KeyboardHandler.HandleKeyUp_Right();
             }
 
             base.OnKeyUp(e);
@@ -146,7 +144,6 @@ namespace AutomatedCar.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            this.keyboardHandler = new KeyboardHandler(World.Instance.ControlledCar.VirtualFunctionBus);
         }
     }
 }
