@@ -74,7 +74,7 @@
                 this.PowertrainPacket.Speed = (int)this.GearBox.Speed;
 
                 this.MovementCalculator.Process(brakePercentage, wheelPercentage, this.GearBox);
-                (this.virtualFunctionBus.AEBInputPacket as AEBInputPacket).WarningOver70kmph = (int)this.GearBox.Speed < 70 ? true : false;
+                (this.virtualFunctionBus.AEBInputPacket as AEBInputPacket).WarningOver70kmph = (int)this.GearBox.Speed > 70 ? true : false;
             }
         }
     }
