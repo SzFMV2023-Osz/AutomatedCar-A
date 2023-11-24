@@ -8,5 +8,8 @@
 
     internal interface IReadOnlyAEBInputPacket : IReadOnlyInputDevicePacket
     {
+        bool WarningOver70kmph { get; set; }
+
+        bool WarningAvoidableCollision { get; set; }
     }
 }
