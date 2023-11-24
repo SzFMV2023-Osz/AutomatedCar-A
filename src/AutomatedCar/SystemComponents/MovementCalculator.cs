@@ -74,18 +74,18 @@
                 }
             }
 
-            AutomatedCar car = World.Instance.ControlledCar;
-            double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI/180);
-            car.Rotation += gearBox.Speed / radius;
+            //AutomatedCar car = World.Instance.ControlledCar;
+            //double radius = WHEEL_BASE / Math.Sin(Wheel.IntToDegrees(wheelPercentage) * Math.PI/180);
+            //car.Rotation += gearBox.Speed / radius;
 
-            float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
-            Vector2 directionVector = new Vector2((float)Math.Sin(rotationInRadian), (float)Math.Cos(rotationInRadian));
-            Vector2 velocity = directionVector * gearBox.Speed;
+            //float rotationInRadian = -(float)(car.Rotation * Math.PI / 180);
+            //Vector2 directionVector = new Vector2((float)Math.Sin(rotationInRadian), (float)Math.Cos(rotationInRadian));
+            //Vector2 velocity = directionVector * gearBox.Speed;
 
-            velocity = ConvertVelocity(velocity);
+            //velocity = ConvertVelocity(velocity);
 
-            car.X += (int)velocity.X;
-            car.Y += (int)velocity.Y;
+            //car.X += (int)velocity.X;
+            //car.Y += (int)velocity.Y;
         }
 
         public Vector2 ConvertVelocity(Vector2 velocity)
