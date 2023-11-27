@@ -46,7 +46,7 @@
             this.GetClosestHighlightedObject();
             LKAOnOffControll();
 
-            ObjectsinViewRefresher();
+            this.ObjectsinViewRefresher();
         }
 
         public void ObjectsinViewRefresher()
@@ -57,8 +57,6 @@
             {
                 helper.Add(item);
             }
-
-            //this.virtualFunctionBus.ObjectsinViewPacket.ObjectsinView = (List<WorldObject>)CurrentObjectsinView.Select(obj => obj);
 
             this.virtualFunctionBus.ObjectsinViewPacket.ObjectsinView = helper;
         }
