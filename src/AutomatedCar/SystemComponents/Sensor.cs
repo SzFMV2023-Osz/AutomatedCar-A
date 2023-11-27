@@ -122,6 +122,7 @@
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
         }
+
         protected PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
         {
             List<Point> updatedPoints = new List<Point>();
@@ -162,15 +163,15 @@
 
             if (!obj.RotationPoint.IsEmpty)
             {
-                // offset with the rotationPoint coordinate
-                Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+                    // offset with the rotationPoint coordinate
+                    Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
 
-                // now apply rotation
-                double rotatedX = (offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
-                double rotatedY = (offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+                    // now apply rotation
+                    double rotatedX = Math.Round(offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                    double rotatedY = Math.Round(offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
 
-                // offset with the actual coordinate
-                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
+                    // offset with the actual coordinate
+                    transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
             }
             else
             {
@@ -179,6 +180,25 @@
             }
 
             return transformedPoint;
+        }
+
+        protected double ClosestPointOfObject(Point p, WorldObject obj)
+        {
+            double minDistance = double.MaxValue;
+            foreach (var geom in obj.Geometries)
+            {
+                PolylineGeometry tgeom = ActualizeGeometry(geom, obj);
+                foreach (var point in tgeom.Points)
+                {
+                    double distance = CalculateDistance(p.X, p.Y, point.X, point.Y);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                }
+            }
+
+            return minDistance;
         }
     }
 }

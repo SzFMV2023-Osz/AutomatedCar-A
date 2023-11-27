@@ -22,26 +22,71 @@
             this.viewAngle = 60;
         }
 
+        private void SelectLane(List<WorldObject> roads)
+        {
+            
+            List<Point> CenterLine = new List<Point>();
+            List<Point> ALine = new List<Point>();
+            List<Point> BLine = new List<Point>();
+            List<Point> cp = new List<Point>();
+            cp.AddRange(ActualizeGeometry(roads[0].Geometries[1], roads[0]).Points);
+            cp.AddRange(ActualizeGeometry(roads[0].Geometries[0], roads[0]).Points);
+            cp.AddRange(ActualizeGeometry(roads[0].Geometries[2], roads[0]).Points);
+            CenterLine.AddRange(ActualizeGeometry(roads[0].Geometries[1], roads[0]).Points);
+            ALine.AddRange(ActualizeGeometry(roads[0].Geometries[0], roads[0]).Points);
+            BLine.AddRange(ActualizeGeometry(roads[0].Geometries[2], roads[0]).Points);
+
+            for (int i = 1; i < roads.Count; i++)
+            {
+                
+                    cp.AddRange(ActualizeGeometry(roads[i].Geometries[1], roads[i]).Points);
+                    cp.AddRange(ActualizeGeometry(roads[i].Geometries[0], roads[i]).Points);
+                    cp.AddRange(ActualizeGeometry(roads[i].Geometries[2], roads[i]).Points);
+                
+                foreach (var g in roads[i].Geometries)
+                {
+                    PolylineGeometry tg=ActualizeGeometry(g, roads[i]); 
+                    if (tg.Points.Any(x => ALine.Contains(x)))
+                    {
+                        ALine.AddRange(tg.Points);
+                    }
+                    else if (tg.Points.Any(x => BLine.Contains(x)))
+                    {
+                        BLine.AddRange(tg.Points);
+                    }
+                }
+                CenterLine.AddRange(ActualizeGeometry(roads[i].Geometries[1], roads[i]).Points);
+            }
+            PolylineGeometry center = new PolylineGeometry();
+            center.Points.Add(CenterLine);
+            PolylineGeometry a = new PolylineGeometry();
+            a.Points.Add(ALine);
+
+        }
+
         public WorldObject ClosestObjInLane()
         {
-
             var roadsInView = CurrentObjectsinView
                 .Where(x => x.WorldObjectType == WorldObjectType.Road)
-                .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y))
+                .OrderBy(x => ClosestPointOfObject(SensorTriangle.Points[0], x))
                 .ToList();
+            SelectLane(roadsInView);
+
             if (roadsInView.Count > 0)
             {
                 PolylineGeometry aLane = MakeLane(roadsInView, 0);
                 PolylineGeometry bLane = MakeLane(roadsInView, 2);
                 if (aLane.FillContains(this.SensorTriangle.Points[0]))
                 {
-                    return CurrentObjectsinView.Where(x => x.Geometries.All(y=>y.Points.All(p=> aLane.FillContains(GetTransformedPoint(p, x))))
-                         && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
-                        .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
+                    var closestobj = this.CurrentObjectsinView
+                        .Where(x => IntersectsWithObject(aLane, x))
+                        .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].Y, x.X, x.Y))
+                        .FirstOrDefault();
+                    return closestobj;
                 }
                 else if (bLane.FillContains(this.SensorTriangle.Points[0]))
                 {
-                    return CurrentObjectsinView.Where(x => x.Geometries.All(y => y.Points.All(p => bLane.FillContains(GetTransformedPoint(p, x))))
+                    return this.CurrentObjectsinView.Where(x => x.Geometries.All(y => y.Points.All(p => bLane.FillContains(GetTransformedPoint(p, x))))
                          && x.WorldObjectType != WorldObjectType.Road && x != this.automatedCarForSensors)
                         .OrderBy(x => CalculateDistance(SensorTriangle.Points[0].X, SensorTriangle.Points[0].X, x.X, x.Y)).ToList().FirstOrDefault();
 
@@ -56,23 +101,20 @@
 
         private PolylineGeometry MakeLane(List<WorldObject> roads, int lane)
         {
+            
             PolylineGeometry pl = new PolylineGeometry();
             foreach (var road in roads)
             {
-                pl.Points.AddRange(ActualizeGeometry(road.Geometries[lane], road).Points);
+                pl.Points.AddRange(this.ActualizeGeometry(road.Geometries[lane], road).Points);
             }
 
             for (int i = roads.Count-1; i >= 0; i--)
             {
                 for (int j = roads[i].Geometries[1].Points.Count-1; j >= 0; j--)
                 {
-                    pl.Points.Add(ActualizeGeometry(roads[i].Geometries[1], roads[i]).Points[j]);
+                    pl.Points.Add(this.ActualizeGeometry(roads[i].Geometries[1], roads[i]).Points[j]);
                 }
             }
-            //foreach (var road in roads)
-            //{
-            //    pl.Points.AddRange(ActualizeGeometry(road.Geometries[1], road).Points);
-            //}
 
             pl.Points.Add(pl.Points.First());
             return pl;
