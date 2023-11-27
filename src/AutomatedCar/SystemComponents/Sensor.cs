@@ -163,8 +163,18 @@
 
             if (!obj.RotationPoint.IsEmpty)
             {
+                Point offsettedPoint;
+                if (obj.RenderTransformOrigin != "0,0" && obj.RenderTransformOrigin != null)
+                {
                     // offset with the rotationPoint coordinate
-                    Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+                     offsettedPoint = new Point(geomPoint.X - (obj.RotationPoint.X * 2), geomPoint.Y - (obj.RotationPoint.Y * 2));
+                }
+                else
+                {
+                // offset with the rotationPoint coordinate
+                 offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+
+                }
 
                     // now apply rotation
                     double rotatedX = Math.Round(offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
