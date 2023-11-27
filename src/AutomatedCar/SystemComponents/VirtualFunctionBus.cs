@@ -17,6 +17,7 @@ namespace AutomatedCar.SystemComponents
         public IReadOnlyInputDevicePacket AEBInputPacket { get; set; }
         public IReadOnlyInputDevicePacket LCCInputPacket { get; set; }
         public IReadOnlyInputDevicePacket LKAInputPacket { get; set; }
+        public IReadOnlyObjectsinViewPacket ObjectsinViewPacket { get; set; }
 
         //public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
 

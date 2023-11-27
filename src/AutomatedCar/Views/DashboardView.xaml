@@ -54,7 +54,7 @@
 								</Image.RenderTransform>
 							</Image>
 							<TextBlock Text="{Binding Car.VirtualFunctionBus.KeyboardHandlerPacket.WheelPercentage}"></TextBlock>
-                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                                 <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
                                 <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
@@ -69,6 +69,15 @@
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
+
+                                <ItemsControl Grid.Row="8" Grid.Column="0" Items="{Binding Car.VirtualFunctionBus.ObjectsinViewPacket}">
+                                  <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding WorldObjectType}"></Label>
+                                    </DataTemplate>
+                                  </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                              
                             </Grid>
                         </StackPanel>
                     </DataTemplate>

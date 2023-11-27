@@ -18,6 +18,8 @@
 
         public _45degreeCheck LKA45degreeCheck { get; set; }
 
+        //public ObjectsinViewPacket ObjectsinViewPacket { get; set; }
+
         public Camera(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
@@ -33,6 +35,8 @@
             this.LKAHandlerPacket.Message = "LKA ON";
             this.LKA45degreeCheck = new _45degreeCheck(virtualFunctionBus);
 
+            //this.ObjectsinViewPacket = new ObjectsinViewPacket();
+            this.virtualFunctionBus.ObjectsinViewPacket = new ObjectsinViewPacket();
         }
         
         public override void Process()
@@ -41,6 +45,22 @@
             this.RefreshRelevantObjects();
             this.GetClosestHighlightedObject();
             LKAOnOffControll();
+
+            ObjectsinViewRefresher();
+        }
+
+        public void ObjectsinViewRefresher()
+        {
+            List<WorldObject> helper = new List<WorldObject>();
+
+            foreach (WorldObject item in CurrentObjectsinView)
+            {
+                helper.Add(item);
+            }
+
+            //this.virtualFunctionBus.ObjectsinViewPacket.ObjectsinView = (List<WorldObject>)CurrentObjectsinView.Select(obj => obj);
+
+            this.virtualFunctionBus.ObjectsinViewPacket.ObjectsinView = helper;
         }
 
         // Returns relevant objects (Roads)
