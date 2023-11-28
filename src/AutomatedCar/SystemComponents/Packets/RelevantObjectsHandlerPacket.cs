@@ -1,20 +1,21 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Models;
+    using ReactiveUI;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
-    public class RelevantObjectsHandlerPacket : IReadOnlyRelevantObjects
+    public class RelevantObjectsHandlerPacket : ReactiveObject, IReadOnlyRelevantObjects
     {
-        private List<WorldObject> relevantObjects { get; set; } = new List<WorldObject>();
+        private List<WorldObject> relevantObjects;
 
         public List<WorldObject> RelevantObjects
         {
             get => this.relevantObjects;
-            set => this.relevantObjects = value; //fix this for RaiseAndSetIfChanged
+            set => this.RaiseAndSetIfChanged(ref this.relevantObjects, value);
         }
     }
 }

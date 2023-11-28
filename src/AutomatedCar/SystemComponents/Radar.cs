@@ -17,9 +17,8 @@
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
-
-            this.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
-            this.virtualFunctionBus.RelevantObjectsPacket = this.RelevantObjectsPacket;
+            
+            this.virtualFunctionBus.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
         }
 
         public override void Process()
@@ -31,7 +30,10 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+            this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
         }
+
+
 
         // Refreshes the distance of elements in previousObjectinView List
         private void RefreshDistances()

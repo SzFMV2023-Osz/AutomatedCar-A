@@ -9,6 +9,6 @@
 
     public interface IReadOnlyRelevantObjects
     {
-        List<WorldObject> RelevantObjects { get; }
+        List<WorldObject> RelevantObjects { get; set; }
     }
 }
