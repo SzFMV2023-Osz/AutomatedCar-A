@@ -7,6 +7,7 @@
     using System.Reflection;
     using System.Runtime.ConstrainedExecution;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using Avalonia.Controls.Shapes;
     using Avalonia.Media;
@@ -33,6 +34,8 @@
         public int viewDistance { get; protected set; }
 
         public int distanceFromCarCenter { get; protected set; }
+
+        public RelevantObjectsHandlerPacket RelevantObjectsPacket { get; set; }
 
         public Sensor(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus)

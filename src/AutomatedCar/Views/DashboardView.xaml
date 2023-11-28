@@ -70,6 +70,18 @@
                                 <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
                             </Grid>
+                            <StackPanel>
+                                <TextBlock Text="Relevant Objects"/>
+                                <ListBox Items="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.RelevantObjects}" Height="200" Width="300">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding WorldObjectType}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>

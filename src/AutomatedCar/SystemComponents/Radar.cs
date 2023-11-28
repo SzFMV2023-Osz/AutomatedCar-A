@@ -4,11 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using Avalonia.Media;
     using DynamicData;
 
-    internal class Radar : Sensor
+    public class Radar : Sensor
     {
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
@@ -16,6 +17,9 @@
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
+
+            this.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
+            this.virtualFunctionBus.RelevantObjectsPacket = this.RelevantObjectsPacket;
         }
 
         public override void Process()
