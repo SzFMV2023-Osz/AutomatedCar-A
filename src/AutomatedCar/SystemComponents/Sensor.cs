@@ -161,8 +161,12 @@
 
         protected static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
         {
+            
             double angleInRad = DegToRad(obj.Rotation);
-
+            if (obj.Rotation == 90)
+            {
+                angleInRad *= -1;
+            }
             Point transformedPoint;
 
             if (!obj.RotationPoint.IsEmpty)
@@ -181,8 +185,8 @@
                 }
 
                     // now apply rotation
-                    double rotatedX = Math.Round(offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
-                    double rotatedY = Math.Round(offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+                    double rotatedX = Math.Ceiling(offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                    double rotatedY = Math.Ceiling(offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
 
                     // offset with the actual coordinate
                     transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
