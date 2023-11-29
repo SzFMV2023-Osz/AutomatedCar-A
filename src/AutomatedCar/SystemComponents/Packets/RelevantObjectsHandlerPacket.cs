@@ -12,6 +12,9 @@
     {
         private List<WorldObject> relevantObjects;
 
+        /// <summary>
+        /// Gives back the list of relevant objects based on what is in the radar view, ordered by distance closest to furthest.
+        /// </summary>
         public List<WorldObject> RelevantObjects
         {
             get => this.relevantObjects;

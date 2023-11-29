@@ -28,9 +28,9 @@
                 }
             }
         }
+
         public _45degreeCheck(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
-            
             this.lKAHandlerPacket = (LKAHandlerPacket)virtualFunctionBus.LKAHandlerPacket;
         }
 
@@ -39,11 +39,17 @@
             // +60 deg -> -60 deg
             return angleInt * 0.6;
         }
+
         public void CheckToTurnOffLKA(double? angleAsDegree)
         {
-            if (angleAsDegree>45 || angleAsDegree<-45)
+            if (angleAsDegree > 45 || angleAsDegree < -45)
             {
                 this.lKAHandlerPacket.LKAOnOff = false;
+                this.lKAHandlerPacket.Warning = false;
+            }
+            else if ((angleAsDegree <= 45 && angleAsDegree >= 30) || (angleAsDegree >= -45 && angleAsDegree <= -30))
+            {
+                this.lKAHandlerPacket.Warning = true;
             }
         }
 

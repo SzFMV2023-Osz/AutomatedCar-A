@@ -69,6 +69,7 @@
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
+                                <TextBlock Grid.Row="8" Grid.Column="1" IsVisible="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message, Mode=OneWay}"></TextBlock> 
                             </Grid>
                             <StackPanel>
                                 <TextBlock Text="Relevant Objects"/>

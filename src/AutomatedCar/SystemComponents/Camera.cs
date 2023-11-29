@@ -41,6 +41,7 @@
             this.RefreshRelevantObjects();
             this.GetClosestHighlightedObject();
             LKAOnOffControll();
+            LKAWarnigControll();
         }
 
         // Returns relevant objects (Roads)
@@ -74,9 +75,8 @@
         public void LKATurnOnOff()
         {
             this.LKAHandlerPacket.LKAOnOff = !this.LKAHandlerPacket.LKAOnOff;
-            
-            
         }
+
         public void LKAOnOffControll()
         {
             if (this.LKAHandlerPacket.LKAOnOff)
@@ -86,6 +86,29 @@
             else
             {
                 this.LKAHandlerPacket.Message = "LKA OFF";
+            }
+        }
+
+        public void LKAWarnigControll()
+        {
+            if(this.LKAHandlerPacket.Warning)
+            {
+                this.LKAHandlerPacket.WarningMessage = "WARNING!! Crosswalk";
+            }
+            else
+            {
+                foreach (WorldObject relobj in this.CurrentObjectsinView)
+                {
+                    if (relobj.WorldObjectType.Equals(WorldObjectType.Crosswalk))
+                    {
+                        this.LKAHandlerPacket.Warning = true;
+                        this.LKAHandlerPacket.WarningMessage = "WARNING!! Crosswalk";
+                    }
+                    else
+                    {
+                        this.LKAHandlerPacket.Warning = false;
+                    }
+                }
             }
         }
     }

@@ -11,5 +11,7 @@
         bool LKAAvailable { get; }
         bool LKAOnOff { get; }
         string Message { get; }
+        bool Warning { get; }
+        string WarningMessage { get;}
     }
 }

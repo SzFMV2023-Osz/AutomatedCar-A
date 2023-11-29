@@ -30,7 +30,7 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
-            this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
+            this.PacketUpdate();
         }
 
 
@@ -87,10 +87,10 @@
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                     {
-                    if (this.previousObjectinView.Contains(prevobj))
-                    {
-                        helper.Remove(prevobj);
-                    }
+                        if (this.previousObjectinView.Contains(prevobj))
+                        {
+                            helper.Remove(prevobj);
+                        }
                     }
                 }
 
@@ -131,6 +131,46 @@
                     this.HighlightedObject = this.CurrentObjectsinView[i];
                 }
             }
+        }
+
+        private void PacketUpdate()
+        {
+            List<WorldObject> relevantObjects = this.CurrentObjectsinView;
+            relevantObjects = OrderByClosestToFurtherest(relevantObjects);
+            this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = relevantObjects;
+            //this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
+        }
+
+        private List<WorldObject> OrderByClosestToFurtherest(List<WorldObject> list)
+        {
+            List<WorldObject> orderedList = new List<WorldObject>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i == 0)
+                {
+                    orderedList.Add(list[i]);
+                }
+                else
+                {
+                    for (int j = 0; j < orderedList.Count; j++)
+                    {
+                        if (this.CalculateDistance(list[i].X, list[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
+                                                       <= this.CalculateDistance(orderedList[j].X, orderedList[j].Y, this.SensorPosition.X, this.SensorPosition.Y))
+                        {
+                            orderedList.Insert(j, list[i]);
+                            break;
+                        }
+                        else if (j == orderedList.Count - 1)
+                        {
+                            orderedList.Add(list[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return orderedList;
         }
 
         public void DetectCollision()
