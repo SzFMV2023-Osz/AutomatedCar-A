@@ -42,14 +42,19 @@
 
         public void CheckToTurnOffLKA(double? angleAsDegree)
         {
-            if (angleAsDegree > 45 || angleAsDegree < -45)
+
+            if (angleAsDegree >= 30 && angleAsDegree <= 45)
+            {
+                this.lKAHandlerPacket.Warning = true;
+            }
+            else if (angleAsDegree <= -30 && angleAsDegree >= -45)
+            {
+                this.lKAHandlerPacket.Warning = true;
+            }
+            else if (angleAsDegree > 45 || angleAsDegree < -45 || angleAsDegree < 30)
             {
                 this.lKAHandlerPacket.LKAOnOff = false;
                 this.lKAHandlerPacket.Warning = false;
-            }
-            else if ((angleAsDegree <= 45 && angleAsDegree >= 30) || (angleAsDegree >= -45 && angleAsDegree <= -30))
-            {
-                this.lKAHandlerPacket.Warning = true;
             }
         }
 

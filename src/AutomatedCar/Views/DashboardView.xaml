@@ -55,10 +55,8 @@
 							</Image>
 							<TextBlock Text="{Binding Car.VirtualFunctionBus.KeyboardHandlerPacket.WheelPercentage}"></TextBlock>
                             <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                                <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Y}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" Text="{Binding Path=X, StringFormat='X: {0}'}"></TextBlock>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Margin="10" Text="{Binding Path=Y, StringFormat='Y: {0}'}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="0">Filename:</TextBlock>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
@@ -69,19 +67,22 @@
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
-                                <TextBlock Grid.Row="8" Grid.Column="1" IsVisible="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message, Mode=OneWay}"></TextBlock> 
                             </Grid>
                             <StackPanel>
-                                <TextBlock Text="Relevant Objects"/>
-                                <ListBox Items="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.RelevantObjects}" Height="200" Width="300">
+                                <TextBlock Text="Relevant Objects" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <ListBox Items="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.RelevantObjects}" Height="100" Width="300">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding WorldObjectType}"/>
+                                                <TextBlock Text="{Binding WorldObjectType}" FontWeight="Bold" Foreground="Black"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Warnings" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.WarningMessage}" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

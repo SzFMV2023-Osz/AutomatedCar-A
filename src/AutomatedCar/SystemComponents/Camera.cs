@@ -93,20 +93,22 @@
         {
             if(this.LKAHandlerPacket.Warning)
             {
-                this.LKAHandlerPacket.WarningMessage = "WARNING!! Crosswalk";
+                this.LKAHandlerPacket.WarningMessage = "WARNING LKA: Steep Turn! LKA will be powered off";
             }
             else
             {
+                this.LKAHandlerPacket.WarningMessage = "";
                 foreach (WorldObject relobj in this.CurrentObjectsinView)
                 {
                     if (relobj.WorldObjectType.Equals(WorldObjectType.Crosswalk))
                     {
                         this.LKAHandlerPacket.Warning = true;
-                        this.LKAHandlerPacket.WarningMessage = "WARNING!! Crosswalk";
+                        this.LKAHandlerPacket.WarningMessage = "WARNING Camera: Crosswalk in range. LKA will be powered off";
                     }
                     else
                     {
                         this.LKAHandlerPacket.Warning = false;
+                        this.LKAHandlerPacket.WarningMessage = "";
                     }
                 }
             }
