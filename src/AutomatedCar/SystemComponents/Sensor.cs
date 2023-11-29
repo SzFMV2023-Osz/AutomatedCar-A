@@ -7,6 +7,7 @@
     using System.Reflection;
     using System.Runtime.ConstrainedExecution;
     using AutomatedCar.Models;
+    using AutomatedCar.Models.NPC;
     using Avalonia;
     using Avalonia.Controls.Shapes;
     using Avalonia.Media;
@@ -144,7 +145,10 @@
                 foreach (var item in geom.Points)
                 {
                     Point updatedPoint = GetTransformedPoint(item, obj);
-
+                    if (obj is INPC)
+                    {
+                        updatedPoint = GetTransformedPoint(new Point(obj.X, obj.Y), obj);
+                    }
                     if (updatedGeometry.FillContains(updatedPoint))
                     {
                         return true;
