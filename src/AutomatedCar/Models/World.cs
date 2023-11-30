@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.Models
+namespace AutomatedCar.Models
 {
     using System;
     using System.Collections.Generic;
@@ -16,11 +16,14 @@
 
     public class World
     {
-
+        public enum WorldType
+        {
+            Oval, Test
+        }
         public NPCManager npcManager = new NPCManager();
         private int controlledCarPointer = 0;
         public List<AutomatedCar> controlledCars = new ();
-
+        public WorldType SelectedWorld { get; set; }
         public static World Instance { get; } = new World();
         public List<WorldObject> WorldObjects { get; set; } = new List<WorldObject>();
 
@@ -77,6 +80,11 @@
         public void AddObject(WorldObject worldObject)
         {
             this.WorldObjects.Add(worldObject);
+        }
+
+        public void SetSelectedWorldTo(WorldType worldType)
+        {
+            this.SelectedWorld = worldType;
         }
 
         public void PopulateFromJSON(string filename)
