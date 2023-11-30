@@ -1,4 +1,5 @@
 namespace AutomatedCar.Models.NPC{
+    using Avalonia.Media;
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
@@ -11,6 +12,7 @@ namespace AutomatedCar.Models.NPC{
         public int Speed { get; set; }
 
         private NPCManager nPCManager;
+        public PolylineGeometry Geometry { get; set; }
 
         public NPCCar(int x, int y, string filename, int speed, bool repeating, int currentPoint, List<NPCPathPoint> points, NPCManager nPCManager) : base(x, y, filename)
         {
