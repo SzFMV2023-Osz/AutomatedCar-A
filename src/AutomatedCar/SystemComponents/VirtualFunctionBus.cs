@@ -9,16 +9,6 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
 
-        public ICharacteristicsInterface CharacteristicsPacket { get; set; }
-        public IPedalInterface BrakePedalPacket { get; set; }
-        public IPedalInterface GasPedalPacket { get; set; }
-
-        public IAccInterface AccPacket { get; set; }
-
-        public IReadOnlyKeyboardHandlerPacket KeyboardHandlerPacket { get; set; }
-
-        public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
-
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);

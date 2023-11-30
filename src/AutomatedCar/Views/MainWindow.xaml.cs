@@ -1,8 +1,5 @@
 namespace AutomatedCar.Views
 {
-    using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents;
-    using AutomatedCar.SystemComponents.InputHandling;
     using AutomatedCar.ViewModels;
     using Avalonia.Controls;
     using Avalonia.Input;
@@ -10,8 +7,6 @@ namespace AutomatedCar.Views
 
     public class MainWindow : Window
     {
-        private KeyboardHandler keyboardHandler;
-
         public MainWindow()
         {
             this.InitializeComponent();
@@ -26,32 +21,22 @@ namespace AutomatedCar.Views
 
             if (Keyboard.IsKeyDown(Key.Up))
             {
-                this.keyboardHandler.HandleKeyDown_Up();
+                viewModel.CourseDisplay.KeyUp();
             }
 
             if (Keyboard.IsKeyDown(Key.Down))
             {
-                this.keyboardHandler.HandleKeyDown_Down();
+                viewModel.CourseDisplay.KeyDown();
             }
 
             if (Keyboard.IsKeyDown(Key.Left))
             {
-                this.keyboardHandler.HandleKeyDown_Left();
+                viewModel.CourseDisplay.KeyLeft();
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
-                this.keyboardHandler.HandleKeyDown_Right();
-            }
-
-            if (Keyboard.IsKeyDown(Key.Q))
-            {
-                this.keyboardHandler.HandleKeyDown_Q();
-            }
-
-            if (Keyboard.IsKeyDown(Key.A))
-            {
-                this.keyboardHandler.HandleKeyDown_A();
+                viewModel.CourseDisplay.KeyRight();
             }
 
             if (Keyboard.IsKeyDown(Key.PageUp))
@@ -113,35 +98,13 @@ namespace AutomatedCar.Views
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Up))
-            {
-                this.keyboardHandler.HandleKeyUp_Up();
-            }
-
-            if (Keyboard.IsKeyDown(Key.Down))
-            {
-                this.keyboardHandler.HandleKeyUp_Down();
-            }
-
-            if (Keyboard.IsKeyDown(Key.Left))
-            {
-                this.keyboardHandler.HandleKeyUp_Left();
-            }
-
-            if (Keyboard.IsKeyDown(Key.Right))
-            {
-                this.keyboardHandler.HandleKeyUp_Right();
-            }
-
-            base.OnKeyUp(e);
-
             Keyboard.Keys.Remove(e.Key);
+            base.OnKeyUp(e);
         }
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            this.keyboardHandler = new KeyboardHandler(World.Instance.ControlledCar.VirtualFunctionBus);
         }
     }
 }
