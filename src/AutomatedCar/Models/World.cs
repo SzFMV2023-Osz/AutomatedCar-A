@@ -12,16 +12,15 @@
     using Visualization;
     using Avalonia.Media;
 
+    using NPC;
+
     public class World
     {
-<<<<<<< HEAD
         public enum WorldType
         {
             Oval, Test
         }
         public NPCManager npcManager = new NPCManager();
-=======
->>>>>>> parent of c42ccb5 (Merge branch 'develop' into master (#67))
         private int controlledCarPointer = 0;
         public List<AutomatedCar> controlledCars = new ();
         public WorldType SelectedWorld { get; set; }

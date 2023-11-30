@@ -4,12 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Folder Include="Assets\NPC_paths\" />
     <Folder Include="Models\" />
 
-=======
->>>>>>> parent of c42ccb5 (Merge branch 'develop' into master (#67))
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
