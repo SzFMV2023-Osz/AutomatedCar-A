@@ -51,7 +51,7 @@
             {
                 this.lKAHandlerPacket.Warning = true;
             }
-            else if (angleAsDegree > 45 || angleAsDegree < -45 || angleAsDegree < 30)
+            else if (angleAsDegree > 45 || angleAsDegree < -45/* || angleAsDegree < 30*/)
             {
                 this.lKAHandlerPacket.LKAOnOff = false;
                 this.lKAHandlerPacket.Warning = false;

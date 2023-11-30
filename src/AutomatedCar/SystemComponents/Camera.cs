@@ -3,6 +3,9 @@
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.LaneKeepingAssistant;
     using AutomatedCar.SystemComponents.Packets;
+    using Avalonia;
+    using Avalonia.Controls;
+    using Avalonia.Media;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -22,7 +25,7 @@
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 10;
-            this.viewDistance = 80;
+            this.viewDistance = 200;
             this.viewAngle = 60;
 
             this.LKAHandlerPacket = new LKAHandlerPacket();
@@ -37,11 +40,65 @@
         
         public override void Process()
         {
+            this.CreateSensorTriangle(this.automatedCarForSensors, this.distanceFromCarCenter, this.viewAngle, this.viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RefreshRelevantObjects();
             this.GetClosestHighlightedObject();
             LKAOnOffControll();
             LKAWarnigControll();
+
+            WorldObject HIGHLIGHTR = this.HighlightedObject;
+
+            fortest();
+        }
+
+        public void fortest()
+        {
+            List<WorldObject> helper = this.CurrentObjectsinView;
+            var closestroad = helper.Where(x => x.WorldObjectType == WorldObjectType.Road).OrderBy(x => ClosestPointOfObject(SensorTriangle.Points[0], x)).FirstOrDefault();
+
+
+
+            List<Geometry> goes = new List<Geometry>();
+ 
+            
+
+            if (closestroad != null) {
+                Point UpdatedCenterPoint = this.helo(closestroad.Geometries[1].Points, closestroad);
+                Point UpdatedEdgePoint;
+
+                Point Updated0Point = this.helo(closestroad.Geometries[0].Points, closestroad);
+                Point Updated2Point = this.helo(closestroad.Geometries[2].Points, closestroad);
+
+
+                if (CalculateDistance(Updated0Point.X,Updated0Point.Y, SensorTriangle.Points[0].X, SensorTriangle.Points[0].Y)>
+                    CalculateDistance(Updated2Point.X, Updated2Point.Y, SensorTriangle.Points[0].X, SensorTriangle.Points[0].Y))
+                {
+                    UpdatedEdgePoint = Updated2Point;
+                }
+                else
+                {
+                    UpdatedEdgePoint = Updated0Point;
+                }
+
+            }
+        }
+
+        Point helo(Points point, WorldObject wo)
+        {
+            double distance = double.MaxValue;
+            Point result = new Point();
+            foreach(var item in point)
+            {
+
+                double currentdist = CalculateDistance(GetTransformedPoint(item, wo).X, GetTransformedPoint(item, wo).Y, SensorTriangle.Points[0].X, SensorTriangle.Points[0].Y);
+                if (currentdist < distance)
+                {
+                    distance = currentdist;
+                    result = GetTransformedPoint(item, wo);
+                }
+            }
+            return result;
         }
 
         // Returns relevant objects (Roads)
