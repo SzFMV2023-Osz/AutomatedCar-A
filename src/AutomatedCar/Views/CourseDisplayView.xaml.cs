@@ -14,7 +14,6 @@ namespace AutomatedCar.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-            
         }
     }
 }

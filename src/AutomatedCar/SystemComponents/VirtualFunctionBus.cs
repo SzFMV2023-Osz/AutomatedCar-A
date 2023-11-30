@@ -9,6 +9,7 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
 
+<<<<<<< HEAD
         public ICharacteristicsInterface CharacteristicsPacket { get; set; }
         public IPedalInterface BrakePedalPacket { get; set; }
         public IPedalInterface GasPedalPacket { get; set; }
@@ -19,6 +20,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
 
+=======
+>>>>>>> parent of c42ccb5 (Merge branch 'develop' into master (#67))
         public void RegisterComponent(SystemComponent component)
         {
             this.components.Add(component);
