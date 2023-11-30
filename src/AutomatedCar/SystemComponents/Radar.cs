@@ -6,15 +6,20 @@
     using AutomatedCar.Models;
     using Avalonia;
     using DynamicData;
+    using AutomatedCar.SystemComponents.Packets;
 
     internal class Radar : Sensor
     {
+        public RadarPacket RadarPacket { get; set; }
+
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 115;
             this.viewDistance = 200;
             this.viewAngle = 60;
+            this.RadarPacket = new RadarPacket();
+            this.virtualFunctionBus.RadarPacket = this.RadarPacket;
         }
 
         public override void Process()
@@ -26,6 +31,7 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+            this.RadarPacket.RelevantObjects = RelevantObjects();
         }
 
         // Refreshes the distance of elements in previousObjectinView List
