@@ -68,6 +68,7 @@
         public void PDControl()
         {
             List<WorldObject> helper = this.CurrentObjectsinView;
+            //List<WorldObject> test = World.Instance.WorldObjects.Where(x => !x.Filename.Contains("straight") && x.Filename.Contains("road")).ToList();
             var closestroad = helper.Where(x => x.WorldObjectType == WorldObjectType.Road).OrderBy(x => ClosestPointOfObject(SensorTriangle.Points[0], x)).FirstOrDefault();
             // closestroad = the road we are on
             if (closestroad != null) 
@@ -149,7 +150,7 @@
 
         Point GeometryPointGetter(Points point, WorldObject wo)
         {
-            double distance=  double.MaxValue;
+            double distance = double.MaxValue;
             Point result = new Point();
             foreach(var item in point)
             {

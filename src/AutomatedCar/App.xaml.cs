@@ -42,7 +42,7 @@ namespace AutomatedCar
 
             // this.AddDummyCircleTo(world);
 
-            world.PopulateFromJSON($"AutomatedCar.Assets.test_world.json");
+            world.PopulateFromJSON($"AutomatedCar.Assets.lane_keeping_test_world.json");
 
             this.AddControlledCarsTo(world);
             this.AddNpcPedestrian(world);
