@@ -5,5 +5,12 @@
 
     public class LKAInputPacket : InputDevicePacket, IReadOnlyLKAInputPacket
     {
+        private double wheelCorrection;
+        public double WheelCorrection
+        {
+            get => this.wheelCorrection;
+            set => this.RaiseAndSetIfChanged(ref this.wheelCorrection, value);
+        }
+
     }
 }

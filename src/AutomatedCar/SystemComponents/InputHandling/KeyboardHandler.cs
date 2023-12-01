@@ -10,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
 
     public class KeyboardHandler : SystemComponent, IInputHandler
     {
@@ -189,7 +190,10 @@
 
             if (this.virtualFunctionBus.LKAHandlerPacket.LKAOnOff)
             {
-                this.wheelPercentage -= 100 / 30;
+                if(this.wheelPercentage > -100 && this.wheelPercentage < 100)
+                {
+                    this.wheelPercentage += (int)this.virtualFunctionBus.LKAInputPacket.WheelCorrection;
+                }
             }
             else
             {

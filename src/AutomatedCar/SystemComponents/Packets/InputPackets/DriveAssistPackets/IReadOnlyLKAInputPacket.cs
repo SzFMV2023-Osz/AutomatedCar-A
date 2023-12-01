@@ -6,7 +6,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal interface IReadOnlyLKAInputPacket : IReadOnlyInputDevicePacket
+    public interface IReadOnlyLKAInputPacket : IReadOnlyInputDevicePacket
     {
+        double WheelCorrection { get; }
     }
 }
