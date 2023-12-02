@@ -122,7 +122,7 @@
 
             foreach (var obj in data)
             {
-                if (this.IsInCar(obj))
+                if (this.automatedCarForSensors != obj && this.IsInCar(obj))
                 {
                     this.automatedCarForSensors.Collideable = true;
                     return;
