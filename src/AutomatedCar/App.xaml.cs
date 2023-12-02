@@ -118,6 +118,7 @@ namespace AutomatedCar
             controlledCar.Geometries.Add(controlledCar.Geometry);
             controlledCar.RotationPoint = new System.Drawing.Point(54, 120);
             controlledCar.Rotation = rotation;
+            controlledCar.WorldObjectType = WorldObjectType.Car;
 
             controlledCar.CreateRadarSensor(); // needs to be after Rotation value assignment
             controlledCar.CreateCameraSensor();
