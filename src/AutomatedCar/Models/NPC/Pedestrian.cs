@@ -13,7 +13,7 @@ namespace AutomatedCar.Models.NPC{
         private NPCManager nPCManager;
         public PolylineGeometry Geometry { get; set; }
 
-        public Pedestrian(int x, int y, string filename, int speed, bool repeating, int currentPoint, List<NPCPathPoint> points, NPCManager nPCManager) : base(x, y, filename)
+        public Pedestrian(int x, int y, string filename, int speed, bool repeating, int currentPoint, List<NPCPathPoint> points, NPCManager nPCManager) : base(x, y, filename, collideable: true, worldObjectType: WorldObjectType.Pedestrian)
         {
             this.MoveLoad(speed, repeating, currentPoint, points);
 
