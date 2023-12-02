@@ -3,13 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels;assembly=AutomatedCar"
-             Width="320" Height="720"
+			 Width="320" Height="720"
              x:Class="AutomatedCar.Views.DashboardView"
              DataContext="{Binding Dashboard}"
              xmlns:visualization="clr-namespace:AutomatedCar.Visualization;assembly=AutomatedCar"
              >
 
-    <UserControl.Styles>
+	<UserControl.Styles>
         <Style Selector="ContentControl#Dashboard">
             <Setter Property="Background" Value="#424242"/>
             <Setter Property="Foreground" Value="#EEEEEE"/>
@@ -19,7 +19,7 @@
             <Setter Property="Foreground" Value="#EEEEEE"/>
         </Style>
     </UserControl.Styles>
-
+	
     <DockPanel>
         <Border Padding="2 0 0 0" >
             <ContentControl Name="Dashboard" Content="{Binding ControlledCar, Mode=OneWay}" >
@@ -63,13 +63,11 @@
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
-                                <TextBlock Grid.Row="4" Grid.Column="0">Distance X:</TextBlock>
-                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceX}"/>
-                                <TextBlock Grid.Row="5" Grid.Column="0">Distance Y:</TextBlock>
-                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
-                                <TextBlock Grid.Row="6" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
                             </Grid>
-                        </StackPanel>
+							<TextBlock Text="Warning! IMPACT!!!" IsVisible="{Binding Collideable, Mode=OneWay}"/>
+							<TextBlock Text="Warning!!! Unsave AEB!      Speed ower 70km/h" FontWeight="ExtraBlack" Foreground="Black" Background="Yellow" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningOver70kmph, Mode=OneWay}"/>
+							<TextBlock Text="Warning!!!                            Future Collision Detected" FontWeight="ExtraBlack" Foreground="Black" Background="Red" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningAvoidableCollision, Mode=OneWay}"/>
+						</StackPanel>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
             </ContentControl>
