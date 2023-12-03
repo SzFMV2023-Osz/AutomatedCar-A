@@ -44,6 +44,7 @@
             if (max != null)
             {
                 this.SpeedLimit = max.MaxSpeed;
+                virtualFunctionBus.TempomatPacket.limitSpeed = this.SpeedLimit;
             }
         }
         private void UpdateRelevantsigns()

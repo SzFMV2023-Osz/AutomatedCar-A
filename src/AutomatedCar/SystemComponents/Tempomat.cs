@@ -6,7 +6,7 @@
     using System.Reflection.Metadata;
     using System.Text.RegularExpressions;
 
-    internal class Tempomat : SystemComponent
+    public class Tempomat : SystemComponent
     {
         VirtualFunctionBus virtualFunctionBus;
         public int userSetSpeed { get; set; }
@@ -18,8 +18,6 @@
         public bool isEnabled { get; set; }
         public int BrakePercentage { get; set; }
         public int ThrottlePercentage { get; set; }
-        Car car;
-        Radar localRadar;
         private const int minimumSpeed = 30;
         private const int maximumSpeed = 160;
         private const int speedChangeInterval = 10;
@@ -29,11 +27,9 @@
             get { return GetGoalSpeed(); }
         }
 
-        Tempomat(VirtualFunctionBus VirtualFunctionBus, Radar radar, Car Car) : base(VirtualFunctionBus)
+        public Tempomat(VirtualFunctionBus VirtualFunctionBus) : base(VirtualFunctionBus)
         {
             userSetSpeed = ReturnSpeedValid(currentSpeed);
-            localRadar = radar;
-            car = Car;
             virtualFunctionBus = VirtualFunctionBus;
             limitSpeed = maximumSpeed;
             this.tempomatPacket = new TempomatPacket();
@@ -42,8 +38,6 @@
 
         public override void Process()
         {
-            limitSpeed = localRadar.viewAngle; //TODO
-            currentSpeed = 0;
 
             if (this.virtualFunctionBus.TempomatPacket.isEnabled)
             {
@@ -53,11 +47,11 @@
 
         public void ActiveTempomatProcess()
         {
-            if (currentSpeed < GoalSpeed || IsNeededAdaptiveCorrection())
+            if (currentSpeed < GoalSpeed/* || IsNeededAdaptiveCorrection()*/)
             {
                 Accelerate();
             }
-            else if (currentSpeed > GoalSpeed || IsNeededAdaptiveCorrection())
+            else if (currentSpeed > GoalSpeed /*|| IsNeededAdaptiveCorrection()*/)
             {
                 Decelerate();
             }
@@ -96,35 +90,36 @@
             }
         }
 
-        public void Enable()
+        public void ToggleACC()
         {
-            isEnabled = true;
-            tempomatPacket.isEnabled = true;
-            userSetSpeed = ReturnSpeedValid(currentSpeed);
-        }
-
-        public void Disable()
-        {
-            isEnabled = false;
+            isEnabled = !isEnabled;
+            tempomatPacket.isEnabled = !tempomatPacket.isEnabled;
+            if (isEnabled)
+            {
+                userSetSpeed = ReturnSpeedValid(currentSpeed);
+            }
         }
 
         private void Accelerate()
         {
 
-            var temp = 50;
-            if (temp > 1)
-            {
-                ThrottlePercentage = 1;
-            }
-            else
-            {
-               ThrottlePercentage = temp;
-            }
+            //var temp = 50;
+            //if (temp > 100)
+            //{
+            //    ThrottlePercentage = 100;
+            //}
+            //else
+            //{
+            //   ThrottlePercentage = temp;
+            ThrottlePercentage = 69;
+            tempomatPacket.ThrottlePercentage = ThrottlePercentage;
+            
         }
 
         private void Decelerate()
         {
            BrakePercentage = 50;
+           tempomatPacket.ThrottlePercentage = ThrottlePercentage;
         }
 
         private bool IsSpeedValid(int speed)

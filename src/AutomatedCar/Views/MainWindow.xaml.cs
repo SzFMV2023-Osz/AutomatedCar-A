@@ -7,6 +7,7 @@ namespace AutomatedCar.Views
     using Avalonia.Controls;
     using Avalonia.Input;
     using Avalonia.Markup.Xaml;
+    using Avalonia.VisualTree;
 
     public class MainWindow : Window
     {
@@ -106,7 +107,20 @@ namespace AutomatedCar.Views
                 viewModel.PrevControlledCar();
                 Keyboard.Keys.Remove(Key.F5);
             }
+            if (Keyboard.IsKeyDown(Key.C))
+            {
+                viewModel.CourseDisplay.ToggleAdaptiveTempomat();
+            }
 
+            if (Keyboard.IsKeyDown(Key.Subtract))
+            {
+                viewModel.CourseDisplay.DecreaseAccTargetSpeed();
+            }
+
+            if (Keyboard.IsKeyDown(Key.Add))
+            {
+                viewModel.CourseDisplay.IncreaseAccTargetSpeed();
+            }
             var scrollViewer = this.Get<CourseDisplayView>("courseDisplay").Get<ScrollViewer>("scrollViewer");
             viewModel.CourseDisplay.FocusCar(scrollViewer);
         }

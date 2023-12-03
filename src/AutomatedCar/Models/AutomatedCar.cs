@@ -12,7 +12,7 @@ namespace AutomatedCar.Models
     {
         private VirtualFunctionBus virtualFunctionBus;
         private Powertrain powertrain;
-
+        public Tempomat tempomat;
         private Radar radarSensor;
 
         private Camera cameraSensor;
@@ -23,6 +23,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.powertrain = new Powertrain(this.virtualFunctionBus);
+            this.tempomat = new Tempomat(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
