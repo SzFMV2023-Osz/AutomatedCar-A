@@ -7,11 +7,12 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal class Tempomat
+    internal class Tempomat : SystemComponent
     {
         int userSetSpeed;
         int limitSpeed;
         int currentSpeed;
+        bool isEnabled;
         private const int minimumSpeed = 160;
         private const int maximumSpeed = 30;
         private const int speedChangeInterval = 10;
@@ -20,11 +21,22 @@
         {
             get { return getGoalSpeed(); }
         }
-
-        Tempomat()
+        Tempomat(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
         {
             userSetSpeed = ReturnSpeedValid(currentSpeed);
+            isEnabled = false;
         }
+
+        public override void Process()
+        {
+            limitSpeed = 0;
+            currentSpeed = 0;
+            if(isEnabled)
+            {
+                ActiveTempomatProcess();
+            }
+        }
+   
 
         public void ActiveTempomatProcess() 
         { 
@@ -58,6 +70,15 @@
             }
 
         }
+        public void Enable()
+        {
+            isEnabled = true;
+            userSetSpeed = ReturnSpeedValid(currentSpeed);
+        }
+        public void Disable()
+        {
+            isEnabled = false;
+        }
         private void Accelerate()
         {
             // todo  
@@ -80,5 +101,7 @@
         {
             return ReturnSpeedValid(Math.Min(userSetSpeed,limitSpeed));
         }
+
+        
     }
 }
