@@ -65,7 +65,7 @@
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
                             </Grid>
 							<TextBlock Text="Warning! IMPACT!!!" IsVisible="{Binding Collideable, Mode=OneWay}"/>
-							<TextBlock Text="Warning!!! Unsave AEB!      Speed ower 70km/h" FontWeight="ExtraBlack" Foreground="Black" Background="Yellow" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningOver70kmph, Mode=OneWay}"/>
+							<TextBlock Text="Warning!!! AEB system could not handle every situation over 70 km/h" FontWeight="ExtraBlack" Foreground="Black" Background="Yellow" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningOver70kmph, Mode=OneWay}"/>
 							<TextBlock Text="Warning!!!                            Future Collision Detected" FontWeight="ExtraBlack" Foreground="Black" Background="Red" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningAvoidableCollision, Mode=OneWay}"/>
 						</StackPanel>
                     </DataTemplate>
