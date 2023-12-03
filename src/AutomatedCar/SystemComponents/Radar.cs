@@ -22,7 +22,7 @@
         private List<WorldObject> RelevantSigns = new List<WorldObject>();
         private List<MapSign> Signs = new List<MapSign>();
 
-        private int SpeedLimit = new int();
+        public int SpeedLimit = new int();
 
         public override void Process()
         {

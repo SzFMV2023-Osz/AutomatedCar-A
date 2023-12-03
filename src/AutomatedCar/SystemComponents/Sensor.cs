@@ -52,7 +52,6 @@
                     if (!CurrentObjectsinView.Contains(obj))
                     {
                         CurrentObjectsinView.Add(obj);
-
                     }
                 }
                 else
