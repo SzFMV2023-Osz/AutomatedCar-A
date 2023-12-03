@@ -42,9 +42,21 @@
 
         public override void Process()
         {
-            int brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+            int brakePercentage;
+            int throttlePercentage;
+            if (virtualFunctionBus.TempomatPacket.isEnabled)
+            {
+                 brakePercentage = virtualFunctionBus.TempomatPacket.BrakePercentage;
+                 throttlePercentage = virtualFunctionBus.TempomatPacket.ThrottlePercentage;
+
+            }
+            else
+            {
+                brakePercentage = virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+                throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+            }
+
             int wheelPercentage = virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage;
-            int throttlePercentage = virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
             SequentialShiftingDirections shiftUpOrDown = virtualFunctionBus.KeyboardHandlerPacket.ShiftUpOrDown;
 
             this.Wheel.AngleAsDegree = wheelPercentage;
