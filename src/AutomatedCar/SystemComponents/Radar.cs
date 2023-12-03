@@ -6,6 +6,7 @@
     using AutomatedCar.Models;
     using Avalonia;
     using DynamicData;
+    using DynamicData.Aggregation;
 
     internal class Radar : Sensor
     {
@@ -17,6 +18,12 @@
             this.viewAngle = 60;
         }
 
+        // releváns road signokat tároljuk
+        private List<WorldObject> RelevantSigns = new List<WorldObject>();
+        private List<MapSign> Signs = new List<MapSign>();
+
+        private int SpeedLimit = new int();
+
         public override void Process()
         {
             this.ClosestHighlightedObject();
@@ -26,7 +33,33 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+            this.UpdateRelevantsigns();
+            this.UpdateMaxSpeed();
         }
+
+        private void UpdateMaxSpeed()
+        {
+            var relevants = this.Signs.Where(x => x.MaxSpeed >= 0);
+            var max = relevants.Where(x => x.Distance == relevants.Min(y=>y.Distance)).FirstOrDefault();
+            if (max != null)
+            {
+                this.SpeedLimit = max.MaxSpeed;
+            }
+        }
+        private void UpdateRelevantsigns()
+        {
+            this.RelevantSigns = new List<WorldObject>();
+            this.Signs = new List<MapSign>();
+            foreach (WorldObject item in CurrentObjectsinView)
+            {
+                if(item.WorldObjectType== WorldObjectType.RoadSign)
+                {
+                    this.RelevantSigns.Add(item);
+                    this.Signs.Add(new MapSign(item.Filename,this.automatedCarForSensors.X,this.automatedCarForSensors.Y,item.X,item.Y));
+                }
+            }
+        }
+
 
         // Refreshes the distance of elements in previousObjectinView List
         private void RefreshDistances()
@@ -158,6 +191,54 @@
                     && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Other) && !this.CurrentObjectsinView[i].WorldObjectType.Equals(WorldObjectType.Crosswalk))
                 {
                     this.HighlightedObject = this.CurrentObjectsinView[i];
+                }
+            }
+        }
+    }
+
+    public class MapSign
+    {
+
+        public int MaxSpeed;
+        public double Distance;
+        public MapSign(string name,int carx, int cary, int sx,int sy) 
+        {
+
+            this.MaxSpeed = MaxS(name);
+            this.Distance = GetDistance(carx, cary, sx, sy);
+        }
+        private double GetDistance(int carx, int cary, int sx, int sy)
+        {
+            double dx = sx - carx;
+            double dy = sy - cary;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+        private int MaxS(string input)
+        {
+            // Get all the digits from the input string
+            string digitsString = new string(input.Where(char.IsDigit).ToArray());
+
+            if (!string.IsNullOrEmpty(digitsString))
+            {
+                // Convert the string of digits to an integer
+                if (int.TryParse(digitsString, out int digits))
+                {
+                    return digits;
+                }
+                else
+                {
+                    throw new Exception("HIBA");
+                }
+            }
+            else
+            {
+                if (digitsString.Contains("stop"))
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
                 }
             }
         }
