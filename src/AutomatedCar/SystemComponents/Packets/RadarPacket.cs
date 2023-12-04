@@ -13,5 +13,14 @@
             get => this.relevantObjects;
             set => this.RaiseAndSetIfChanged(ref this.relevantObjects, value);
         }
+
+        private int limitSpeed;
+
+        public int LimitSpeed
+        {
+            get => this.limitSpeed;
+            set => this.RaiseAndSetIfChanged(ref this.limitSpeed, value);
+        }
+
     }
 }

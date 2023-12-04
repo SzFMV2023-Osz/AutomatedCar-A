@@ -5,6 +5,7 @@
 
     public interface IReadOnlyRadarPacket
     {
+        int LimitSpeed { get; }
         List<RelevantObject> RelevantObjects { get; }
     }
 }
