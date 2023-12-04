@@ -37,6 +37,7 @@
         
         public override void Process()
         {
+            this.CreateSensorTriangle(this.automatedCarForSensors, this.distanceFromCarCenter, this.viewAngle, this.viewDistance);
             this.ObjectsinViewUpdate(World.Instance.WorldObjects);
             this.RefreshRelevantObjects();
             this.GetClosestHighlightedObject();
