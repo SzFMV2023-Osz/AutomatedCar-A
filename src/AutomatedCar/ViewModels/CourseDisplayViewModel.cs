@@ -95,9 +95,9 @@ namespace AutomatedCar.ViewModels
 
         }
 
-        internal void ToggleAdaptiveTempomat()
+        internal void ToggleAdaptiveTempomat(string key)
         {
-            World.Instance.ControlledCar.tempomat.ToggleACC();
+            World.Instance.ControlledCar.tempomat.ToggleACC(key);
 
         }
     }

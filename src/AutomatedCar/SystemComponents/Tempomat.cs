@@ -91,14 +91,26 @@
             }
         }
 
-        public void ToggleACC()
+        public void ToggleACC(string key)
         {
-            isEnabled = !isEnabled;
-            tempomatPacket.isEnabled = !tempomatPacket.isEnabled;
-            if (isEnabled)
+            if (key == "OFF")
             {
-                userSetSpeed = ReturnSpeedValid(currentSpeed);
+                tempomatPacket.isEnabled = false;
             }
+            else
+            {
+                isEnabled = !isEnabled;
+                tempomatPacket.isEnabled = !tempomatPacket.isEnabled;
+                if (isEnabled)
+                {
+                    userSetSpeed = ReturnSpeedValid(currentSpeed);
+                }
+
+            }
+
+            
+
+            
         }
 
         private void Accelerate()

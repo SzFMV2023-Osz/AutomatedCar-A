@@ -30,6 +30,7 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.Down))
             {
                 viewModel.KeyboardHandler.HandleKeyDown_Down();
+                viewModel.CourseDisplay.ToggleAdaptiveTempomat("OFF");
             }
 
             if (Keyboard.IsKeyDown(Key.Left))
@@ -108,7 +109,7 @@ namespace AutomatedCar.Views
             }
             if (Keyboard.IsKeyDown(Key.C))
             {
-                viewModel.CourseDisplay.ToggleAdaptiveTempomat();
+                viewModel.CourseDisplay.ToggleAdaptiveTempomat("");
             }
 
             if (Keyboard.IsKeyDown(Key.Subtract))
