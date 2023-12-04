@@ -86,12 +86,12 @@ namespace AutomatedCar.ViewModels
 
         internal void DecreaseAccTargetSpeed()
         {
-            World.Instance.ControlledCar.tempomat.IncreaseGoalSpeed();
+            World.Instance.ControlledCar.tempomat.DecreaseGoalSpeed();
         }
 
         internal void IncreaseAccTargetSpeed()
         {
-            World.Instance.ControlledCar.tempomat.DecreaseGoalSpeed();
+            World.Instance.ControlledCar.tempomat.IncreaseGoalSpeed();
 
         }
 

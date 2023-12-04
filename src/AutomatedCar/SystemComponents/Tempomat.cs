@@ -47,6 +47,7 @@
 
         public void ActiveTempomatProcess()
         {
+            currentSpeed = this.virtualFunctionBus.PowertrainPacket.Speed;
             if (currentSpeed < GoalSpeed/* || IsNeededAdaptiveCorrection()*/)
             {
                 Accelerate();
@@ -82,7 +83,7 @@
         {
             if (IsSpeedValid(userSetSpeed - speedChangeInterval))
             {
-                userSetSpeed += speedChangeInterval;
+                userSetSpeed -= speedChangeInterval;
             }
             else
             {
@@ -103,23 +104,33 @@
         private void Accelerate()
         {
 
-            //var temp = 50;
-            //if (temp > 100)
-            //{
-            //    ThrottlePercentage = 100;
-            //}
-            //else
-            //{
-            //   ThrottlePercentage = temp;
-            ThrottlePercentage = 69;
+            int result = (int)Math.Floor(Convert.ToDouble(currentSpeed + GetGoalSpeed() / 100 + currentSpeed / 2 + 50));
+            if (result > 100)
+            {
+                ThrottlePercentage = 100;
+            }
+            else
+            {
+                ThrottlePercentage = result;
+            }
+            tempomatPacket.BrakePercentage = 0;
             tempomatPacket.ThrottlePercentage = ThrottlePercentage;
 
         }
 
         private void Decelerate()
         {
-            BrakePercentage = 50;
-            tempomatPacket.ThrottlePercentage = ThrottlePercentage;
+            int result = (int)Math.Floor(Convert.ToDouble(currentSpeed + GetGoalSpeed() / 100 + 50));
+            if (result > 100)
+            {
+                BrakePercentage = 33;
+            }
+            else
+            {
+                BrakePercentage = (int)Math.Floor(Convert.ToDouble(result / 3));
+            }
+            tempomatPacket.ThrottlePercentage = 0;
+            tempomatPacket.BrakePercentage = BrakePercentage;
         }
 
         private bool IsSpeedValid(int speed)
@@ -141,7 +152,7 @@
             {
                 return maximumSpeed;
             }
-            return ReturnSpeedValid(Math.Min(userSetSpeed, limitSpeed));
+            return Math.Min(ReturnSpeedValid(userSetSpeed),limitSpeed);
         }
     }
 }
