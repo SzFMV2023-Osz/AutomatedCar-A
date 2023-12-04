@@ -38,7 +38,7 @@
 
         public override void Process()
         {
-            this.limitSpeed = this.virtualFunctionBus.TempomatPacket.limitSpeed;
+            this.limitSpeed = this.virtualFunctionBus.RadarPacket.LimitSpeed;
             if (this.virtualFunctionBus.TempomatPacket.isEnabled)
             {
                 ActiveTempomatProcess();

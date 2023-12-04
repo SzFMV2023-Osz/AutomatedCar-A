@@ -36,9 +36,9 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
+            this.RadarPacket.RelevantObjects = RelevantObjects();
             this.UpdateRelevantsigns();
             this.UpdateMaxSpeed();
-            this.RadarPacket.RelevantObjects = RelevantObjects();
         }
         private void UpdateMaxSpeed()
         {
@@ -47,13 +47,13 @@
             if (max != null)
             {
                 this.SpeedLimit = max.MaxSpeed;
-                virtualFunctionBus.TempomatPacket.limitSpeed = this.SpeedLimit;
             }
             else
             {
                 this.SpeedLimit = 200;
-                virtualFunctionBus.TempomatPacket.limitSpeed = this.SpeedLimit;
             }
+
+            this.RadarPacket.LimitSpeed = SpeedLimit;
         }
         private void UpdateRelevantsigns()
         {
@@ -238,15 +238,12 @@
             }
             else
             {
-                if (digitsString.Contains("stop"))
+                if (input.Contains("stop"))
                 {
                     return 0;
                 }
-                else
-                {
-                    return -1;
-                }
             }
+            return -1;
         }
     }
 }
