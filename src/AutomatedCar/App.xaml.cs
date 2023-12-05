@@ -170,36 +170,6 @@ namespace AutomatedCar
 
             world.AddObject(circle);
         }
-        private PolylineGeometry GetNPCCarBoundaryBox()
-        {
-            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"AutomatedCar.Assets.worldobject_polygons.json"));
-            string json_text = reader.ReadToEnd();
-            dynamic stuff = JObject.Parse(json_text);
-            var points = new List<Point>();
-            foreach (var i in stuff["objects"][5]["polys"][0]["points"])
-            {
-                points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
-            }
-
-            return new PolylineGeometry(points, false);
-
-        }
-
-        private PolylineGeometry GetControlledNPCPedestrianBoundaryBox()
-        {
-            StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly()
-    .GetManifestResourceStream($"AutomatedCar.Assets.worldobject_polygons.json"));
-            string json_text = reader.ReadToEnd();
-            dynamic stuff = JObject.Parse(json_text);
-            var points = new List<Point>();
-            foreach (var i in stuff["objects"][31]["polys"][0]["points"])
-            {
-                points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
-            }
-
-            return new PolylineGeometry(points, false);
-        }
 
         private AutomatedCar CreateControlledCar(int x, int y, int rotation, string filename)
         {
