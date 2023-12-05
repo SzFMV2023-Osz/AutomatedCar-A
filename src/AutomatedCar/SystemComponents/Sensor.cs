@@ -7,6 +7,7 @@
     using System.Reflection;
     using System.Runtime.ConstrainedExecution;
     using AutomatedCar.Models;
+    using AutomatedCar.Models.NPC;
     using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
     using Avalonia.Controls.Shapes;
@@ -50,28 +51,44 @@
         {
             foreach (var obj in objects)
             {
-                if (IsInTriangle(obj))
+                if (this.IsInTriangle(obj))
                 {
-                    if (!CurrentObjectsinView.Contains(obj))
+                    if (!this.CurrentObjectsinView.Contains(obj))
                     {
-                        CurrentObjectsinView.Add(obj);
+                        if (obj != this.automatedCarForSensors)
+                        {
+                            this.CurrentObjectsinView.Add(obj);
+                        }
                     }
                 }
                 else
                 {
-                    CurrentObjectsinView.Remove(obj);
+                    this.CurrentObjectsinView.Remove(obj);
                 }
             }
         }
 
         private bool IsInTriangle(WorldObject obj)
         {
+            if (obj.WorldObjectType == WorldObjectType.Road)
+            {
+                Polygon outlineGeometry = this.GetRoadOutline(obj);
+
+                foreach (var item in this.SensorTriangle.Points)
+                {
+                    if (outlineGeometry.DefiningGeometry.FillContains(item))
+                    {
+                        return true;
+                    }
+                }
+            }
+
             foreach (var g in obj.Geometries)
             {
                 foreach (var p in g.Points)
                 {
-                    Point point = new Point(p.X + obj.X, p.Y + obj.Y);
-                    if (SensorTriangle.DefiningGeometry.FillContains(point))
+                    Point point = GetTransformedPoint(p, obj);
+                    if (this.SensorTriangle.DefiningGeometry.FillContains(point))
                     {
                         return true;
                     }
@@ -81,6 +98,29 @@
             return false;
         }
 
+        protected Polygon GetRoadOutline(WorldObject roadObj)
+        {
+            List<Point> outlinePoints = new List<Point>();
+
+            for (int i = 0; i < roadObj.Geometries[0].Points.Count; i++)
+            {
+                outlinePoints.Add(GetTransformedPoint(roadObj.Geometries[0].Points[i], roadObj));
+            }
+
+            for (int i = roadObj.Geometries[2].Points.Count - 1; i >= 0; i--)
+            {
+                outlinePoints.Add(GetTransformedPoint(roadObj.Geometries[2].Points[i], roadObj));
+            }
+
+            Point first = outlinePoints.First();
+            outlinePoints.Add(first);
+
+            Polygon outlineGeometry = new Polygon();
+            outlineGeometry.Points = outlinePoints;
+
+            return outlineGeometry;
+        }
+
         protected void CreateSensorTriangle(AutomatedCar automatedCar, int distanceFromCarCenter, int viewAngle, int range)
         {
             // car x : 480
@@ -88,7 +128,7 @@
             int alpha = viewAngle / 2;
 
             // c means c side of a right-triangle
-            int cSideLength = (int)(range / Math.Cos(alpha));
+            int cSideLength = (int)(range / Math.Cos(DegToRad(alpha)));
 
             Point point1 = new Point(
                            automatedCar.X + (int)(distanceFromCarCenter * Math.Cos(DegToRad(270 + automatedCar.Rotation))),
@@ -124,6 +164,59 @@
         {
             double distance = Math.Sqrt(Math.Pow(xBCoordinate - xACoordinate, 2) + Math.Pow(yBCoordinate - yACoordinate, 2));
             return distance;
+        }
+
+        protected PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
+        {
+            List<Point> updatedPoints = new List<Point>();
+
+            foreach (var item in oldGeom.Points)
+            {
+                Point updatedPoint = GetTransformedPoint(item, obj);
+
+                updatedPoints.Add(updatedPoint);
+            }
+
+            return new PolylineGeometry(updatedPoints, false);
+        }
+
+        protected static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
+        {
+            double angleInRad = DegToRad(obj.Rotation);
+            //if (obj.Rotation == 90)
+            //{
+            //    angleInRad *= -1;
+            //}
+            Point transformedPoint;
+
+            if (!obj.RotationPoint.IsEmpty)
+            {
+                Point offsettedPoint;
+                if (obj.RenderTransformOrigin != "0,0" && obj.RenderTransformOrigin != null)
+                {
+                    // offset with the rotationPoint coordinate
+                     offsettedPoint = new Point(geomPoint.X - (obj.RotationPoint.X * 2), geomPoint.Y - (obj.RotationPoint.Y * 2));
+                }
+                else
+                {
+                // offset with the rotationPoint coordinate
+                 offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+                }
+
+                // now apply rotation
+                double rotatedX = Math.Ceiling(offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                double rotatedY = Math.Ceiling(offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+
+                // offset with the actual coordinate
+                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
+            }
+            else
+            {
+                // offset with the actual coordinate
+                transformedPoint = new Point(geomPoint.X + obj.X, geomPoint.Y + obj.Y);
+            }
+
+            return transformedPoint;
         }
     }
 }
