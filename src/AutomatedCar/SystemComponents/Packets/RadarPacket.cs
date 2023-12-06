@@ -4,7 +4,7 @@
     using ReactiveUI;
     using System.Collections.Generic;
 
-    class RadarPacket : ReactiveObject, IReadOnlyRadarPacket
+    public class RadarPacket : ReactiveObject, IReadOnlyRadarPacket
     {
         private List<RelevantObject> relevantObjects;
 

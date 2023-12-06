@@ -6,7 +6,6 @@ namespace AutomatedCar
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
     using System.Runtime.Remoting;
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents;
@@ -14,7 +13,7 @@ namespace AutomatedCar
     using System.Windows.Markup;
     using AutomatedCar.Models;
     using AutomatedCar.Models.NPC;
-
+    using AutomatedCar.SystemComponents;
     using AutomatedCar.ViewModels;
     using AutomatedCar.Views;
     using Avalonia;
@@ -193,10 +192,12 @@ namespace AutomatedCar
         public delegate void CollidedEventArgs(object sender, EventArgs e);
         private void AddControlledCarsTo(World world)
         {
+
            // var controlledCar = this.CreateControlledCar(480, 1425, 0, "car_1_white.png");
             var controlledCar2 = this.CreateControlledCar(4250, 1420, -90, "car_1_red.png");
 
            //g world.AddControlledCar(controlledCar);
+
             world.AddControlledCar(controlledCar2);
         }
 
