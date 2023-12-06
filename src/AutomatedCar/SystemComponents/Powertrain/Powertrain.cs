@@ -58,9 +58,21 @@
                 }
 
                 this.inputPacket = this.inputPriorityHandler.GetInputs(this.virtualFunctionBus);
-                int brakePercentage = (int)this.inputPacket.BrakePercentage;
+                int brakePercentage;
+                int throttlePercentage;
+                if (virtualFunctionBus.TempomatPacket.isEnabled)
+                {
+                    brakePercentage = virtualFunctionBus.TempomatPacket.BrakePercentage;
+                    throttlePercentage = virtualFunctionBus.TempomatPacket.ThrottlePercentage;
+
+                }
+                else
+                {
+                    brakePercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
+                    throttlePercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+                }
                 int wheelPercentage = (int)this.inputPacket.WheelPercentage;
-                int throttlePercentage = (int)this.inputPacket.ThrottlePercentage;
+                
                 SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.inputPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
@@ -74,6 +86,7 @@
                 this.PowertrainPacket.Speed = (int)this.GearBox.Speed;
 
                 this.MovementCalculator.Process(brakePercentage, wheelPercentage, this.GearBox);
+                (this.virtualFunctionBus.AEBInputPacket as AEBInputPacket).WarningOver70kmph = (int)this.GearBox.Speed > 70 ? true : false;
             }
         }
     }
