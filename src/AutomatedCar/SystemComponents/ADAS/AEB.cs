@@ -66,9 +66,9 @@
                         break;
                     }
 
-                    this.AEBPacket = this.CalculateBrakingForce(
-                        obj.CurrentDistance,
-                        this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance / meterToPxRatio));
+                    //this.AEBPacket = this.CalculateBrakingForce(
+                    //    obj.CurrentDistance,
+                    //    this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance / meterToPxRatio));
 
                     // calculate speed from previos and current distance
                     int relativeSpeed = this.CalculateSpeedForRelevantObject(obj);
