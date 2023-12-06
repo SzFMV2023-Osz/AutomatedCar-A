@@ -6,7 +6,13 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal interface IReadOnlyLKAInputPacket : IReadOnlyInputDevicePacket
+    public interface IReadOnlyLKAInputPacket : IReadOnlyInputDevicePacket
     {
+        double WheelCorrection { get; }
+        bool LKAAvailable { get; }
+        bool LKAOnOff { get; }
+        string Message { get; }
+        bool Warning { get; }
+        string WarningMessage { get; }
     }
 }

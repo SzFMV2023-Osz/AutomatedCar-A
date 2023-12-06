@@ -181,7 +181,7 @@ namespace AutomatedCar
             controlledCar.Rotation = rotation;
             controlledCar.WorldObjectType = WorldObjectType.Car;
 
-            controlledCar.CreateRadarSensor(); // needs to be after Rotation value assignment
+            //controlledCar.CreateRadarSensor(); // needs to be after Rotation value assignment
             controlledCar.CreateCameraSensor();
 
 

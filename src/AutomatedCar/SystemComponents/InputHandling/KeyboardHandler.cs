@@ -10,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
 
     public class KeyboardHandler : SystemComponent, IInputHandler
     {
@@ -197,7 +198,15 @@
                 this.wheelPercentage += 100 / 30;
             }
 
-            this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
+            // ez azért 
+            //if (this.virtualFunctionBus.LKAInputPacket.LKAOnOff)
+            //{
+            //    // this.KeyboardHandlerPacket.WheelPercentage = this.virtualFunctionBus.LKAInputPacket.WheelPercentage;
+            //}
+            //else
+            //{
+                this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
+            //}
         }
     }
 }
