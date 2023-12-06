@@ -9,6 +9,8 @@
 
     public interface IReadOnlyRelevantObjects
     {
-        List<WorldObject> RelevantObjects { get; set; }
+        int LimitSpeed { get; }
+
+        List<RelevantObject> RelevantObjects { get; set; }
     }
 }

@@ -98,6 +98,25 @@
             return false;
         }
 
+        protected double ClosestPointOfObject(Point p, WorldObject obj)
+        {
+            double minDistance = double.MaxValue;
+            foreach (var geom in obj.Geometries)
+            {
+                PolylineGeometry tgeom = ActualizeGeometry(geom, obj);
+                foreach (var point in tgeom.Points)
+                {
+                    double distance = CalculateDistance(p.X, p.Y, point.X, point.Y);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                    }
+                }
+            }
+
+            return minDistance;
+        }
+
         protected Polygon GetRoadOutline(WorldObject roadObj)
         {
             List<Point> outlinePoints = new List<Point>();
