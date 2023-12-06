@@ -3,6 +3,7 @@ namespace AutomatedCar.SystemComponents
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Packets.InputPackets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
     using System.Collections.Generic;
 
     public class VirtualFunctionBus : GameBase
@@ -22,7 +23,7 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyInputDevicePacket AEBInputPacket { get; set; }
         public IReadOnlyInputDevicePacket LCCInputPacket { get; set; }
-        public IReadOnlyInputDevicePacket LKAInputPacket { get; set; }
+        public IReadOnlyLKAInputPacket LKAInputPacket { get; set; }
 
         //public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
 

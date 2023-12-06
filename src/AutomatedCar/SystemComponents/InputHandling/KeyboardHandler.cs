@@ -10,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
 
     public class KeyboardHandler : SystemComponent, IInputHandler
     {
@@ -187,15 +188,15 @@
             this.KeyboardHandlerPacket.ThrottlePercentage = this.throttlePercentage;
             this.KeyboardHandlerPacket.BrakePercentage = this.brakePercentage;
 
-            if (this.wheelIsTurningLeft && this.wheelPercentage > -100)
-            {
-                this.wheelPercentage -= 100 / 30;
-            }
+                if (this.wheelIsTurningLeft && this.wheelPercentage > -100)
+                {
+                    this.wheelPercentage -= 100 / 30;
+                }
 
-            if (this.wheelIsTurningRight && this.wheelPercentage < 100)
-            {
-                this.wheelPercentage += 100 / 30;
-            }
+                if (this.wheelIsTurningRight && this.wheelPercentage < 100)
+                {
+                    this.wheelPercentage += 100 / 30;
+                }
 
             this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
         }

@@ -187,7 +187,7 @@
             //this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
         }
 
-        private List<WorldObject> OrderByClosestToFurtherest(List<WorldObject> list)
+        protected List<WorldObject> OrderByClosestToFurtherest(List<WorldObject> list)
         {
             List<WorldObject> orderedList = new List<WorldObject>();
 

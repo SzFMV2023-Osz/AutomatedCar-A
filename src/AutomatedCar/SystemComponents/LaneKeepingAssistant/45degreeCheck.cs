@@ -8,9 +8,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class _45degreeCheck : SystemComponent, IWheel
+    public class _45degreeCheck
     {
-        private LKAHandlerPacket lKAHandlerPacket;
+        //private LKAHandlerPacket lKAHandlerPacket;
         private double angleAsDegree;
 
         public double AngleAsDegree
@@ -29,9 +29,9 @@
             }
         }
 
-        public _45degreeCheck(VirtualFunctionBus virtualFunctionBus) : base(virtualFunctionBus)
+        public _45degreeCheck(VirtualFunctionBus virtualFunctionBus)// : base(virtualFunctionBus)
         {
-            this.lKAHandlerPacket = (LKAHandlerPacket)virtualFunctionBus.LKAHandlerPacket;
+            //this.lKAHandlerPacket = (LKAHandlerPacket)virtualFunctionBus.LKAHandlerPacket;
         }
 
         public static double IntToDegrees(int angleInt)
@@ -45,22 +45,22 @@
 
             if (angleAsDegree >= 30 && angleAsDegree <= 45)
             {
-                this.lKAHandlerPacket.Warning = true;
+                //this.lKAHandlerPacket.Warning = true;
             }
             else if (angleAsDegree <= -30 && angleAsDegree >= -45)
             {
-                this.lKAHandlerPacket.Warning = true;
+                //this.lKAHandlerPacket.Warning = true;
             }
-            else if (angleAsDegree > 45 || angleAsDegree < -45 || angleAsDegree < 30)
+            else if (angleAsDegree > 45 || angleAsDegree < -45/* || angleAsDegree < 30*/)
             {
-                this.lKAHandlerPacket.LKAOnOff = false;
-                this.lKAHandlerPacket.Warning = false;
+                //this.lKAHandlerPacket.LKAOnOff = false;
+                //this.lKAHandlerPacket.Warning = false;
             }
         }
 
-        public override void Process()
-        {
-            this.CheckToTurnOffLKA(virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage);
-        }
+        //public override void Process()
+        //{
+        //    this.CheckToTurnOffLKA(virtualFunctionBus.KeyboardHandlerPacket.WheelPercentage);
+        //}
     }
 }
