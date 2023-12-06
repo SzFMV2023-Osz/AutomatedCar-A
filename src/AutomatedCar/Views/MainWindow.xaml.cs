@@ -35,11 +35,13 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.Left))
             {
                 viewModel.KeyboardHandler.HandleKeyDown_Left();
+                viewModel.LKATurnOnOffSteering();
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
                 viewModel.KeyboardHandler.HandleKeyDown_Right();
+                viewModel.LKATurnOnOffSteering();
             }
 
             if (Keyboard.IsKeyDown(Key.Q))

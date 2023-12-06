@@ -65,7 +65,7 @@
                                 <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceX}"/>
                                 <TextBlock Grid.Row="5" Grid.Column="0">Distance Y:</TextBlock>
                                 <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
-                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.Message}"></TextBlock>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
                             </Grid>
                             <StackPanel>
@@ -82,7 +82,7 @@
                             </StackPanel>
                             <StackPanel>
                                 <TextBlock Text="Warnings" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Car.VirtualFunctionBus.LKAHandlerPacket.WarningMessage}" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Car.VirtualFunctionBus.LKAInpitPacket.WarningMessage}" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

@@ -177,10 +177,6 @@
             return transformedPoint;
         }
 
-
-
-
-
         protected double ClosestPointOfObject(Point p, WorldObject obj)
         {
             double minDistance = double.MaxValue;
