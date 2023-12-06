@@ -15,6 +15,7 @@ namespace AutomatedCar.SystemComponents
         public IReadOnlyPowertrainPacket PowertrainPacket { get; set; }
 
         public IReadOnlyRadarPacket RadarPacket { get; set; }
+        public IReadOnlyTempomatPacket TempomatPacket { get; set; }
 
         public IReadOnlyInputDevicePacket AEBInputPacket { get; set; }
         public IReadOnlyInputDevicePacket LCCInputPacket { get; set; }
