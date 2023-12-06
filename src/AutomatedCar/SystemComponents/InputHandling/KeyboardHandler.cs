@@ -188,17 +188,25 @@
             this.KeyboardHandlerPacket.ThrottlePercentage = this.throttlePercentage;
             this.KeyboardHandlerPacket.BrakePercentage = this.brakePercentage;
 
-                if (this.wheelIsTurningLeft && this.wheelPercentage > -100)
-                {
-                    this.wheelPercentage -= 100 / 30;
-                }
+            if (this.wheelIsTurningLeft && this.wheelPercentage > -100)
+            {
+                this.wheelPercentage -= 100 / 30;
+            }
 
-                if (this.wheelIsTurningRight && this.wheelPercentage < 100)
-                {
-                    this.wheelPercentage += 100 / 30;
-                }
+            if (this.wheelIsTurningRight && this.wheelPercentage < 100)
+            {
+                this.wheelPercentage += 100 / 30;
+            }
 
-            this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
+            // ez azért 
+            //if (this.virtualFunctionBus.LKAInputPacket.LKAOnOff)
+            //{
+            //    // this.KeyboardHandlerPacket.WheelPercentage = this.virtualFunctionBus.LKAInputPacket.WheelPercentage;
+            //}
+            //else
+            //{
+                this.KeyboardHandlerPacket.WheelPercentage = this.wheelPercentage;
+            //}
         }
     }
 }

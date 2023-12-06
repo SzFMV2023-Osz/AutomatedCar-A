@@ -18,7 +18,7 @@
 
         public override void Process()
         {
-            List<RelevantObject> relevantObjects = this.virtualFunctionBus.RadarPacket.RelevantObjects;
+            List<RelevantObject> relevantObjects = this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
     using AutomatedCar.Models;
-    using AutomatedCar.SystemComponents.LaneKeepingAssistant;
     using AutomatedCar.SystemComponents.Packets;
     using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
     using Avalonia;
@@ -26,7 +25,7 @@
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 10;
-            this.viewDistance = 200;
+            this.viewDistance = 400; // 4000 = 80m
             this.viewAngle = 60;
 
             this.LKASetup();

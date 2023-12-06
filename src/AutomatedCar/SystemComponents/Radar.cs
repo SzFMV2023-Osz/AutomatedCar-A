@@ -13,24 +13,24 @@
 
     public class Radar : Sensor
     {
-        public RadarPacket RadarPacket { get; set; }
         private List<WorldObject> RelevantSigns = new List<WorldObject>();
         private List<MapSign> Signs = new List<MapSign>();
 
-        private int SpeedLimit = new int();
+        private int SpeedLimit;
 
+        private RelevantObjectsHandlerPacket RelevantObjetPacket;
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 115;
-            this.viewDistance = 200;
+            this.viewDistance = 1000; // 10000 = 200m
             this.viewAngle = 60;
+            this.SpeedLimit = 0;
 
-            
-            this.virtualFunctionBus.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
+            this.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
 
-            this.RadarPacket = new RadarPacket();
-            this.virtualFunctionBus.RadarPacket = this.RadarPacket;
+            this.virtualFunctionBus.RelevantObjectsPacket = this.RelevantObjectsPacket;
+
 
         }
 
@@ -43,13 +43,11 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
-
             this.PacketUpdate();
-
-            this.RadarPacket.RelevantObjects = RelevantObjects();
             this.UpdateRelevantsigns();
             this.UpdateMaxSpeed();
 
+            List<RelevantObject> gfwer = this.previousObjectinView;
         }
         private void UpdateMaxSpeed()
         {
@@ -65,7 +63,7 @@
             }
 
 
-            this.RadarPacket.LimitSpeed = SpeedLimit;
+            this.RelevantObjectsPacket.LimitSpeed = SpeedLimit;
         }
         private void UpdateRelevantsigns()
         {
@@ -96,7 +94,9 @@
         {
             foreach (WorldObject WO in this.CurrentObjectsinView)
             {
-                if (!WO.WorldObjectType.Equals(WorldObjectType.Road))
+                if (!WO.WorldObjectType.Equals(WorldObjectType.Road) 
+                    && !WO.WorldObjectType.Equals(WorldObjectType.Crosswalk)
+                    && !WO.WorldObjectType.Equals(WorldObjectType.ParkingSpace))
                 {
                     bool mustadd = true;
                     foreach (RelevantObject prevobj in this.previousObjectinView)
@@ -181,15 +181,18 @@
 
         private void PacketUpdate()
         {
-            List<WorldObject> relevantObjects = this.CurrentObjectsinView;
+            List<RelevantObject> relevantObjects = this.previousObjectinView;
+
+
             relevantObjects = OrderByClosestToFurtherest(relevantObjects);
-            this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = relevantObjects;
+            this.RelevantObjectsPacket.RelevantObjects = relevantObjects;
+            this.RelevantObjectsPacket.LimitSpeed = SpeedLimit;
             //this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
         }
 
-        protected List<WorldObject> OrderByClosestToFurtherest(List<WorldObject> list)
+        protected List<RelevantObject> OrderByClosestToFurtherest(List<RelevantObject> list)
         {
-            List<WorldObject> orderedList = new List<WorldObject>();
+            List<RelevantObject> orderedList = new List<RelevantObject>();
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -201,8 +204,8 @@
                 {
                     for (int j = 0; j < orderedList.Count; j++)
                     {
-                        if (this.CalculateDistance(list[i].X, list[i].Y, this.SensorPosition.X, this.SensorPosition.Y)
-                                                       <= this.CalculateDistance(orderedList[j].X, orderedList[j].Y, this.SensorPosition.X, this.SensorPosition.Y))
+                        if (this.CalculateDistance(list[i].RelevantWorldObject.X, list[i].RelevantWorldObject.Y, this.SensorPosition.X, this.SensorPosition.Y)
+                                                       <= this.CalculateDistance(orderedList[j].RelevantWorldObject.X, orderedList[j].RelevantWorldObject.Y, this.SensorPosition.X, this.SensorPosition.Y))
                         {
                             orderedList.Insert(j, list[i]);
                             break;

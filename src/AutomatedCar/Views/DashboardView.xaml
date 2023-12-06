@@ -54,7 +54,7 @@
 								</Image.RenderTransform>
 							</Image>
 							<TextBlock Text="{Binding Car.VirtualFunctionBus.KeyboardHandlerPacket.WheelPercentage}"></TextBlock>
-                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" Text="{Binding Path=X, StringFormat='X: {0}'}"></TextBlock>
                                 <TextBlock Grid.Row="0" Grid.Column="1" Margin="10" Text="{Binding Path=Y, StringFormat='Y: {0}'}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="0">Filename:</TextBlock>
@@ -63,6 +63,7 @@
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
                                 <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.Message}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.LimitSpeed, Mode=OneWay}"></TextBlock>
                             </Grid>
                             <StackPanel>
                                 <TextBlock Text="Relevant Objects" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
@@ -70,7 +71,7 @@
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding WorldObjectType}" FontWeight="Bold" Foreground="Black"/>
+                                                <TextBlock Text="{Binding RelevantWorldObject.WorldObjectType}" FontWeight="Bold" Foreground="Black"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
