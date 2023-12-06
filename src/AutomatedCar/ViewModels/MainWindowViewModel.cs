@@ -47,5 +47,10 @@
             this.keyboardHandler = new KeyboardHandler(World.Instance.ControlledCar.VirtualFunctionBus);
             this.Dashboard = new DashboardViewModel(World.Instance.ControlledCar);
         }
+
+        public void LKATurnOnOff()
+        {
+            dashboard.ControlledCar.Car.CameraSensor.LKATurnOnOff();
+        }
     }
 }

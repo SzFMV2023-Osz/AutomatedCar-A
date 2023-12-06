@@ -43,6 +43,8 @@
 
             this.shiftingDirection = SequentialShiftingDirections.Nothing;
 
+            this.shiftingDirection = SequentialShiftingDirections.Nothing;
+
             this.brakeTimer.Elapsed += (sender, e) =>
             {
                 if (!this.brakeSmoothReturnIsActive)

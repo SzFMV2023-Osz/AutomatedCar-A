@@ -19,6 +19,7 @@ namespace AutomatedCar.Models
         private Camera cameraSensor;
 
         private AEB aeb;
+        public Tempomat tempomat;
 
 
         public AutomatedCar(int x, int y, string filename)
@@ -27,12 +28,17 @@ namespace AutomatedCar.Models
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.powertrain = new Powertrain(this.virtualFunctionBus, this);
             this.aeb = new AEB(this.virtualFunctionBus);
+            this.tempomat = new Tempomat(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 
         public Powertrain Powertrain { get => this.powertrain; }
+
+        public Camera CameraSensor { get => this.cameraSensor; }
+
+        public Radar RadarSensor { get => this.radarSensor; }
 
         public int Revolution { get; set; }
 
