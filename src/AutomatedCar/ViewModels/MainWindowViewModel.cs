@@ -52,5 +52,10 @@
         {
             dashboard.ControlledCar.Car.CameraSensor.LKATurnOnOff();
         }
+
+        public void LKATurnOnOffSteering()
+        {
+            dashboard.ControlledCar.Car.CameraSensor.LKATurnOnOffSteering();
+        }
     }
 }

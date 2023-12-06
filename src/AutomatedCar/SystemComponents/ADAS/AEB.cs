@@ -47,7 +47,7 @@
         public override void Process()
         {
             int egoSpeed = this.virtualFunctionBus.PowertrainPacket.Speed;
-            List<RelevantObject> relevantObjects = this.virtualFunctionBus.RadarPacket.RelevantObjects;
+            List<RelevantObject> relevantObjects = this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects;
             foreach (var obj in relevantObjects)
             {
                 if (this.status != AEBStatus.Off)
