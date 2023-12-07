@@ -1,58 +1,56 @@
 ﻿namespace AutomatedCar.SystemComponents.Packets
 {
     using AutomatedCar.Helpers.Gearbox_helpers;
+    using AutomatedCar.SystemComponents.Packets.InputPackets;
     using ReactiveUI;
-    using System.IO;
-    using AutomatedCar.Helpers.Gearbox_helpers;
 
-    public class KeyboardHandlerPacket : ReactiveObject, IReadOnlyKeyboardHandlerPacket
+    public class KeyboardHandlerPacket : InputDevicePacket, IReadOnlyKeyboardHandlerPacket
     {
 
-        /// <summary>
-        /// Represents how far the brake pedal is being pushed down. 0 meaning not at all, 100 meaning fully pressed.
-        /// </summary>
-        private int brakePercentage;
-
-        /// <summary>
-        /// Represents how far the throttle pedal is being pushed down. 0 meaning not at all, 100 meaning fully pressed.
-        /// </summary>
-        private int throttlePercentage;
-
-        /// <summary>
-        /// Represents steering wheel rotation between values -100 and +100 (left to right). 0 means that the wheel is centered.
-        /// </summary>
-        private int wheelPercentage;
-
-        /// <summary>
-        /// Value can be:
-        /// -1 meaning shift down,
-        /// 0 meaning don't shift,
-        /// +1 meaning shift up.
-        /// </summary>
-        private SequentialShiftingDirections shiftUpOrDown;
-
-        public int BrakePercentage
+        public KeyboardHandlerPacket()
+        {
+            this.brakePercentage = 0;
+            this.throttlePercentage = 0;
+            this.wheelPercentage = 0;
+            this.shiftUpOrDown = 0;
+        }
+        public override int? BrakePercentage
         {
             get => this.brakePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.brakePercentage, value);
+            set {
+                if (value != null)
+                    this.RaiseAndSetIfChanged(ref this.brakePercentage, value);
+            }
         }
 
-        public int ThrottlePercentage
+        public override int? ThrottlePercentage
         {
             get => this.throttlePercentage;
-            set => this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
+            set
+            {
+                if (value != null)
+                    this.RaiseAndSetIfChanged(ref this.throttlePercentage, value);
+            }
         }
 
-        public int WheelPercentage
+        public override double? WheelPercentage
         {
             get => this.wheelPercentage;
-            set => this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
+            set
+            {
+                if (value != null)
+                    this.RaiseAndSetIfChanged(ref this.wheelPercentage, value);
+            }
         }
 
-        public SequentialShiftingDirections ShiftUpOrDown
+        public override SequentialShiftingDirections? ShiftUpOrDown
         {
             get => this.shiftUpOrDown;
-            set => this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
+            set
+            {
+                if (value != null)
+                    this.RaiseAndSetIfChanged(ref this.shiftUpOrDown, value);
+            }
         }
     }
 }

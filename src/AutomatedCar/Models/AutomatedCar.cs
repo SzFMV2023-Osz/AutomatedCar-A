@@ -7,6 +7,7 @@ namespace AutomatedCar.Models
     using SystemComponents;
     using ReactiveUI;
     using SystemComponents.Powertrain;
+    using SystemComponents.ADAS;
 
     public class AutomatedCar : Car
     {
@@ -17,18 +18,28 @@ namespace AutomatedCar.Models
 
         private Camera cameraSensor;
 
+        private AEB aeb;
+        public Tempomat tempomat;
+
 
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
-            this.powertrain = new Powertrain(this.virtualFunctionBus);
+            this.powertrain = new Powertrain(this.virtualFunctionBus, this);
+            this.radarSensor = new Radar(this.virtualFunctionBus, this);
+            this.aeb = new AEB(this.virtualFunctionBus);
+            this.tempomat = new Tempomat(this.virtualFunctionBus);
             this.ZIndex = 10;
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
 
         public Powertrain Powertrain { get => this.powertrain; }
+
+        public Camera CameraSensor { get => this.cameraSensor; }
+
+        public Radar RadarSensor { get => this.radarSensor; }
 
         public int Revolution { get; set; }
 
