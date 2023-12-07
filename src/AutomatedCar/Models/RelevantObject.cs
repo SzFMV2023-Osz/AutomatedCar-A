@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public struct RelevantObject
+    public class RelevantObject
     {
         public RelevantObject(WorldObject relevantobject, double currentdistance, double previousdistance)
         {
