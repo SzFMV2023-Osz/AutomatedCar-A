@@ -36,11 +36,13 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.Left))
             {
                 viewModel.KeyboardHandler.HandleKeyDown_Left();
+                viewModel.LKATurnOnOffSteering();
             }
 
             if (Keyboard.IsKeyDown(Key.Right))
             {
                 viewModel.KeyboardHandler.HandleKeyDown_Right();
+                viewModel.LKATurnOnOffSteering();
             }
 
             if (Keyboard.IsKeyDown(Key.Q))
@@ -120,6 +122,11 @@ namespace AutomatedCar.Views
             if (Keyboard.IsKeyDown(Key.Add))
             {
                 viewModel.CourseDisplay.IncreaseAccTargetSpeed();
+            }
+
+            if (Keyboard.IsKeyDown(Key.L))
+            {
+                viewModel.LKATurnOnOff();
             }
 
             var scrollViewer = this.Get<CourseDisplayView>("courseDisplay").Get<ScrollViewer>("scrollViewer");

@@ -4,27 +4,34 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.Packets;
     using Avalonia;
+    using Avalonia.Media;
     using DynamicData;
     using DynamicData.Aggregation;
     using AutomatedCar.SystemComponents.Packets;
 
-    internal class Radar : Sensor
+    public class Radar : Sensor
     {
-        public RadarPacket RadarPacket { get; set; }
         private List<WorldObject> RelevantSigns = new List<WorldObject>();
         private List<MapSign> Signs = new List<MapSign>();
 
-        private int SpeedLimit = new int();
+        private int SpeedLimit;
 
+        private RelevantObjectsHandlerPacket RelevantObjetPacket;
         public Radar(VirtualFunctionBus virtualFunctionBus, AutomatedCar automatedCar)
             : base(virtualFunctionBus, automatedCar)
         {
             this.distanceFromCarCenter = 115;
-            this.viewDistance = 200;
+            this.viewDistance = 1000; // 10000 = 200m
             this.viewAngle = 60;
-            this.RadarPacket = new RadarPacket();
-            this.virtualFunctionBus.RadarPacket = this.RadarPacket;
+            this.SpeedLimit = 0;
+
+            this.RelevantObjectsPacket = new RelevantObjectsHandlerPacket();
+
+            this.virtualFunctionBus.RelevantObjectsPacket = this.RelevantObjectsPacket;
+
+
         }
 
         public override void Process()
@@ -36,9 +43,11 @@
             this.RemoveObjectsNotinView();
             this.RefreshDistances();
             this.RefreshPreviousObjects();
-            this.RadarPacket.RelevantObjects = RelevantObjects();
+            this.PacketUpdate();
             this.UpdateRelevantsigns();
             this.UpdateMaxSpeed();
+
+            List<RelevantObject> gfwer = this.previousObjectinView;
         }
         private void UpdateMaxSpeed()
         {
@@ -53,7 +62,8 @@
                 this.SpeedLimit = 200;
             }
 
-            this.RadarPacket.LimitSpeed = SpeedLimit;
+
+            this.RelevantObjectsPacket.LimitSpeed = SpeedLimit;
         }
         private void UpdateRelevantsigns()
         {
@@ -68,6 +78,7 @@
                 }
             }
         }
+
         // Refreshes the distance of elements in previousObjectinView List
         private void RefreshDistances()
         {
@@ -83,7 +94,9 @@
         {
             foreach (WorldObject WO in this.CurrentObjectsinView)
             {
-                if (!WO.WorldObjectType.Equals(WorldObjectType.Road))
+                if (!WO.WorldObjectType.Equals(WorldObjectType.Road) 
+                    && !WO.WorldObjectType.Equals(WorldObjectType.Crosswalk)
+                    && !WO.WorldObjectType.Equals(WorldObjectType.ParkingSpace))
                 {
                     bool mustadd = true;
                     foreach (RelevantObject prevobj in this.previousObjectinView)
@@ -120,10 +133,10 @@
                 {
                     if (!this.CurrentObjectsinView.Contains(prevobj.RelevantWorldObject))
                     {
-                    if (this.previousObjectinView.Contains(prevobj))
-                    {
-                        helper.Remove(prevobj);
-                    }
+                        if (this.previousObjectinView.Contains(prevobj))
+                        {
+                            helper.Remove(prevobj);
+                        }
                     }
                 }
 
@@ -147,42 +160,6 @@
             return relevantObjects;
         }
 
-        public void DetectCollision()
-        {
-            var data = World.Instance.WorldObjects.Where(x => x.WorldObjectType != WorldObjectType.Crosswalk
-                     && x.WorldObjectType != WorldObjectType.Road
-                     && x.WorldObjectType != WorldObjectType.Other
-                     && x.WorldObjectType != WorldObjectType.ParkingSpace);
-
-            foreach (var obj in data)
-            {
-                if (this.automatedCarForSensors != obj && this.IsInCar(obj))
-                {
-                    this.automatedCarForSensors.Collideable = true;
-                    return;
-                }
-            }
-
-            this.automatedCarForSensors.Collideable = false;
-        }
-
-        private bool IsInCar(WorldObject obj)
-        {
-            foreach (var g in obj.Geometries)
-            {
-                Rect old = this.automatedCarForSensors.Geometries[0].Bounds;
-                AutomatedCar car = this.automatedCarForSensors;
-                Rect actualPos = new Rect(old.X + car.X - (old.Width / 2), old.Y + car.Y - (old.Height / 2), old.Width, old.Height);
-
-                if (actualPos.Intersects(new Rect(g.Bounds.X + obj.X, g.Bounds.Y + obj.Y, g.Bounds.Width, g.Bounds.Height)))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public void ClosestHighlightedObject()
         {
             if (this.CurrentObjectsinView.Count > 0)
@@ -200,6 +177,131 @@
                     this.HighlightedObject = this.CurrentObjectsinView[i];
                 }
             }
+        }
+
+        private void PacketUpdate()
+        {
+            List<RelevantObject> relevantObjects = this.previousObjectinView;
+
+
+            relevantObjects = OrderByClosestToFurtherest(relevantObjects);
+            this.RelevantObjectsPacket.RelevantObjects = relevantObjects;
+            this.RelevantObjectsPacket.LimitSpeed = SpeedLimit;
+            //this.virtualFunctionBus.RelevantObjectsPacket.RelevantObjects = this.CurrentObjectsinView;
+        }
+
+        protected List<RelevantObject> OrderByClosestToFurtherest(List<RelevantObject> list)
+        {
+            List<RelevantObject> orderedList = new List<RelevantObject>();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i == 0)
+                {
+                    orderedList.Add(list[i]);
+                }
+                else
+                {
+                    for (int j = 0; j < orderedList.Count; j++)
+                    {
+                        if (this.CalculateDistance(list[i].RelevantWorldObject.X, list[i].RelevantWorldObject.Y, this.SensorPosition.X, this.SensorPosition.Y)
+                                                       <= this.CalculateDistance(orderedList[j].RelevantWorldObject.X, orderedList[j].RelevantWorldObject.Y, this.SensorPosition.X, this.SensorPosition.Y))
+                        {
+                            orderedList.Insert(j, list[i]);
+                            break;
+                        }
+                        else if (j == orderedList.Count - 1)
+                        {
+                            orderedList.Add(list[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return orderedList;
+        }
+
+        public void DetectCollision()
+        {
+            var collidableObjects = World.Instance.WorldObjects.Where(x => x != this.automatedCarForSensors
+            && (x.Collideable || x.WorldObjectType == WorldObjectType.Other)).ToList();
+
+            PolylineGeometry newCarGeometry = this.ActualizeGeometry(
+                                                                     this.automatedCarForSensors.Geometry,
+                                                                     this.automatedCarForSensors);
+
+            foreach (var obj in collidableObjects)
+            {
+
+                if (IntersectsWithObject(newCarGeometry, obj))
+
+                {
+                    this.automatedCarForSensors.Collideable = true;
+                    return;
+                }
+            }
+
+            this.automatedCarForSensors.Collideable = false;
+        }
+
+        private PolylineGeometry ActualizeGeometry(PolylineGeometry oldGeom, WorldObject obj)
+        {
+            List<Point> updatedPoints = new List<Point>();
+
+            foreach (var item in oldGeom.Points)
+            {
+                Point updatedPoint = GetTransformedPoint(item, obj);
+
+                updatedPoints.Add(updatedPoint);
+            }
+
+            return new PolylineGeometry(updatedPoints, false);
+        }
+
+        private static bool IntersectsWithObject(PolylineGeometry updatedGeometry, WorldObject obj)
+        {
+            foreach (var geom in obj.Geometries)
+            {
+                foreach (var item in geom.Points)
+                {
+                    Point updatedPoint = GetTransformedPoint(item, obj);
+
+                    if (updatedGeometry.FillContains(updatedPoint))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static Point GetTransformedPoint(Point geomPoint, WorldObject obj)
+        {
+            double angleInRad = DegToRad(obj.Rotation);
+
+            Point transformedPoint;
+
+            if (!obj.RotationPoint.IsEmpty)
+            {
+                // offset with the rotationPoint coordinate
+                Point offsettedPoint = new Point(geomPoint.X - obj.RotationPoint.X, geomPoint.Y - obj.RotationPoint.Y);
+
+                // now apply rotation
+                double rotatedX = (offsettedPoint.X * Math.Cos(angleInRad)) - (offsettedPoint.Y * Math.Sin(angleInRad));
+                double rotatedY = (offsettedPoint.X * Math.Sin(angleInRad)) + (offsettedPoint.Y * Math.Cos(angleInRad));
+
+                // offset with the actual coordinate
+                transformedPoint = new Point(rotatedX + obj.X, rotatedY + obj.Y);
+            }
+            else
+            {
+                // offset with the actual coordinate
+                 transformedPoint = new Point(geomPoint.X + obj.X, geomPoint.Y + obj.Y);
+            }
+
+            return transformedPoint;
         }
     }
     public class MapSign

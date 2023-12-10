@@ -54,20 +54,38 @@
 								</Image.RenderTransform>
 							</Image>
 							<TextBlock Text="{Binding Car.VirtualFunctionBus.KeyboardHandlerPacket.WheelPercentage}"></TextBlock>
-                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                                <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Y}"/>
+                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="10" Text="{Binding Path=X, StringFormat='X: {0}'}"></TextBlock>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Margin="10" Text="{Binding Path=Y, StringFormat='Y: {0}'}"/>
                                 <TextBlock Grid.Row="2" Grid.Column="0">Filename:</TextBlock>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.Message}"></TextBlock>
+                                <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
+                                <TextBlock Grid.Row="8" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.LimitSpeed, Mode=OneWay}"></TextBlock>
                             </Grid>
-							<TextBlock Text="Warning! IMPACT!!!" IsVisible="{Binding Collideable, Mode=OneWay}"/>
-							<TextBlock Text="Warning!!! AEB system could not handle every situation over 70 km/h" FontWeight="ExtraBlack" Foreground="Black" Background="Yellow" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningOver70kmph, Mode=OneWay}"/>
-							<TextBlock Text="Warning!!!                            Future Collision Detected" FontWeight="ExtraBlack" Foreground="Black" Background="Red" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningAvoidableCollision, Mode=OneWay}"/>
-						</StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Relevant Objects" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <ListBox Items="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.RelevantObjects}" Height="100" Width="300">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding RelevantWorldObject.WorldObjectType}" FontWeight="Bold" Foreground="Black"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                            <StackPanel>
+                              <TextBlock Text="Warnings" Margin="7" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                              <TextBlock Text="Warning! IMPACT!!!" IsVisible="{Binding Collideable, Mode=OneWay}"/>
+                              <TextBlock Text="Warning!!! AEB system could not handle every situation over 70 km/h" FontWeight="ExtraBlack" Foreground="Black" Background="Yellow" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningOver70kmph, Mode=OneWay}"/>
+                              <TextBlock Text="Warning!!!                            Future Collision Detected" FontWeight="ExtraBlack" Foreground="Black" Background="Red" FontSize="20" TextWrapping="Wrap" IsVisible="{Binding Car.VirtualFunctionBus.AEBInputPacket.WarningAvoidableCollision, Mode=OneWay}"/>
+                              <TextBlock Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.WarningMessage}" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
             </ContentControl>
