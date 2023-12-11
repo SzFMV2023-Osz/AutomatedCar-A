@@ -61,7 +61,8 @@
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
                                 <TextBlock Grid.Row="3" Grid.Column="0">Rotation:</TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Rotation}"/>
-                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.Message}"></TextBlock>
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.OnOffMessage}"></TextBlock>
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.AvailableMessage}"></TextBlock>
                                 <TextBlock Grid.Row="7" Grid.Column="0" IsVisible="{Binding Collideable, Mode=OneWay}">!!!IMPACT!!!</TextBlock>
                                 <TextBlock Grid.Row="8" Grid.Column="0" Text="{Binding Car.VirtualFunctionBus.RelevantObjectsPacket.LimitSpeed, Mode=OneWay}"></TextBlock>
                             </Grid>

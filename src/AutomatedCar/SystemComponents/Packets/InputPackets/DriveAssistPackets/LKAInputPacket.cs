@@ -5,16 +5,10 @@
 
     public class LKAInputPacket : InputDevicePacket, IReadOnlyLKAInputPacket
     {
-        private double wheelCorrection;
-        public double WheelCorrection
-        {
-            get => this.wheelCorrection;
-            set => this.RaiseAndSetIfChanged(ref this.wheelCorrection, value);
-        }
-
         private bool lKAAvailable;
         private bool lKAOnOff;
-        private string message;
+        private string onOffMessage;
+        private string availableMessage;
         private bool warning;
         private string warningMessage;
 
@@ -30,10 +24,16 @@
             set => this.RaiseAndSetIfChanged(ref this.lKAOnOff, value);
         }
 
-        public string Message
+        public string OnOffMessage
         {
-            get => this.message;
-            set => this.RaiseAndSetIfChanged(ref this.message, value);
+            get => this.onOffMessage;
+            set => this.RaiseAndSetIfChanged(ref this.onOffMessage, value);
+        }
+
+        public string AvailableMessage
+        {
+            get => this.availableMessage;
+            set => this.RaiseAndSetIfChanged(ref this.availableMessage, value);
         }
 
         public bool Warning

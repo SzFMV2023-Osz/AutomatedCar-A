@@ -8,10 +8,10 @@
 
     public interface IReadOnlyLKAInputPacket : IReadOnlyInputDevicePacket
     {
-        double WheelCorrection { get; }
         bool LKAAvailable { get; }
         bool LKAOnOff { get; }
-        string Message { get; }
+        string OnOffMessage { get; }
+        string AvailableMessage { get; }
         bool Warning { get; }
         string WarningMessage { get; }
     }
