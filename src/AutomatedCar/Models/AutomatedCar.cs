@@ -27,6 +27,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.powertrain = new Powertrain(this.virtualFunctionBus, this);
+            this.radarSensor = new Radar(this.virtualFunctionBus, this);
             this.aeb = new AEB(this.virtualFunctionBus);
             this.tempomat = new Tempomat(this.virtualFunctionBus);
             this.ZIndex = 10;
