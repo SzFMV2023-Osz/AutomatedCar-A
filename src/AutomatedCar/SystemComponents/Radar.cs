@@ -10,6 +10,7 @@
     using DynamicData;
     using DynamicData.Aggregation;
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.SystemComponents.Helpers;
 
     public class Radar : Sensor
     {
@@ -65,6 +66,7 @@
 
             this.RelevantObjectsPacket.LimitSpeed = SpeedLimit;
         }
+
         private void UpdateRelevantsigns()
         {
             this.RelevantSigns = new List<WorldObject>();

@@ -8,6 +8,8 @@
 
     class AEB : SystemComponent
     {
+        // Point closestPointOfObject = PolygonHelper.GetClosestPointOnPolygon(relevantWorldObject.Geometries, new Point(radar.X, radar.Y));
+
 
         private const double PixelsToMeters = 1.0 / 50.0; // Conversion factor from pixels to meters
         private const double FrameTimeSeconds = 1.0 / 60.0; // Time for one frame in seconds
@@ -86,7 +88,7 @@
             AEBInputPacket result = new AEBInputPacket();
 
             // Calculate the deceleration required to stop before hitting the object
-            double calculationErrorInMeters = 2.5;
+            double calculationErrorInMeters = 2;
 
             // Apply calculation error only if the distance is bigger than the error itself
             distanceInMeters = distanceInMeters <= calculationErrorInMeters ? distanceInMeters : distanceInMeters - calculationErrorInMeters;
@@ -103,10 +105,10 @@
             result.WarningAvoidableCollision = true;
 
             // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
-            double decelerationThreshold = 7; // meters per sec
-            double farDistanceThreshold = 100; // meters
-            double closeDistanceThreshold = 4; // meters // useful at slow speeds
-            if (distanceInMeters < closeDistanceThreshold || (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold))
+            double decelerationThreshold = 1; // meters per sec
+            double farDistanceThreshold = 50; // meters
+            double closeDistanceThreshold = 10; // meters // useful at slow speeds
+            if (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold)
             {
                 // Calculate the braking force
                 double brakingForce = deceleration * 100 / 9; // Scale to a range of 0-100
