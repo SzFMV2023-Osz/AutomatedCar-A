@@ -32,6 +32,8 @@
 
         public bool IsEmergencyBraking { get; set; }
 
+        public int cooldownTimer { get; set; }
+
         public override void Process()
         {
             int egoSpeed = this.virtualFunctionBus.PowertrainPacket.Speed;
@@ -40,13 +42,22 @@
             // Deactivate AEB after car stops on an emergency breaking.
             if (this.IsEmergencyBraking && egoSpeed == 0)
             {
+                if(cooldownTimer == 60)
+                {
+
                     this.IsEmergencyBraking = false;
+                }
+                else
+                {
+                    cooldownTimer++;
+                }
             }
 
             if (!this.IsEmergencyBraking)
             {
                 this.AEBInputPacket.BrakePercentage = null;
                 this.AEBInputPacket.ThrottlePercentage = null;
+                this.cooldownTimer = 0;
             }
 
             if (relevantObjects?.Count > 0 && egoSpeed <= 70 && egoSpeed > 0)
@@ -56,7 +67,8 @@
                 {
                      result = this.CalculateBrakingForce(
                         obj.CurrentDistance,
-                        this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance));
+                        this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance),
+                        obj.RelevantWorldObject.WorldObjectType == WorldObjectType.Car ? 2.5 : 1);
                 }
 
                 this.AEBInputPacket.WarningAvoidableCollision = result.WarningAvoidableCollision;
@@ -80,15 +92,13 @@
         /// </summary>
         /// <param name="distanceInPixels">Distance from object in question in pixels.</param>
         /// <param name="currentSpeed">Relative speed compared to object in question (m/s).</param>
+        /// <param name="calculationErrorInMeters">Error applied to distance calculation.</param>
         /// <returns>AEBInputPacket that the powertrain can use.</returns>
-        public AEBInputPacket CalculateBrakingForce(double distanceInPixels, double currentSpeed)
+        public AEBInputPacket CalculateBrakingForce(double distanceInPixels, double currentSpeed, double calculationErrorInMeters)
         {
             var distanceInMeters = distanceInPixels * PixelsToMeters;
 
             AEBInputPacket result = new AEBInputPacket();
-
-            // Calculate the deceleration required to stop before hitting the object
-            double calculationErrorInMeters = 2;
 
             // Apply calculation error only if the distance is bigger than the error itself
             distanceInMeters = distanceInMeters <= calculationErrorInMeters ? distanceInMeters : distanceInMeters - calculationErrorInMeters;
