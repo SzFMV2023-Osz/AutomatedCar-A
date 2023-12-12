@@ -97,9 +97,6 @@
                 deceleration = 9;
             }
 
-            // FIXME
-            result.WarningAvoidableCollision = true;
-
             // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
             double decelerationThreshold = 7; // meters per sec
             double farDistanceThreshold = 100; // meters
