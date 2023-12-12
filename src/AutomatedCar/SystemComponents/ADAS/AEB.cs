@@ -116,7 +116,7 @@
 
             // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
             double decelerationThreshold = 6; // meters per sec
-            double farDistanceThreshold = 50; // meters
+            double farDistanceThreshold = 200; // meters
             double closeDistanceThreshold = 3; // meters // useful at slow speeds
             if (distanceInMeters < closeDistanceThreshold || (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold))
             {
