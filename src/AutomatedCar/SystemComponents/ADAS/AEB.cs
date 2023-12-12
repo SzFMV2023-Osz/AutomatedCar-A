@@ -63,11 +63,8 @@
                     this.AEBInputPacket.ThrottlePercentage = 0;
                 }
             }
-            else
-            {
-                // WARNING OVER 70km/h
-                this.AEBInputPacket.WarningOver70kmph = true;
-            }
+
+            this.AEBInputPacket.WarningOver70kmph = egoSpeed > 70;
         }
 
         /// <summary>
