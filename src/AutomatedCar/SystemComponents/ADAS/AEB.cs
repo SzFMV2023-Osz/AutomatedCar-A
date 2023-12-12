@@ -57,11 +57,17 @@
                         this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance));
                 }
 
+                this.AEBInputPacket.WarningAvoidableCollision = result.WarningAvoidableCollision;
+
                 if ((this.AEBInputPacket.BrakePercentage == null && result.BrakePercentage > 0) || this.AEBInputPacket.BrakePercentage < result.BrakePercentage)
                 {
                     this.AEBInputPacket.BrakePercentage = result.BrakePercentage;
                     this.AEBInputPacket.ThrottlePercentage = 0;
                 }
+            }
+            else
+            {
+                this.AEBInputPacket.WarningAvoidableCollision = false;
             }
 
             this.AEBInputPacket.WarningOver70kmph = egoSpeed > 70;
