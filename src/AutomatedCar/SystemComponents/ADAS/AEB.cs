@@ -83,6 +83,12 @@
             AEBInputPacket result = new AEBInputPacket();
 
             // Calculate the deceleration required to stop before hitting the object
+            double calculationErrorInMeters = 2.5;
+
+            // Apply calculation error only if the distance is bigger than the error itself
+            distanceInMeters = distanceInMeters <= calculationErrorInMeters ? distanceInMeters : distanceInMeters - calculationErrorInMeters;
+
+            // Calculate deceleration
             double deceleration = Math.Pow(currentSpeed, 2) / (2 * distanceInMeters);
 
             // If the deceleration required is greater than the maximum deceleration possible (9 m/s^2), limit it
@@ -94,8 +100,11 @@
             // FIXME
             result.WarningAvoidableCollision = true;
 
-            // Activate AEB at 7 m/s^2 deceleration
-            if (deceleration > 7)
+            // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
+            double decelerationThreshold = 7; // meters per sec
+            double farDistanceThreshold = 100; // meters
+            double closeDistanceThreshold = 4; // meters // useful at slow speeds
+            if (distanceInMeters < closeDistanceThreshold || (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold))
             {
                 // Calculate the braking force
                 double brakingForce = deceleration * 100 / 9; // Scale to a range of 0-100
