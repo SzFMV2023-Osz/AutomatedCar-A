@@ -105,10 +105,10 @@
             result.WarningAvoidableCollision = true;
 
             // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
-            double decelerationThreshold = 1; // meters per sec
+            double decelerationThreshold = 6; // meters per sec
             double farDistanceThreshold = 50; // meters
-            double closeDistanceThreshold = 10; // meters // useful at slow speeds
-            if (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold)
+            double closeDistanceThreshold = 3; // meters // useful at slow speeds
+            if (distanceInMeters < closeDistanceThreshold || (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold))
             {
                 // Calculate the braking force
                 double brakingForce = deceleration * 100 / 9; // Scale to a range of 0-100
