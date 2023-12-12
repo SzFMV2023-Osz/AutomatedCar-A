@@ -57,6 +57,8 @@
                         this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance));
                 }
 
+                this.AEBInputPacket.WarningAvoidableCollision = result.WarningAvoidableCollision;
+
                 if ((this.AEBInputPacket.BrakePercentage == null && result.BrakePercentage > 0) || this.AEBInputPacket.BrakePercentage < result.BrakePercentage)
                 {
                     this.AEBInputPacket.BrakePercentage = result.BrakePercentage;
@@ -66,8 +68,10 @@
             else
             {
                 // WARNING OVER 70km/h
-                this.AEBInputPacket.WarningOver70kmph = true;
+                this.AEBInputPacket.WarningAvoidableCollision = false;
             }
+
+            this.AEBInputPacket.WarningOver70kmph = egoSpeed > 70;
         }
 
         /// <summary>
@@ -96,6 +100,8 @@
             {
                 deceleration = 9;
             }
+
+            result.WarningAvoidableCollision = true;
 
             // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
             double decelerationThreshold = 7; // meters per sec
