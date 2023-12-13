@@ -8,6 +8,8 @@
 
     class AEB : SystemComponent
     {
+        // Point closestPointOfObject = PolygonHelper.GetClosestPointOnPolygon(relevantWorldObject.Geometries, new Point(radar.X, radar.Y));
+
 
         private const double PixelsToMeters = 1.0 / 50.0; // Conversion factor from pixels to meters
         private const double FrameTimeSeconds = 1.0 / 60.0; // Time for one frame in seconds
@@ -30,6 +32,8 @@
 
         public bool IsEmergencyBraking { get; set; }
 
+        public int cooldownTimer { get; set; }
+
         public override void Process()
         {
             int egoSpeed = this.virtualFunctionBus.PowertrainPacket.Speed;
@@ -38,13 +42,22 @@
             // Deactivate AEB after car stops on an emergency breaking.
             if (this.IsEmergencyBraking && egoSpeed == 0)
             {
+                if(cooldownTimer == 60)
+                {
+
                     this.IsEmergencyBraking = false;
+                }
+                else
+                {
+                    cooldownTimer++;
+                }
             }
 
             if (!this.IsEmergencyBraking)
             {
                 this.AEBInputPacket.BrakePercentage = null;
                 this.AEBInputPacket.ThrottlePercentage = null;
+                this.cooldownTimer = 0;
             }
 
             if (relevantObjects?.Count > 0 && egoSpeed <= 70 && egoSpeed > 0)
@@ -54,8 +67,11 @@
                 {
                      result = this.CalculateBrakingForce(
                         obj.CurrentDistance,
-                        this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance));
+                        this.CalculateSpeed(obj.CurrentDistance, obj.PreviousDistance),
+                        obj.RelevantWorldObject.WorldObjectType == WorldObjectType.Car ? 2.5 : 1);
                 }
+
+                this.AEBInputPacket.WarningAvoidableCollision = result.WarningAvoidableCollision;
 
                 if ((this.AEBInputPacket.BrakePercentage == null && result.BrakePercentage > 0) || this.AEBInputPacket.BrakePercentage < result.BrakePercentage)
                 {
@@ -65,9 +81,10 @@
             }
             else
             {
-                // WARNING OVER 70km/h
-                this.AEBInputPacket.WarningOver70kmph = true;
+                this.AEBInputPacket.WarningAvoidableCollision = false;
             }
+
+            this.AEBInputPacket.WarningOver70kmph = egoSpeed > 70;
         }
 
         /// <summary>
@@ -75,14 +92,18 @@
         /// </summary>
         /// <param name="distanceInPixels">Distance from object in question in pixels.</param>
         /// <param name="currentSpeed">Relative speed compared to object in question (m/s).</param>
+        /// <param name="calculationErrorInMeters">Error applied to distance calculation.</param>
         /// <returns>AEBInputPacket that the powertrain can use.</returns>
-        public AEBInputPacket CalculateBrakingForce(double distanceInPixels, double currentSpeed)
+        public AEBInputPacket CalculateBrakingForce(double distanceInPixels, double currentSpeed, double calculationErrorInMeters)
         {
             var distanceInMeters = distanceInPixels * PixelsToMeters;
 
             AEBInputPacket result = new AEBInputPacket();
 
-            // Calculate the deceleration required to stop before hitting the object
+            // Apply calculation error only if the distance is bigger than the error itself
+            distanceInMeters = distanceInMeters <= calculationErrorInMeters ? distanceInMeters : distanceInMeters - calculationErrorInMeters;
+
+            // Calculate deceleration
             double deceleration = Math.Pow(currentSpeed, 2) / (2 * distanceInMeters);
 
             // If the deceleration required is greater than the maximum deceleration possible (9 m/s^2), limit it
@@ -91,11 +112,13 @@
                 deceleration = 9;
             }
 
-            // FIXME
             result.WarningAvoidableCollision = true;
 
-            // Activate AEB at 7 m/s^2 deceleration
-            if (deceleration > 7)
+            // Activate AEB if object is closer than <closeDistanceThreshold> or if deceleration exceeds <decelerationThreshold>. <farDistanceThreshold> limits how far the radar sees in the context of AEB.
+            double decelerationThreshold = 6; // meters per sec
+            double farDistanceThreshold = 200; // meters
+            double closeDistanceThreshold = 3; // meters // useful at slow speeds
+            if (distanceInMeters < closeDistanceThreshold || (deceleration > decelerationThreshold && distanceInMeters < farDistanceThreshold))
             {
                 // Calculate the braking force
                 double brakingForce = deceleration * 100 / 9; // Scale to a range of 0-100
