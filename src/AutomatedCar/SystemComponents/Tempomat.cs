@@ -40,7 +40,7 @@
 
         public override void Process()
         {
-            if (this.virtualFunctionBus.AEBInputPacket.BrakePercentage != 0)
+            if (this.virtualFunctionBus.AEBInputPacket.BrakePercentage != null)
             {
                 tempomatPacket.isEnabled = false;
                 return;
