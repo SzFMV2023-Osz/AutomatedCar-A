@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal interface IReadOnlyAEBInputPacket : IReadOnlyInputDevicePacket
+    public interface IReadOnlyAEBInputPacket : IReadOnlyInputDevicePacket
     {
         bool WarningOver70kmph { get; set; }
 

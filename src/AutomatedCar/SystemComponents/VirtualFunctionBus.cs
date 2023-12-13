@@ -20,8 +20,8 @@ namespace AutomatedCar.SystemComponents
 
         public IReadOnlyTempomatPacket TempomatPacket { get; set; }
 
-        public IReadOnlyInputDevicePacket AEBInputPacket { get; set; }
-        public IReadOnlyInputDevicePacket LCCInputPacket { get; set; }
+        public IReadOnlyAEBInputPacket AEBInputPacket { get; set; }
+        public IReadOnlyACCInputPacket LCCInputPacket { get; set; }
         public IReadOnlyLKAInputPacket LKAInputPacket { get; set; }
         public IReadOnlyRelevantObjects RelevantObjectsPacket { get; set; }
 

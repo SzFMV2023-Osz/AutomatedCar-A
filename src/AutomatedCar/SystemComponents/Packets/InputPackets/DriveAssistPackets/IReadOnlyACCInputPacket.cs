@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    internal interface IReadOnlyACCInputPacket : IReadOnlyInputDevicePacket
+    public interface IReadOnlyACCInputPacket : IReadOnlyInputDevicePacket
     {
     }
 }

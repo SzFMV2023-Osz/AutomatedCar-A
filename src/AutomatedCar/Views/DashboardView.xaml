@@ -46,6 +46,9 @@
                             <TextBlock Text="Brake"/>
                             <ProgressBar Value="{Binding Car.VirtualFunctionBus.KeyboardHandlerPacket.BrakePercentage}"></ProgressBar>
                             <Separator Height="12"></Separator>
+							<TextBlock Text="AEB value"/>
+							<ProgressBar Value="{Binding Car.VirtualFunctionBus.AEBInputPacket.BrakePercentage}" ></ProgressBar>
+
 							<Image
                                 Width="90" Height="90"
                                 Source="resm:AutomatedCar.Assets.steering-wheel.png?assembly=AutomatedCar">
@@ -85,7 +88,6 @@
                               <TextBlock Text="{Binding Car.VirtualFunctionBus.LKAInputPacket.WarningMessage}" Foreground="Yellow" FontWeight="Bold" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
-
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
             </ContentControl>
