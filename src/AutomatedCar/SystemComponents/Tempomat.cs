@@ -1,7 +1,9 @@
 ﻿namespace AutomatedCar.SystemComponents
 {
     using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents.ADAS;
     using AutomatedCar.SystemComponents.Packets;
+    using AutomatedCar.SystemComponents.Packets.InputPackets.DriveAssistPackets;
     using System;
     using System.Reflection.Metadata;
     using System.Text.RegularExpressions;
@@ -38,6 +40,11 @@
 
         public override void Process()
         {
+            if (this.virtualFunctionBus.AEBInputPacket.BrakePercentage != 0)
+            {
+                tempomatPacket.isEnabled = false;
+                return;
+            }
             this.limitSpeed = this.virtualFunctionBus.RelevantObjectsPacket.LimitSpeed;
             if (this.virtualFunctionBus.TempomatPacket.isEnabled)
             {
@@ -105,12 +112,7 @@
                 {
                     userSetSpeed = ReturnSpeedValid(currentSpeed);
                 }
-
             }
-
-            
-
-            
         }
 
         private void Accelerate()
