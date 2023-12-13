@@ -62,17 +62,17 @@
                 int throttlePercentage;
                 if (virtualFunctionBus.TempomatPacket.isEnabled)
                 {
-                    brakePercentage = virtualFunctionBus.TempomatPacket.BrakePercentage;
-                    throttlePercentage = virtualFunctionBus.TempomatPacket.ThrottlePercentage;
-
+                    brakePercentage = (this.inputPacket != null && this.inputPacket.BrakePercentage > 0) ? (int)this.inputPacket.BrakePercentage : this.virtualFunctionBus.TempomatPacket.BrakePercentage;
+                    throttlePercentage = this.virtualFunctionBus.TempomatPacket.ThrottlePercentage;
                 }
                 else
                 {
-                    brakePercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.BrakePercentage;
-                    throttlePercentage = (int)virtualFunctionBus.KeyboardHandlerPacket.ThrottlePercentage;
+                    brakePercentage = (int)this.inputPacket.BrakePercentage;
+                    throttlePercentage = (int)this.inputPacket.ThrottlePercentage;
                 }
+
                 int wheelPercentage = (int)this.inputPacket.WheelPercentage;
-                
+
                 SequentialShiftingDirections shiftUpOrDown = (SequentialShiftingDirections)this.inputPacket.ShiftUpOrDown;
 
                 this.Wheel.AngleAsDegree = wheelPercentage;
